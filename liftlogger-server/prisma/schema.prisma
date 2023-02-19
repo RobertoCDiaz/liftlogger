@@ -14,13 +14,31 @@ datasource db {
 // Each user is identified by their email address, which is used as the primary key. 
 // The table has relationships to other tables in the schema, including MuscleGroup, Movement, Template, and LiftingSession.
 model User {
-  email     String           @id @db.VarChar(255)
-  groups    MuscleGroup[]
-  movements Movement[]
-  templates Template[]
-  sessions  LiftingSession[]
+  email      String           @id @db.VarChar(255)
+  groups     MuscleGroup[]
+  movements  Movement[]
+  templates  Template[]
+  sessions   LiftingSession[]
+  weightings Weighting[]
 
   @@map("users")
+}
+
+// Weighting data, usually retrieved from a physical weightscale.
+// You can choose to ignore some registers by setting `ignored` to true, so that those are not taken into account to critical computations.
+model Weighting {
+  id                 Int      @id @default(autoincrement())
+  datetime           DateTime @default(now())
+  weight             Float
+  fat_percentage     Float
+  muscle_mass        Float
+  protein_percentage Float
+  metabolism         Float
+  visceral_fat       Float
+  ignored            Boolean  @default(false)
+
+  user_email String
+  user       User   @relation(fields: [user_email], references: [email])
 }
 
 // The MuscleGroup table stores information about different muscle groups, such as chest, back, legs, etc. 
