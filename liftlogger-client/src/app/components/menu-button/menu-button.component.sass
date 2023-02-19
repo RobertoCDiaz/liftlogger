@@ -1,0 +1,24 @@
+@use '../../../styles'
+
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons')
+
+.menu-button
+  @include styles.flex(row)
+  gap: .5em
+  border: 1px solid styles.$primary-color
+  border-radius: .5em
+  padding: .5em 1em
+  align-items: center
+  cursor: pointer
+
+  *
+    color: styles.$primary-color
+
+  .content
+    font-weight: bold
+    flex-grow: 1
+
+  &:hover
+    background-color: styles.$primary-color
+    *
+      color: styles.$white

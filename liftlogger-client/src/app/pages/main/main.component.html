@@ -1,0 +1,42 @@
+<div class="main-page">
+  <div class="header">
+    <div class="title-bar">
+      <span class="material-icons">menu</span>
+      <h1>LiftLog</h1>
+    </div>
+    <div class="highlights">
+      <div class="graphs">
+        <div class="item">
+          <h3>Weight Progress</h3>
+          <div class="graph"></div>
+        </div>
+        <div class="item">
+          <h3>Fat % Progress</h3>
+          <div class="graph"></div>
+        </div>
+        <div class="item">
+          <h3>Muscle Mass Progress</h3>
+          <div class="graph"></div>
+        </div>
+      </div>
+      <p class="view-all-data">View all data ></p>
+    </div>
+  </div>
+
+  <div class="content">
+    <app-menu-button
+      text="Add weighting data"
+      icon="monitor_weight"
+      href="/add-weighting"/>
+
+    <app-menu-button
+      text="Start working out"
+      icon="fitness_center"
+      href="/start-workout"/>
+
+    <app-menu-button
+      text="Movements, Templates, and Muscle Groups"
+      icon="sports_gymnastics"
+      href="/library" />
+  </div>
+</div>

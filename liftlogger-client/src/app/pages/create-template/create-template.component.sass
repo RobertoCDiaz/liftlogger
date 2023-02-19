@@ -1,0 +1,42 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex(column)
+  align-items: stretch
+  height: 100vh
+
+  .content
+    @include styles.flex(column)
+    flex-grow: 1
+    padding: 2em
+
+    .creator
+      @include styles.flex(column)
+      flex-grow: 1
+      height: 10em
+      gap: 1em
+
+      input, textarea
+        all: unset
+
+      .name
+        font-size: 2.1rem
+        // font-weight: bold
+
+      .description
+        font-size: 1.25rem
+
+      // .template
+      //   @include styles.flex(column)
+      //   gap: 1em
+
+      //   .items
+      //     @include styles.flex(column)
+      //     align-items: stretch
+
+    .footer
+      @include styles.flex(row)
+      gap: 1em
+
+      .action
+        flex-grow: 1

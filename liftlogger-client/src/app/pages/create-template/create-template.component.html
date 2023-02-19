@@ -1,0 +1,20 @@
+<app-page-header>Create Template</app-page-header>
+<div class="content">
+  <div class="creator">
+    <input
+      [(ngModel)]="templateName"
+      type="text"
+      class="name"
+      placeholder="Template name...">
+    <textarea
+      [(ngModel)]="templateDescription"
+      type="text"
+      class="description"
+      placeholder="Description..."></textarea>
+    <app-template-movements-list></app-template-movements-list>
+  </div>
+  <div class="footer">
+    <app-button type="no-border">Cancel</app-button>
+    <app-button (click)="createTemplate()" class="action" type="primary">Create</app-button>
+  </div>
+</div>

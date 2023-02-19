@@ -1,0 +1,10 @@
+<button
+  type="button"
+  class="app-button {{ type }}"
+  [ngClass]="{ 'disabled': disabled }">
+    <span
+      class="material-icons" *ngIf="icon">
+      {{ icon }}
+    </span>
+    <span><ng-content></ng-content></span>
+</button>

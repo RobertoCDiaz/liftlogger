@@ -1,0 +1,47 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex(column)
+
+  button
+    @include styles.flex
+    all: unset
+    text-align: center
+    padding: .5em
+    cursor: pointer
+    border-radius: .25em
+    transition: 200ms
+
+    span
+      margin: 0 .25em
+
+    *
+      vertical-align: middle
+
+    &.default, &.primary
+      @include styles.shadow
+
+    &.primary
+      background-color: styles.$primary-color
+      color: styles.$white
+      *
+        color: styles.$white
+
+      &:hover
+        background-color: styles.$primary-light-color
+
+    &.disabled
+      cursor: default
+
+    &.default, &.no-border
+      &:hover
+        background-color: styles.$light-gray
+
+      &.disabled
+        color: styles.$dark-gray
+        *
+          color: styles.$dark-gray
+
+    &.primary
+      &.disabled
+        background-color: styles.$light-gray

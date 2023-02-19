@@ -1,0 +1,9 @@
+@use '/src/styles'
+
+:host
+  @include styles.flex(column)
+  gap: 1em
+
+  .items
+    @include styles.flex(column)
+    align-items: stretch

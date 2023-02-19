@@ -1,0 +1,47 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Inter&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap')
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap')
+
+// Colors
+$primary-color: #0373DB
+$primary-dark-color: #00509A
+$primary-light-color: #6EB4F4
+$text-color: #212121
+$white: #FFFFFF
+$dark-gray: #808080
+$light-gray: #C0C0C0
+
+// mixins
+@mixin flex($direction: row)
+  display: flex
+  flex-direction: $direction
+
+@mixin shadow
+  box-shadow: 0 .25em 4px rgba(0, 0, 0, 0.25)
+
+html, body
+  min-height: 100vh
+  height: auto
+
+// global styles
+html, body, *
+  padding: 0
+  margin: 0
+  color: $text-color
+  font-family: Inter
+
+a
+  all: unset
+
+@mixin isLarge
+  @media screen and (min-width: 992px)
+    @content
+
+@mixin isXL
+  @media screen and (min-width: 1200px)
+    @content
+
+// debuggin styles
+// *
+//   border: 1px solid red

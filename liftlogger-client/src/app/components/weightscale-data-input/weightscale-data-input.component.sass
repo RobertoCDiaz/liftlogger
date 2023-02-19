@@ -1,0 +1,21 @@
+@use '../../../styles'
+
+.weighscale-data-input
+  @include styles.flex
+  align-items: center
+
+  .name
+    flex-grow: 1
+    font-weight: bold
+
+  input
+    width: 3em
+    border: 0
+    border-bottom: 1px solid styles.$text-color
+    padding: .25em
+    font-size: 1.5rem
+    text-align: center
+
+    &:focus
+      outline: none
+      border-bottom: 2px solid styles.$primary-color

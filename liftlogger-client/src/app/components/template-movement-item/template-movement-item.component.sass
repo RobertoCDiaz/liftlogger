@@ -1,0 +1,13 @@
+@use '/src/styles'
+
+:host
+  @include styles.flex(row)
+  align-items: center
+  gap: 1em
+  padding: .5em 0
+
+  .name
+    flex-grow: 1
+
+  .drag, .close
+    cursor: pointer
