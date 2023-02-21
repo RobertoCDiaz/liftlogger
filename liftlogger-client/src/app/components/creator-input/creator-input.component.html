@@ -1,0 +1,11 @@
+<input
+  *ngIf="!isTextArea"
+  [ngClass]="{ title: isTitle }"
+  type="text"
+  [placeholder]="placeholder">
+
+<textarea
+  *ngIf="isTextArea"
+  [ngClass]="{ title: isTitle }"
+  type="text"
+  [placeholder]="placeholder"></textarea>

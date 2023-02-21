@@ -1,0 +1,25 @@
+@use '/src/styles'
+
+:host
+  @include styles.flex(column)
+  height: 100vh
+
+  .content
+    @include styles.flex(column)
+    flex-grow: 1
+    gap: 1em
+    padding: 2em
+
+    .header
+      @include styles.flex(column)
+      gap: 1em
+
+    .groups-selector
+      flex-grow: 1
+
+    .footer
+      @include styles.flex(row)
+      gap: 1em
+
+      .action
+        flex-grow: 1
