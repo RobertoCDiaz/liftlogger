@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-weightscale-data-input',
@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./weightscale-data-input.component.sass']
 })
 export class WeightscaleDataInputComponent {
+  data: string = '';
+  @Output() dataChanged = new EventEmitter<number>();
 
+  onDataChanged(): void {
+    this.dataChanged.emit(Number(this.data));
+  }
 }

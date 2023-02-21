@@ -2,5 +2,5 @@
   <p class="name">
     <ng-content></ng-content>
   </p>
-  <input type="text">
+  <input type="text" (change)="onDataChanged()" [(ngModel)]="data">
 </div>
