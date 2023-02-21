@@ -17,4 +17,5 @@ export class ButtonComponent {
   @Input() disabled: boolean = false;
   @Input() icon?: string;
   @Input() href?: string;
+  @Input() isSubmitButton: boolean = false;
 }

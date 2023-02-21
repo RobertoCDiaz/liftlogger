@@ -1,5 +1,5 @@
 <button
-  type="button"
+  type="{{isSubmitButton ? 'submit' : 'button'}}"
   class="app-button {{ type }}"
   [ngClass]="{ 'disabled': disabled }">
     <span
