@@ -15,11 +15,13 @@ export class GroupsService {
     return MOCK_GROUPS;
   }
 
+  // TODO: Al seleccionar un hijo, el padre también se selecciona
   toggleGroup(name: String, groups: Group[], singleSelection: boolean = false) {
     for (let group of groups) {
+      group.isPrimary = false;
+
       if (singleSelection) {
         group.checked = false;
-        group.isPrimary = false;
       }
 
       if (group.name === name) {
@@ -28,6 +30,20 @@ export class GroupsService {
 
       if (group.groups) {
         this.toggleGroup(name, group.groups, singleSelection);
+      }
+    }
+  }
+
+  setGroupAsPrimary(name: String, groups: Group[]) {
+    for (let group of groups) {
+      group.isPrimary = false;
+
+      if (group.name === name && group.checked) {
+        group.isPrimary = true;
+      }
+
+      if (group.groups) {
+        this.setGroupAsPrimary(name, group.groups);
       }
     }
   }

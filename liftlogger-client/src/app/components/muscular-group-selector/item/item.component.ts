@@ -23,19 +23,23 @@ export class ItemComponent {
   constructor(private groupsService: GroupsService) { }
 
   onGroupToggle(groupName: String): void {
-    // this.group.checked = !this.group.checked;
     this.groupsService.toggleGroup(
       groupName,
       this.data,
-      !this.isMultipleChoice // TODO: enable single selection
+      !this.isMultipleChoice
     )
 
 
     console.log(this.groupsService.getSelectedGroups(this.data));
   }
 
-  setPrimary(): void {
-    this.group.isPrimary = true;
+  setPrimary(groupName: String): void {
+    // this.group.isPrimary = true;
+    if (!this.group.checked) {
+      this.groupsService.toggleGroup(groupName, this.data, !this.isMultipleChoice)
+    }
+
+    this.groupsService.setGroupAsPrimary(groupName, this.data);
   }
 
   toggleExpanded(): void {

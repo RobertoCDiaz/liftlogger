@@ -14,7 +14,7 @@
       check_box_outline_blank
     </span>
     <span class="name"
-    (dblclick)="setPrimary()">
+    (dblclick)="setPrimary(group.name)">
       {{ group.name }}
     </span>
     <span *ngIf="group.isPrimary" class="primary material-icons">
