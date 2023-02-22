@@ -1,0 +1,35 @@
+<div
+  class="group"
+  [ngClass]="{ checked: group.checked}">
+    <span
+    *ngIf="group.checked"
+    (click)="onGroupToggle(group.name)"
+    class="checkbox material-icons">
+    check_box
+    </span>
+    <span
+      *ngIf="!group.checked"
+      (click)="onGroupToggle(group.name)"
+      class="checkbox material-icons">
+      check_box_outline_blank
+    </span>
+    <span class="name"
+    (dblclick)="setPrimary()">
+      {{ group.name }}
+    </span>
+    <span *ngIf="group.isPrimary" class="primary material-icons">
+      star
+    </span>
+    <span *ngIf="group.groups" (click)="toggleExpanded()" class="expand material-icons">
+      expand_more
+    </span>
+</div>
+<div
+  class="children"
+  *ngIf="isExpanded">
+  <app-muscular-group-selector-item
+    *ngFor="let subgroup of group.groups"
+    [data]="data"
+    [isMultipleChoice]="isMultipleChoice"
+    [group]="subgroup"/>
+</div>

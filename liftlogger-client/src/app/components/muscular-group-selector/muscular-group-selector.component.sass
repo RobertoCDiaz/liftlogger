@@ -1,0 +1,18 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex(column)
+  @include styles.no-selection
+  gap: .5em
+
+  .info
+    @include styles.flex(column)
+    gap: .5em
+
+    .secondary
+      color: styles.$dark-gray
+      font-size: .80em
+
+  .container
+    border: 1px solid styles.$light-gray
+    border-radius: .5em

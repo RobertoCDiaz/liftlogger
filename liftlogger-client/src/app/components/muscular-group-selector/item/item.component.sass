@@ -1,0 +1,30 @@
+@use '/src/styles'
+
+.group
+  padding: .5em
+  @include styles.flex(row)
+  align-items: center
+  gap: .5em
+  cursor: pointer
+
+  .name
+    flex-grow: 1
+
+  .expand
+    color: styles.$dark-gray
+
+  .primary
+    color: styles.$primary-color
+
+  &.checked
+    .name, .checkbox
+      color: styles.$primary-color
+
+  &:hover
+    background-color: styles.$selection-color
+
+    .name, .checkbox
+      color: styles.$primary-color
+
+.children
+  padding-left: 1em
