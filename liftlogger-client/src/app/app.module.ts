@@ -15,6 +15,12 @@ import { CreateTemplateComponent } from './pages/create-template/create-template
 import { TemplateMovementItemComponent } from './components/template-movement-item/template-movement-item.component';
 import { TemplateMovementsListComponent } from './components/template-movements-list/template-movements-list.component'
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { CreateMovementComponent } from './pages/create-movement/create-movement.component';
+import { CreatorInputComponent } from './components/creator-input/creator-input.component';
+import { CreatorPageComponent } from './components/creator-page/creator-page.component';
+import { MuscularGroupSelectorComponent } from './components/muscular-group-selector/muscular-group-selector.component';
+import { ItemComponent } from './components/muscular-group-selector/item/item.component'
 
 @NgModule({
   declarations: [
@@ -28,12 +34,18 @@ import { FormsModule } from '@angular/forms';
     CreateTemplateComponent,
     TemplateMovementItemComponent,
     TemplateMovementsListComponent,
+    CreateMovementComponent,
+    CreatorInputComponent,
+    CreatorPageComponent,
+    MuscularGroupSelectorComponent,
+    ItemComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

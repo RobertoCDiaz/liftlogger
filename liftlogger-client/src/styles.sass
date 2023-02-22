@@ -7,6 +7,7 @@
 $primary-color: #0373DB
 $primary-dark-color: #00509A
 $primary-light-color: #6EB4F4
+$selection-color: #B8DDFF
 $text-color: #212121
 $white: #FFFFFF
 $dark-gray: #808080
@@ -19,6 +20,11 @@ $light-gray: #C0C0C0
 
 @mixin shadow
   box-shadow: 0 .25em 4px rgba(0, 0, 0, 0.25)
+
+@mixin no-selection
+  -webkit-user-select: none // Safari
+  -ms-user-select: none // IE 10 and IE 11
+  user-select: none // Standard syntax
 
 html, body
   min-height: 100vh
