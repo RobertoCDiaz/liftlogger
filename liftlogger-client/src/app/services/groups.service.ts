@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, single } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Group, MOCK_GROUPS } from '../models/Groups';
 
 @Injectable({
@@ -15,9 +15,21 @@ export class GroupsService {
     return MOCK_GROUPS;
   }
 
-  toggleGroup(name: String, groups: Group[], singleSelection: boolean = false): boolean {
+  clearSelectionsInGroup(groups: Group[]) {
     for (let group of groups) {
-      group.isPrimary = false;
+      group.checked = false;
+
+      if (group.groups) {
+        this.clearSelectionsInGroup(group.groups);
+      }
+    }
+  }
+
+  toggleGroup(name: String, groups: Group[], singleSelection: boolean = false): boolean {
+    let checkedCount = 0;
+
+    for (let group of groups) {
+      // group.isPrimary = false;
 
       if (singleSelection) {
         group.checked = false;
@@ -25,21 +37,38 @@ export class GroupsService {
 
       if (group.name === name) {
         group.checked = !group.checked;
-        return group.checked;
+
+        if (group.isPrimary) {
+          group.isPrimary = false;
+        }
+      }
+
+      if (group.checked) {
+        checkedCount++;
       }
 
       if (group.groups) {
-        const childWasToggled = this.toggleGroup(name, group.groups, singleSelection);
+        const childWasChecked = this.toggleGroup(name, group.groups, singleSelection);
 
-        if (childWasToggled) {
-          group.checked = true;
-          return true;
+        if (childWasChecked && !singleSelection) {
+          checkedCount++;
         }
       }
     }
 
-    return false;
+    if (!singleSelection || checkedCount <= 1) {
+      return checkedCount > 0;
+    }
+
+    for (let group of groups) {
+      if (group.name !== name && group.checked) {
+        group.checked = false;
+      }
+    }
+
+    return true;
   }
+
 
   setGroupAsPrimary(name: String, groups: Group[]) {
     for (let group of groups) {
