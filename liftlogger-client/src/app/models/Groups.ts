@@ -1,10 +1,28 @@
+/**
+ * Represents a group of muscles and its properties.
+ */
 export type Group = {
-  name: String,
+  /**
+   * The name of the muscle group.
+   */
+  name: string,
+  /**
+   * Indicates if the muscle group is selected or not.
+   */
   checked?: boolean,
+  /**
+   * Indicates if the muscle group is a primary muscle group or not.
+   */
   isPrimary?: boolean,
+  /**
+   * An array of sub-groups for a muscle group.
+   */
   groups?: Group[]
 }
 
+/**
+ * An array of mock `Group` objects for testing or demonstration purposes.
+ */
 export const MOCK_GROUPS: Group[] = [
   {
     name: 'Chest',
@@ -24,7 +42,7 @@ export const MOCK_GROUPS: Group[] = [
   {
     name: 'Legs',
     groups: [
-      { name: 'Gloutes' },
+      { name: 'Glutes' },
       { name: 'Quads' },
       { name: 'Hamstrings' },
       { name: 'Calves' },

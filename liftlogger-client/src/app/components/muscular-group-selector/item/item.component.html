@@ -3,13 +3,13 @@
   [ngClass]="{ checked: group.checked}">
     <span
     *ngIf="group.checked"
-    (click)="onGroupToggle(group.name)"
+    (click)="toggleChecked(group.name)"
     class="checkbox material-icons">
     check_box
     </span>
     <span
       *ngIf="!group.checked"
-      (click)="onGroupToggle(group.name)"
+      (click)="toggleChecked(group.name)"
       class="checkbox material-icons">
       check_box_outline_blank
     </span>

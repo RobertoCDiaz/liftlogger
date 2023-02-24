@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { Group, MOCK_GROUPS } from '../models/Groups';
 
 @Injectable({
@@ -8,29 +7,29 @@ import { Group, MOCK_GROUPS } from '../models/Groups';
 export class GroupsService {
   constructor() { }
 
-  // getGroups(): Observable<Group[]> {
-  //   return of(MOCK_GROUPS);
-  // }
+  /**
+   * Retrieves a list of groups.
+   *
+   * @returns An array of Group objects representing the groups.
+   */
   getGroups(): Group[] {
     return MOCK_GROUPS;
   }
 
-  clearSelectionsInGroup(groups: Group[]) {
-    for (let group of groups) {
-      group.checked = false;
-
-      if (group.groups) {
-        this.clearSelectionsInGroup(group.groups);
-      }
-    }
-  }
-
+  /**
+   * Toggles the checked state of a group with the specified name, and optionally
+   * toggles the checked state of all other groups to false if singleSelection is
+   * set to true.
+   *
+   * @param name - The name of the group to toggle.
+   * @param groups - An array of Group objects representing the groups to search.
+   * @param singleSelection - A flag indicating whether only one group can be checked at a time.
+   * @returns A boolean indicating whether at least one group is checked.
+   */
   toggleGroup(name: String, groups: Group[], singleSelection: boolean = false): boolean {
     let checkedCount = 0;
 
     for (let group of groups) {
-      // group.isPrimary = false;
-
       if (singleSelection) {
         group.checked = false;
       }
@@ -69,8 +68,14 @@ export class GroupsService {
     return true;
   }
 
-
-  setGroupAsPrimary(name: String, groups: Group[]) {
+  /**
+   * Sets a group with the specified name as the primary group, and unsets all other
+   * groups as primary.
+   *
+   * @param name - The name of the group to set as primary.
+   * @param groups - An array of Group objects representing the groups to search.
+   */
+  setGroupAsPrimary(name: String, groups: Group[]): void {
     for (let group of groups) {
       group.isPrimary = false;
 
@@ -84,6 +89,12 @@ export class GroupsService {
     }
   }
 
+  /**
+   * Retrieves an array of strings representing the names of all checked groups in a list.
+   *
+   * @param groups - An array of Group objects representing the groups to search.
+   * @returns An array of strings representing the names of all checked groups.
+   */
   getSelectedGroups(groups: Group[]): String[] {
     let selectedGroups: String[] = [];
 
