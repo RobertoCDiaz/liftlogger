@@ -10,8 +10,8 @@ datasource db {
   url      = env("DB_URL")
 }
 
-// The User table stores information about users of the application. 
-// Each user is identified by their email address, which is used as the primary key. 
+// The User table stores information about users of the application.
+// Each user is identified by their email address, which is used as the primary key.
 // The table has relationships to other tables in the schema, including MuscleGroup, Movement, Template, and LiftingSession.
 model User {
   email      String           @id @db.VarChar(255)
@@ -32,19 +32,22 @@ model Weighting {
   weight             Float
   fat_percentage     Float
   muscle_mass        Float
-  protein_percentage Float
-  metabolism         Float
-  visceral_fat       Float
+  water_percentage   Float?
+  protein_percentage Float?
+  metabolism         Float?
+  visceral_fat       Float?
   ignored            Boolean  @default(false)
 
   user_email String
   user       User   @relation(fields: [user_email], references: [email])
+
+  @@map("weightings")
 }
 
-// The MuscleGroup table stores information about different muscle groups, such as chest, back, legs, etc. 
-// Each muscle group can have subgroups, which are stored in the groups field. 
-// Each muscle group can also belong to a parent group, which is stored in the parent_group field. 
-// The group_movements field is used to store the movements associated with a muscle group. 
+// The MuscleGroup table stores information about different muscle groups, such as chest, back, legs, etc.
+// Each muscle group can have subgroups, which are stored in the groups field.
+// Each muscle group can also belong to a parent group, which is stored in the parent_group field.
+// The group_movements field is used to store the movements associated with a muscle group.
 // Finally, each muscle group belongs to a user, which is stored in the user field.
 model MuscleGroup {
   id              Int              @id @default(autoincrement())
@@ -60,7 +63,7 @@ model MuscleGroup {
   @@map("musclegroups")
 }
 
-// The Movement table stores information about different weightlifting movements, such as bench press, squats, deadlifts, etc. 
+// The Movement table stores information about different weightlifting movements, such as bench press, squats, deadlifts, etc.
 // Each movement has a name and an optional description.
 model Movement {
   id          Int     @id @default(autoincrement())
@@ -76,7 +79,7 @@ model Movement {
   @@map("movements")
 }
 
-// The Template table stores information about lifting templates, which are pre-defined sets of movements and rep/weight schemes. 
+// The Template table stores information about lifting templates, which are pre-defined sets of movements and rep/weight schemes.
 // Each template has a name and an optional description.
 model Template {
   id          Int     @id @default(autoincrement())
@@ -90,7 +93,7 @@ model Template {
   @@map("templates")
 }
 
-// The LiftingSession table stores information about weightlifting sessions. 
+// The LiftingSession table stores information about weightlifting sessions.
 // Each session has a start time, an end time, and an optional note.
 model LiftingSession {
   id         Int      @id @default(autoincrement())
@@ -105,7 +108,7 @@ model LiftingSession {
   @@map("sessions")
 }
 
-// The LiftingSet table stores information about individual sets performed during a lifting session. Each set has a start time, an end time, a movement, a number of reps, a weight, and an optional note. 
+// The LiftingSet table stores information about individual sets performed during a lifting session. Each set has a start time, an end time, a movement, a number of reps, a weight, and an optional note.
 // The movement field is used to associate the set with a specific movement, and the session field is used to associate the set with a specific lifting session.
 model LiftingSet {
   id          Int            @id @default(autoincrement())
@@ -122,7 +125,7 @@ model LiftingSet {
   @@map("sets")
 }
 
-// The GroupMovements table is a join table that associates muscle groups with movements. 
+// The GroupMovements table is a join table that associates muscle groups with movements.
 // Each row in the table represents a relationship between a muscle group and a movement, and whether the muscle group is the primary muscle group for the movement.
 model GroupMovements {
   group            MuscleGroup @relation(fields: [group_id], references: [id])
@@ -136,7 +139,7 @@ model GroupMovements {
   @@map("group_movements")
 }
 
-// The MovementTemplates table is a join table that associates movements with lifting templates. 
+// The MovementTemplates table is a join table that associates movements with lifting templates.
 // Each row in the table represents a relationship between a movement and a template.
 model MovementTemplates {
   movement    Movement @relation(fields: [movement_id], references: [id])
