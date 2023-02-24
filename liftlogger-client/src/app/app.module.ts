@@ -20,7 +20,8 @@ import { CreateMovementComponent } from './pages/create-movement/create-movement
 import { CreatorInputComponent } from './components/creator-input/creator-input.component';
 import { CreatorPageComponent } from './components/creator-page/creator-page.component';
 import { MuscularGroupSelectorComponent } from './components/muscular-group-selector/muscular-group-selector.component';
-import { ItemComponent } from './components/muscular-group-selector/item/item.component'
+import { ItemComponent } from './components/muscular-group-selector/item/item.component';
+import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-muscle-group.component'
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ItemComponent } from './components/muscular-group-selector/item/item.co
     CreatorPageComponent,
     MuscularGroupSelectorComponent,
     ItemComponent,
+    CreateMuscleGroupComponent,
   ],
   imports: [
     BrowserModule,
