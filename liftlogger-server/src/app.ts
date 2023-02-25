@@ -1,6 +1,16 @@
 import express, { Request, Response } from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+
+import { RegisterRoutes } from '../build/routes';
 
 const app = express();
+
+app.use(cors({ origin: '*' })) // allow all origins
+app.use(bodyParser.json()) // parse json request bodies
+
+// tsoa routes under `src/routes` directory
+RegisterRoutes(app);
 
 // A simple route that sends a 'Hello World' message when accessed
 app.get('/', (req: Request, res: Response) => {
