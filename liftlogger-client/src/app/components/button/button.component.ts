@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 // Different Buttons
 enum ButtonType {
@@ -18,4 +18,14 @@ export class ButtonComponent {
   @Input() icon?: string;
   @Input() href?: string;
   @Input() isSubmitButton: boolean = false;
+
+  @Output() onClicked = new EventEmitter();
+
+  onButtonClicked(): void {
+    if (this.disabled) {
+      return;
+    }
+
+    this.onClicked.emit();
+  }
 }
