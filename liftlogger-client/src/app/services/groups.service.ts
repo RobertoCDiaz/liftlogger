@@ -1,19 +1,58 @@
 import { Injectable } from '@angular/core';
-import { Group, MOCK_GROUPS } from '../models/Groups';
+import { Observable } from 'rxjs';
+import { Group } from '../models/Groups';
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupsService {
-  constructor() { }
+  constructor(private http: HttpService) { }
 
   /**
    * Retrieves a list of groups.
    *
    * @returns An array of Group objects representing the groups.
    */
-  getGroups(): Group[] {
-    return MOCK_GROUPS;
+  getGroups(): Observable<Group[]> {
+    return this.http.get<Group[]>('groups');
+  }
+
+  /**
+   * Organizes an array of Group objects into a hierarchical structure, based on the parent_group_id property of each group.
+   *
+   * @param groups An array of Group objects to be organized.
+   * @returns An array of root-level Group objects with their nested sub-groups added to the 'groups' property of each Group, forming a hierarchical structure.
+   */
+  organizeGroups(groups: Group[]): Group[] {
+    const groupsById: Record<number, Group> = {};
+
+    // Create a lookup table to easily find a group by its ID
+    groups.forEach(group => {
+      if (!group.id) return;
+
+      groupsById[group.id] = group;
+    })
+
+    const rootGroups: Group[] = [];
+    groups.forEach(group => {
+      if (!group.parent_group_id) {
+        // If a group has no parent, it is a root group
+        rootGroups.push(group);
+        return;
+      };
+
+      // If a group has a parent, find the parent group by ID
+      const parent = groupsById[group.parent_group_id];
+
+      // Create an empty array of sub-groups for the parent if it doesn't exist
+      parent.groups = parent.groups ?? [];
+
+      // Add the current group as a sub-group of its parent
+      parent.groups.push(group);
+    })
+
+    return rootGroups;
   }
 
   /**
@@ -95,12 +134,12 @@ export class GroupsService {
    * @param groups - An array of Group objects representing the groups to search.
    * @returns An array of strings representing the names of all checked groups.
    */
-  getSelectedGroups(groups: Group[]): String[] {
-    let selectedGroups: String[] = [];
+  getSelectedGroups(groups: Group[]): Group[] {
+    let selectedGroups: Group[] = [];
 
     for (let group of groups) {
       if (group.checked) {
-        selectedGroups.push(group.name)
+        selectedGroups.push(group)
       }
 
       if (group.groups) {

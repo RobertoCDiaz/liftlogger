@@ -19,7 +19,9 @@ export class MuscularGroupSelectorComponent {
   constructor(private groupsService: GroupsService) { }
 
   ngOnInit() {
-    this.data = this.groupsService.getGroups();
+    this.groupsService.getGroups().subscribe(groups => {
+      this.data = this.groupsService.organizeGroups(groups);
+    });
   }
 
 }
