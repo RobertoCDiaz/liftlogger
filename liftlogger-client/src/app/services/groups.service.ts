@@ -18,6 +18,10 @@ export class GroupsService {
     return this.http.get<Group[]>('groups');
   }
 
+  createGroup(group: Group): Observable<Group> {
+    return this.http.post<Group, Group>('groups', group);
+  }
+
   /**
    * Organizes an array of Group objects into a hierarchical structure, based on the parent_group_id property of each group.
    *
