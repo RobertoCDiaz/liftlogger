@@ -1,3 +1,4 @@
+// TODO: Refactor group selection. (Should it be delegated to the global groups service?)
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Group } from '../models/Groups';

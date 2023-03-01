@@ -1,4 +1,3 @@
-// TODO: Document this component
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Group } from 'src/app/models/Groups';
 import { GroupsService } from 'src/app/services/groups.service';
@@ -9,12 +8,30 @@ import { GroupsService } from 'src/app/services/groups.service';
   styleUrls: ['./muscular-group-selector.component.sass']
 })
 export class MuscularGroupSelectorComponent {
+
+  /**
+   * Source of data to populate the component.
+   */
   groups: Group[];
 
+  /**
+   * Whether multiple groups can be selected at once or not.
+   */
   @Input() isMultipleChoice: boolean = true;
+
+  /**
+   * Main text to show. Useful for titles.
+   */
   @Input() text: String = 'Select a muscular group...';
+
+  /**
+   * Optional text to show as secondary instructions.
+   */
   @Input() secondaryText?: String;
 
+  /**
+   * Fires up when a group selection is changed (e.g. a group is checked or unchecked).
+   */
   @Output() selectionChanged = new EventEmitter<Group[]>();
 
   constructor(private groupsService: GroupsService) { }
@@ -25,6 +42,10 @@ export class MuscularGroupSelectorComponent {
     });
   }
 
+  /**
+   * Emits the currently selected groups through the `selectionChanged` emitter when
+   * a group is toggled.
+   */
   groupToggled() {
     const selectedGroups = this.groupsService.getSelectedGroups(this.groups);
 
