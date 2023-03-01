@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+// TODO: Document this component
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Group } from 'src/app/models/Groups';
 import { GroupsService } from 'src/app/services/groups.service';
 
@@ -8,20 +9,26 @@ import { GroupsService } from 'src/app/services/groups.service';
   styleUrls: ['./muscular-group-selector.component.sass']
 })
 export class MuscularGroupSelectorComponent {
-  data: Group[];
+  groups: Group[];
 
   @Input() isMultipleChoice: boolean = true;
   @Input() text: String = 'Select a muscular group...';
   @Input() secondaryText?: String;
 
-  selectedGroups: Group[] = [];
+  @Output() selectionChanged = new EventEmitter<Group[]>();
 
   constructor(private groupsService: GroupsService) { }
 
   ngOnInit() {
     this.groupsService.getGroups().subscribe(groups => {
-      this.data = this.groupsService.organizeGroups(groups);
+      this.groups = this.groupsService.organizeGroups(groups);
     });
+  }
+
+  groupToggled() {
+    const selectedGroups = this.groupsService.getSelectedGroups(this.groups);
+
+    this.selectionChanged.emit(selectedGroups);
   }
 
 }

@@ -18,6 +18,12 @@ export class GroupsService {
     return this.http.get<Group[]>('groups');
   }
 
+  /**
+   * Creates a new Muscle Group and inserts it into DB.
+   *
+   * @param group Group to be inserted into DB.
+   * @returns Succesfully created group.
+   */
   createGroup(group: Group): Observable<Group> {
     return this.http.post<Group, Group>('groups', group);
   }
@@ -64,12 +70,12 @@ export class GroupsService {
    * toggles the checked state of all other groups to false if singleSelection is
    * set to true.
    *
-   * @param name - The name of the group to toggle.
+   * @param groupToBeToggled - Group reference to be toggled.
    * @param groups - An array of Group objects representing the groups to search.
    * @param singleSelection - A flag indicating whether only one group can be checked at a time.
    * @returns A boolean indicating whether at least one group is checked.
    */
-  toggleGroup(name: String, groups: Group[], singleSelection: boolean = false): boolean {
+  toggleGroup(groupToBeToggled: Group, groups: Group[], singleSelection: boolean = false): boolean {
     let checkedCount = 0;
 
     for (let group of groups) {
@@ -77,7 +83,7 @@ export class GroupsService {
         group.checked = false;
       }
 
-      if (group.name === name) {
+      if (group.id === groupToBeToggled.id) {
         group.checked = !group.checked;
 
         if (group.isPrimary) {
@@ -90,7 +96,7 @@ export class GroupsService {
       }
 
       if (group.groups) {
-        const childWasChecked = this.toggleGroup(name, group.groups, singleSelection);
+        const childWasChecked = this.toggleGroup(group, group.groups, singleSelection);
 
         if (childWasChecked && !singleSelection) {
           checkedCount++;
@@ -103,7 +109,7 @@ export class GroupsService {
     }
 
     for (let group of groups) {
-      if (group.name !== name && group.checked) {
+      if (group.id !== groupToBeToggled.id && group.checked) {
         group.checked = false;
       }
     }
@@ -115,19 +121,19 @@ export class GroupsService {
    * Sets a group with the specified name as the primary group, and unsets all other
    * groups as primary.
    *
-   * @param name - The name of the group to set as primary.
+   * @param targetGroup - Group to be set as primary group.
    * @param groups - An array of Group objects representing the groups to search.
    */
-  setGroupAsPrimary(name: String, groups: Group[]): void {
+  setGroupAsPrimary(targetGroup: Group, groups: Group[]): void {
     for (let group of groups) {
       group.isPrimary = false;
 
-      if (group.name === name && group.checked) {
+      if (group.id === targetGroup.id && group.checked) {
         group.isPrimary = true;
       }
 
       if (group.groups) {
-        this.setGroupAsPrimary(name, group.groups);
+        this.setGroupAsPrimary(targetGroup, group.groups);
       }
     }
   }

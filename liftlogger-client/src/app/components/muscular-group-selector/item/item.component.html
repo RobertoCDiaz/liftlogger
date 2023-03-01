@@ -3,18 +3,18 @@
   [ngClass]="{ checked: group.checked}">
     <span
     *ngIf="group.checked"
-    (click)="toggleChecked(group.name)"
+    (click)="toggleChecked(group)"
     class="checkbox material-icons">
     check_box
     </span>
     <span
       *ngIf="!group.checked"
-      (click)="toggleChecked(group.name)"
+      (click)="toggleChecked(group)"
       class="checkbox material-icons">
       check_box_outline_blank
     </span>
     <span class="name"
-    (dblclick)="setPrimary(group.name)">
+    (dblclick)="setPrimary(group)">
       {{ group.name }}
     </span>
     <span *ngIf="group.isPrimary" class="primary material-icons">
@@ -31,5 +31,6 @@
     *ngFor="let subgroup of group.groups"
     [data]="data"
     [isMultipleChoice]="isMultipleChoice"
+    (itemToggled)="toggleChecked($event)"
     [group]="subgroup"/>
 </div>

@@ -3,30 +3,11 @@
   <p class="secondary" *ngIf="secondaryText">{{ secondaryText }}</p>
 </div>
 <div class="container">
-  <!-- <div
-    *ngFor="let group of data" class="group"
-    (click)="onGroupClick(group)"
-    [ngClass]="{ checked: group.checked}">
-    <span *ngIf="group.checked" class="checkbox material-icons">
-      check_box
-    </span>
-    <span *ngIf="!group.checked" class="checkbox material-icons">
-      check_box_outline_blank
-    </span>
-    <span class="name">
-      {{ group.name }}
-    </span>
-    <span *ngIf="group.isPrimary" class="primary material-icons">
-      star
-    </span>
-    <span class="expand material-icons">
-      expand_more
-    </span>
-  </div> -->
 
   <app-muscular-group-selector-item
-    [data]="data"
-    *ngFor="let group of data"
+    [data]="groups"
+    *ngFor="let group of groups"
     [isMultipleChoice]="isMultipleChoice"
+    (itemToggled)="groupToggled()"
     [group]="group" />
 </div>
