@@ -1,6 +1,6 @@
 import { Weighting } from "@prisma/client"
 
-export type WeightingModel = Omit<
+export type WeightingCreationParams = Omit<
   Weighting,
   'id' | 'datetime' | 'water_percentage' | 'protein_percentage' |
   'metabolism' | 'visceral_fal' | 'ignored'
