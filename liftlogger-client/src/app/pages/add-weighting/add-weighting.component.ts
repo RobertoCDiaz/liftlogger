@@ -1,5 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { Weighting } from 'src/app/models/Weighting';
+import { WeightingsService } from 'src/app/services/weightings.service';
 
 @Component({
   selector: 'app-add-weighting',
@@ -7,26 +9,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./add-weighting.component.sass']
 })
 export class AddWeightingComponent {
+  data: Record<string, any> = {};
 
-  data: Record<string, number> = {};
-
-  constructor(private http: HttpClient) { }
+  constructor(private weightingsService: WeightingsService, private router: Router) { }
 
   onDataChanged(value: number, fieldName: string): void {
     this.data[fieldName] = Number(value);
-
-    console.log(this.data)
   }
 
   onSubmit(): void {
-    // alert('submitting ' + JSON.stringify(this.data));
+    const weighting = this.data as Weighting;
 
-
-    this.http.post(
-      'http://localhost:3001/weighting',
-      this.data,
-      { headers: { 'Content-Type': 'application/json' } }
-    ).subscribe();
+    this.weightingsService.createEntry(weighting).subscribe(result => {
+      alert('New entry added successfully!');
+      this.router.navigate(['..']);
+    });
   }
 
 }

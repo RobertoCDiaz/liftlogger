@@ -34,6 +34,10 @@ export default class MuscleGroupController {
    * @returns Created group.
    */
   static async createGroup(group: MuscleGroupCreationParams): Promise<MuscleGroup> {
+    // TODO: Create a logger class.
+    console.log('🔵 Inserting new MuscleGroup...');
+    console.log(group);
+
     return await prisma.muscleGroup.create({
       data: group,
     })
