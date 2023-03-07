@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AuthService as OAuthService } from '@auth0/auth0-angular';
+import { AuthService as OAuthService, User } from '@auth0/auth0-angular';
+import { lastValueFrom, Observable } from 'rxjs';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -7,6 +8,16 @@ import { HttpService } from './http.service';
 })
 export class AuthService {
   constructor(private oAuthService: OAuthService, private http: HttpService) { }
+
+  /**
+   * Fetches the information for the current user, such as email, profile
+   * picture, auth method, etc.
+   *
+   * @returns User object, or null if not user was logged in.
+   */
+  getUserInfo(): Observable<User | null | undefined> {
+    return this.oAuthService.user$;
+  }
 
   /**
    * Opens the LogIn page.

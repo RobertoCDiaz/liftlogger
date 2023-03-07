@@ -5,6 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
+import { MatSidenavModule } from '@angular/material/sidenav'
+import { MatDividerModule } from '@angular/material/divider';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './pages/main/main.component';
@@ -22,12 +24,11 @@ import { CreatorPageComponent } from './components/creator-page/creator-page.com
 import { MuscularGroupSelectorComponent } from './components/muscular-group-selector/muscular-group-selector.component';
 import { ItemComponent } from './components/muscular-group-selector/item/item.component';
 import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-muscle-group.component'
-
-import { MatSidenavModule } from '@angular/material/sidenav'
-
-import { environment } from 'src/environment/environment';
 import { MainLoginButtonComponent } from './components/main-login-button/main-login-button.component';
 import { LandingComponent } from './pages/landing/landing.component';
+import { MainSidenavComponent } from './components/main-sidenav/main-sidenav.component';
+
+import { environment } from 'src/environment/environment';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { LandingComponent } from './pages/landing/landing.component';
     CreateMuscleGroupComponent,
     MainLoginButtonComponent,
     LandingComponent,
+    MainSidenavComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +59,7 @@ import { LandingComponent } from './pages/landing/landing.component';
     FormsModule,
     HttpClientModule,
     MatSidenavModule,
+    MatDividerModule,
     AuthModule.forRoot({
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,

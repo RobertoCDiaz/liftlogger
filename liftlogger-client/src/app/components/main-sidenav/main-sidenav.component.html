@@ -1,0 +1,20 @@
+<div class="profile">
+  <img *ngIf="pictureUrl" [src]="pictureUrl" alt="profile picture">
+  <div *ngIf="!pictureUrl" class="picturePlaceholder"></div>
+  <p class="email">{{ userEmail }}</p>
+</div>
+<div class="menu">
+  <a class="item">
+    <span class="material-icons">fitness_center</span>
+    <span>Training Journal</span>
+  </a>
+  <mat-divider></mat-divider>
+  <a class="item">
+    <span class="material-icons">settings</span>
+    <span>Settings</span>
+  </a>
+  <a class="item danger" (click)="handleLogout()">
+    <span class="material-icons">logout</span>
+    <span>Logout</span>
+  </a>
+</div>
