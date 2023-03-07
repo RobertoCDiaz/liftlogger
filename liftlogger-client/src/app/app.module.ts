@@ -23,7 +23,11 @@ import { MuscularGroupSelectorComponent } from './components/muscular-group-sele
 import { ItemComponent } from './components/muscular-group-selector/item/item.component';
 import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-muscle-group.component'
 
+import { MatSidenavModule } from '@angular/material/sidenav'
+
 import { environment } from 'src/environment/environment';
+import { MainLoginButtonComponent } from './components/main-login-button/main-login-button.component';
+import { LandingComponent } from './pages/landing/landing.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +47,8 @@ import { environment } from 'src/environment/environment';
     MuscularGroupSelectorComponent,
     ItemComponent,
     CreateMuscleGroupComponent,
+    MainLoginButtonComponent,
+    LandingComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +56,7 @@ import { environment } from 'src/environment/environment';
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
+    MatSidenavModule,
     AuthModule.forRoot({
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,
