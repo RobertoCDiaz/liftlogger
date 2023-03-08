@@ -10,8 +10,14 @@ import { MainComponent } from './pages/main/main.component';
 
 // TODO: Auth in routes: probably make modules for auth-only routes and other for public ones
 const routes: Routes = [
-  // { path: '', component: LandingComponent },
-  { path: '', component: MainComponent },
+  { path: '', component: LandingComponent },
+  { path: 'dashboard', component: MainComponent, canActivate: [AuthGuard] },
+  // {
+  //   path: 'dashboard',
+  //   loadChildren: () =>
+  //     import('./modules/dashboard/dashboard.module').then((m) => m.DashboardModule),
+  //   canActivate: [AuthGuard]
+  // },
   { path: 'add-weighting', component: AddWeightingComponent, canActivate: [AuthGuard] },
   { path: 'create-template', component: CreateTemplateComponent, canActivate: [AuthGuard] },
   { path: 'create-movement', component: CreateMovementComponent, canActivate: [AuthGuard] },

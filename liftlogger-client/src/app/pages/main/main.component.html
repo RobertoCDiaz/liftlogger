@@ -1,3 +1,5 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <mat-sidenav-container class="sidenavContainer">
   <mat-sidenav #mainSidenav mode="over">
     <app-main-sidenav />
@@ -8,7 +10,7 @@
         <div class="title-bar">
           <span class="material-icons" (click)="mainSidenav.toggle()">menu</span>
           <h1>LiftLog</h1>
-          <app-main-login-button />
+          <!-- <app-main-login-button /> -->
         </div>
         <div class="highlights">
           <div class="graphs">
@@ -39,11 +41,6 @@
           text="Start working out"
           icon="fitness_center"
           href="/start-workout"/>
-
-        <app-menu-button
-          text="Movements, Templates, and Muscle Groups"
-          icon="sports_gymnastics"
-          href="/library" />
 
           <h2>temporal links</h2>
           <a href="/create-template">/create-template</a>

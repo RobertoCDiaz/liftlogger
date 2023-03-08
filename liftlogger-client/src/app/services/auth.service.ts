@@ -61,4 +61,8 @@ export class AuthService {
       createRequest.subscribe();
     });
   }
+
+  getAuth0Service() {
+    return this.oAuthService;
+  }
 }
