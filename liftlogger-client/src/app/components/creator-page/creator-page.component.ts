@@ -1,5 +1,5 @@
+import { Location } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Router } from '@angular/router';
 
 /**
  * Serves as a base component for any page that can create a DB entity. It was
@@ -50,13 +50,13 @@ export class CreatorPageComponent {
    */
   @Output() descriptionChanged = new EventEmitter<string>();
 
-  constructor(private router: Router) { }
+  constructor(private location: Location) { }
 
   /**
    * Navigates one page back when `Cancel` is clicked.
    */
   onCancelClicked(): void {
-    this.router.navigate([".."]);
+    this.location.back();
   }
 
   /**

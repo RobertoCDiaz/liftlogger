@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-page-header',
@@ -8,10 +8,10 @@ import { Router } from '@angular/router';
 })
 export class PageHeaderComponent {
 
-  constructor(private router: Router) { }
+  constructor(private location: Location) { }
 
   goBack(): void {
-    this.router.navigate([".."]);
+    this.location.back();
   }
 
 }

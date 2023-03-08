@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService as OAuthService, User } from '@auth0/auth0-angular';
-import { lastValueFrom, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environment/environment';
 import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private oAuthService: OAuthService, private http: HttpService) { }
+  constructor(private oAuthService: OAuthService, private http: HttpService, private router: Router) { }
 
   /**
    * Fetches the information for the current user, such as email, profile
@@ -25,6 +27,11 @@ export class AuthService {
    * If `shouldSignUp === true`, it opens up the Sign Up page directly. Defaults to `false`.
    */
   async login(shouldSignUp: boolean = false) {
+    if (this.isAuthenticated()) {
+      this.router.navigate(['/dashboard']);
+      return;
+    }
+
     this.oAuthService.loginWithPopup({
       authorizationParams: {
         prompt: 'login',
@@ -32,6 +39,9 @@ export class AuthService {
       },
     }).subscribe(async value => {
       await this.tryToCreateUser();
+
+      localStorage.setItem(environment.auth0ClientId + '.isAuthenticated', "true");
+      this.router.navigate(['/dashboard'])
     });
   }
 
@@ -39,7 +49,18 @@ export class AuthService {
    * Logs out from current session.
    */
   async logOut() {
-    this.oAuthService.logout();
+    this.oAuthService.logout().subscribe(value => {
+      localStorage.removeItem(environment.auth0ClientId + '.isAuthenticated');
+    });
+  }
+
+  /**
+   * Checks for user authentication.
+   *
+   * @returns Whether the user is authenticated or not.
+   */
+  isAuthenticated(): boolean {
+    return localStorage.getItem(environment.auth0ClientId + '.isAuthenticated') === 'true';
   }
 
   /**

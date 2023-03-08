@@ -9,8 +9,8 @@ import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatDividerModule } from '@angular/material/divider';
 
 import { AppComponent } from './app.component';
-import { MainComponent } from './pages/main/main.component'; //
-import { MenuButtonComponent } from './components/menu-button/menu-button.component'; //
+import { MainComponent } from './pages/main/main.component';
+import { MenuButtonComponent } from './components/menu-button/menu-button.component';
 import { AddWeightingComponent } from './pages/add-weighting/add-weighting.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { WeightscaleDataInputComponent } from './components/weightscale-data-input/weightscale-data-input.component';
@@ -26,15 +26,15 @@ import { ItemComponent } from './components/muscular-group-selector/item/item.co
 import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-muscle-group.component'
 import { MainLoginButtonComponent } from './components/main-login-button/main-login-button.component';
 import { LandingComponent } from './pages/landing/landing.component';
-import { MainSidenavComponent } from './components/main-sidenav/main-sidenav.component'; //
+import { MainSidenavComponent } from './components/main-sidenav/main-sidenav.component';
 
 import { environment } from 'src/environment/environment';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent, //
-    MenuButtonComponent, //
+    MainComponent,
+    MenuButtonComponent,
     AddWeightingComponent,
     PageHeaderComponent,
     WeightscaleDataInputComponent,
@@ -50,7 +50,7 @@ import { environment } from 'src/environment/environment';
     CreateMuscleGroupComponent,
     MainLoginButtonComponent,
     LandingComponent,
-    MainSidenavComponent, //
+    MainSidenavComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,7 +64,7 @@ import { environment } from 'src/environment/environment';
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,
       authorizationParams: {
-        redirect_uri: window.location.origin,
+        redirect_uri: environment.auth0CallbackUrl,
         audience: environment.auth0Audience
       }
     })

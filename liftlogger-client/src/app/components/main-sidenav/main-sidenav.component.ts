@@ -20,9 +20,7 @@ export class MainSidenavComponent {
 
       this.pictureUrl = user.picture;
       this.userEmail = user.email
-
-      console.log(this.pictureUrl, this.userEmail)
-    })
+    });
   }
 
   handleLogout() {
