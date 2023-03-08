@@ -1,0 +1,57 @@
+@use '../../../styles'
+
+$header-height: 60vh
+
+:host
+  > .header
+    height: $header-height
+
+    > *
+      position: absolute
+
+    img
+      height: $header-height
+
+    .backdrop
+      width: 100%
+      height: $header-height
+      background: linear-gradient(rgba(0, 0, 0, 0), 40%,rgba(0, 0, 0, 0.75), 80%, black)
+
+    .content
+      @include styles.flex($direction: column)
+      gap: 4em
+      justify-content: end
+      align-items: center
+      width: 100vw
+      height: $header-height
+
+      > .header
+        @include styles.flex($direction: column)
+        gap: 1em
+        align-items: center
+
+        h1
+          font-size: 2.5rem
+
+      > .options
+        @include styles.flex($direction: row)
+        gap: 1em
+        align-self: stretch
+        margin: 0 2em
+        margin-bottom: 2em
+
+        > a
+          @include styles.no-selection
+          border: 1px solid styles.$white
+          border-radius: .5em
+          text-align: center
+          padding: .5em
+          flex-grow: 1
+          cursor: pointer
+
+          &.main
+            background-color: styles.$white
+            color: styles.$text-color
+
+      *
+        color: styles.$white

@@ -1,0 +1,36 @@
+import { Body, Controller, Middlewares, Post, Route } from "tsoa";
+import UserController from "../controllers/UsersController";
+import { shouldBeAuthenticated } from "../middlewares/auth";
+import { UserCreationParams } from "../models/User";
+
+@Route('auth')
+export class AuthRoutes extends Controller {
+  /**
+   * Tries to create a new user. If the user email passed through the body
+   * is not in DB, then it will create a new user from that. Otherwise, it will
+   * do nothing.
+   *
+   * @param user User information to create a new user in DB.
+   * @returns Whether a new user was successfully created or not.
+   */
+  @Post('createUser')
+  @Middlewares([shouldBeAuthenticated])
+  public async createUser(
+    @Body() user: UserCreationParams
+  ): Promise<boolean> {
+    // TODO: Create a logger class.
+    console.log('🔵 Trying to create new User:');
+    console.log(user);
+
+    const userExists = (await UserController.get(user.email)) !== null;
+
+    if (userExists) {
+      console.log('🟡 User was already in DB');
+      return false;
+    }
+
+    await UserController.create(user);
+
+    return true;
+  }
+}

@@ -1,47 +1,50 @@
-<div class="main-page">
-  <div class="header">
-    <div class="title-bar">
-      <span class="material-icons">menu</span>
-      <h1>LiftLog</h1>
-    </div>
-    <div class="highlights">
-      <div class="graphs">
-        <div class="item">
-          <h3>Weight Progress</h3>
-          <div class="graph"></div>
+<mat-sidenav-container class="sidenavContainer">
+  <mat-sidenav #mainSidenav mode="over">
+    <app-main-sidenav />
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="main-page">
+      <div class="header">
+        <div class="title-bar">
+          <span class="material-icons" (click)="mainSidenav.toggle()">menu</span>
+          <h1>LiftLog</h1>
+          <!-- <app-main-login-button /> -->
         </div>
-        <div class="item">
-          <h3>Fat % Progress</h3>
-          <div class="graph"></div>
-        </div>
-        <div class="item">
-          <h3>Muscle Mass Progress</h3>
-          <div class="graph"></div>
+        <div class="highlights">
+          <div class="graphs">
+            <div class="item">
+              <h3>Weight Progress</h3>
+              <div class="graph"></div>
+            </div>
+            <div class="item">
+              <h3>Fat % Progress</h3>
+              <div class="graph"></div>
+            </div>
+            <div class="item">
+              <h3>Muscle Mass Progress</h3>
+              <div class="graph"></div>
+            </div>
+          </div>
+          <p class="view-all-data">View all data ></p>
         </div>
       </div>
-      <p class="view-all-data">View all data ></p>
+
+      <div class="content">
+        <app-menu-button
+          text="Add weighting data"
+          icon="monitor_weight"
+          href="/add-weighting"/>
+
+        <app-menu-button
+          text="Start working out"
+          icon="fitness_center"
+          href="/start-workout"/>
+
+          <h2>temporal links</h2>
+          <a href="/create-template">/create-template</a>
+          <a href="/create-movement">/create-movement</a>
+          <a href="/create-muscle-group">/create-muscle-group</a>
+        </div>
     </div>
-  </div>
-
-  <div class="content">
-    <app-menu-button
-      text="Add weighting data"
-      icon="monitor_weight"
-      href="/add-weighting"/>
-
-    <app-menu-button
-      text="Start working out"
-      icon="fitness_center"
-      href="/start-workout"/>
-
-    <app-menu-button
-      text="Movements, Templates, and Muscle Groups"
-      icon="sports_gymnastics"
-      href="/library" />
-
-      <h2>temporal links</h2>
-      <a href="/create-template">/create-template</a>
-      <a href="/create-movement">/create-movement</a>
-      <a href="/create-muscle-group">/create-muscle-group</a>
-    </div>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

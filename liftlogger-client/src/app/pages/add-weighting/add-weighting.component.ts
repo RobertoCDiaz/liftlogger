@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { Weighting } from 'src/app/models/Weighting';
 import { WeightingsService } from 'src/app/services/weightings.service';
 
@@ -11,7 +11,7 @@ import { WeightingsService } from 'src/app/services/weightings.service';
 export class AddWeightingComponent {
   data: Record<string, any> = {};
 
-  constructor(private weightingsService: WeightingsService, private router: Router) { }
+  constructor(private weightingsService: WeightingsService, private location: Location) { }
 
   onDataChanged(value: number, fieldName: string): void {
     this.data[fieldName] = Number(value);
@@ -22,7 +22,7 @@ export class AddWeightingComponent {
 
     this.weightingsService.createEntry(weighting).subscribe(result => {
       alert('New entry added successfully!');
-      this.router.navigate(['..']);
+      this.location.back();
     });
   }
 

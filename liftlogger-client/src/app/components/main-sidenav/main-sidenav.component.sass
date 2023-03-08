@@ -1,0 +1,62 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex($direction: column)
+  min-width: 70vw
+  max-width: 80vw
+
+  @include styles.isLarge
+    min-width: 25vw
+    max-width: 30vw
+
+  .profile
+    @include styles.flex($direction: column)
+    background-color: styles.$primary-color
+    padding: 2em
+    gap: .5em
+    align-items: center
+
+    .picturePlaceholder
+      width: 4em
+      height: 4em
+      background-color: styles.$light-gray
+      border-radius: 256em
+
+    img
+      width: 4em
+      height: 4em
+      border-radius: 256em
+
+    .email
+      color: styles.$white
+      word-break: break-all
+      text-align: center
+
+  .menu
+    @include styles.flex($direction: column)
+
+    *
+      color: styles.$text-color
+
+    .item
+      @include styles.flex($direction: row)
+      @include styles.no-selection
+      gap: 1em
+      padding: 1em
+      align-items: center
+      cursor: pointer
+      transition: 50ms
+
+      &.selected
+        border-left: 5px solid styles.$primary-dark-color
+
+        *
+          color: styles.$primary-dark-color
+          font-weight: bold
+
+      &.danger
+        *
+          color: styles.$red
+
+      &:hover
+        background-color: styles.$light-gray

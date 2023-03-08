@@ -1,4 +1,8 @@
-@use '/src/styles'
+@use '../../../styles'
+
+.sidenavContainer
+  height: 100vh
+
 .main-page
   @include styles.flex(column)
 
@@ -19,6 +23,10 @@
 
       span
         cursor: pointer
+        @include styles.no-selection
+
+      h1
+        flex-grow: 1
 
     .highlights
       @include styles.flex(column)

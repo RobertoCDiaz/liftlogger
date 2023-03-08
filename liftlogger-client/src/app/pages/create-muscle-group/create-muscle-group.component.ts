@@ -1,8 +1,8 @@
 // TODO: Document this page
+import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { Group } from 'src/app/models/Groups';
-import { HttpService } from 'src/app/services/http.service';
+import { GroupsService } from 'src/app/services/groups.service';
 
 
 @Component({
@@ -17,7 +17,7 @@ export class CreateMuscleGroupComponent {
   private groupName: string;
   private groupDescription: string;
 
-  constructor(private http: HttpService, private router: Router) { }
+  constructor(private groupsService: GroupsService, private location: Location) { }
 
   onSelectionChanged(selectedGroups: Group[]): void {
     this.selectedGroup = selectedGroups[0];
@@ -31,14 +31,14 @@ export class CreateMuscleGroupComponent {
       return;
     }
 
-    this.http.post<Group, Group>('groups', {
+    this.groupsService.createGroup({
       name: this.groupName,
       description: this.groupDescription,
       user_email: "robertocdiazsanchez@gmail.com", // TODO: use real user email once auth is implemented
       parent_group_id: this.selectedGroup.id ?? undefined,
     }).subscribe(resultGroup => {
       alert(`[${resultGroup.name}] muscle group was succesfully created!`);
-      this.router.navigate(['..']);
+      this.location.back();
     })
   }
 
