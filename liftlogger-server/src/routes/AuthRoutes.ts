@@ -1,7 +1,7 @@
 import { Body, Controller, Middlewares, Post, Route } from "tsoa";
 import UserController from "../controllers/UsersController";
 import { shouldBeAuthenticated } from "../middlewares/auth";
-import { UserCreationParams } from "../models/User";
+import { UserCreationParams } from "../models/UserModel";
 
 @Route('auth')
 export class AuthRoutes extends Controller {

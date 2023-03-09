@@ -1,5 +1,5 @@
 import { MuscleGroup, PrismaClient } from "@prisma/client";
-import { MuscleGroupCreationParams } from "../models/MuscleGroup";
+import { MuscleGroupCreationParams } from "../models/MuscleGroupModel";
 
 const prisma = new PrismaClient();
 

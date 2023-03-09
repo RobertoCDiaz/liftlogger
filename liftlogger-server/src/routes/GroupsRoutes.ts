@@ -1,7 +1,7 @@
 import { MuscleGroup } from "@prisma/client";
 import { Body, Controller, Get, Path, Post, Query, Route } from "tsoa";
 import MuscleGroupController from "../controllers/MuscleGroupsController";
-import { MuscleGroupCreationParams } from "../models/MuscleGroup";
+import { MuscleGroupCreationParams } from "../models/MuscleGroupModel";
 
 @Route('groups')
 export class GroupsRoutes extends Controller {

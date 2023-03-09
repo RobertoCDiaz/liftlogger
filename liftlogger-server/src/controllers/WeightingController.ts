@@ -1,5 +1,5 @@
 import { PrismaClient, Weighting } from '@prisma/client';
-import { WeightingCreationParams } from '../models/Weighting';
+import { WeightingCreationParams } from '../models/WeightingModel';
 
 const prisma = new PrismaClient();
 

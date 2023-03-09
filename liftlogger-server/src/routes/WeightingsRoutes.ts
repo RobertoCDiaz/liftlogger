@@ -1,7 +1,7 @@
 import { Weighting } from "@prisma/client";
 import { Body, Controller, Get, Post, Route } from "tsoa";
 import { WeightingController } from "../controllers/WeightingController";
-import { WeightingCreationParams } from "../models/Weighting";
+import { WeightingCreationParams } from "../models/WeightingModel";
 
 @Route('weightings')
 export class WeightingRoutes extends Controller {
