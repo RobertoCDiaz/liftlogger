@@ -56,24 +56,45 @@ export default class TemplateController {
 
   /**
    * Inserts a new template in DB. It also makes the proper relationship to
-   * add movements to that new template.
+   * add movements to that new template if a list of Movement ids is provided.
    *
    * @param template Data for the template to be created.
    * @param movementsIds List of the Movements' ids to be included in the template.
    * @returns Template created.
    */
-  static async create(template: TemplateCreationParams, movementsIds: number[]) {
+  static async create(template: TemplateCreationParams, movementsIds?: number[]) {
     const newTemplate = await prisma.template.create({ data: template });
 
-    movementsIds.forEach(async movementId => {
-      await prisma.movementTemplates.create({
-        data: {
-          movement_id: movementId,
-          template_id: newTemplate.id,
-        },
-      });
-    });
+    if (movementsIds) {
+      await this.addMovementsToTemplate(newTemplate.id, movementsIds, newTemplate.user_email);
+    }
 
     return newTemplate;
+  }
+
+  /**
+   * Add movements to a template.
+   *
+   * @param templateId Template in which the movements will be inserted to.
+   * @param movementsIds Ids of the movements to be inserted.
+   * @param userEmail Owner of the template/movements.
+   * @returns Number of movements inserted into the template.
+   */
+  static async addMovementsToTemplate(templateId: number, movementsIds: number[], userEmail: string): Promise<number> {
+    const template = await prisma.template.findFirst({ where: { id: templateId, user_email: userEmail } });
+    const movements = await prisma.template.findMany({ where: { id: { in: movementsIds }, user_email: userEmail } });
+
+    if (!template || (movements.length !== movementsIds.length)) {
+      return 0;
+    }
+
+    const result = await prisma.movementTemplates.createMany({
+      data: movementsIds.map(movementId => ({
+        template_id: templateId,
+        movement_id: movementId,
+      })),
+    })
+
+    return result.count;
   }
 }
