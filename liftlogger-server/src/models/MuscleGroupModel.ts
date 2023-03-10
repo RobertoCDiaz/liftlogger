@@ -12,6 +12,14 @@ export type MuscleGroupCreationParams = Omit<MuscleGroup, 'id' | 'parent_group_i
 }
 
 /**
+ * Relationship of belonging of a Movement to a MuscleGroup.
+ */
+export type MuscleGroupForMovementModel = {
+  group_id: number;
+  is_primary: boolean;
+}
+
+/**
  * Export a prettified version of Params with a proper name.
  */
 // export type MuscleGroupCreationParams = Prettify<Params>;
