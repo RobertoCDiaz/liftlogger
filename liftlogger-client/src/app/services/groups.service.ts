@@ -15,8 +15,8 @@ export class GroupsService {
    *
    * @returns An array of Group objects representing the groups.
    */
-  getGroups(): Observable<Group[]> {
-    return this.http.get<Group[]>('groups');
+  async getGroups(): Promise<Observable<Group[]>> {
+    return this.http.getAuth<Group[]>('groups');
   }
 
   /**

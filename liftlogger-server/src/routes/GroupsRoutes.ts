@@ -16,8 +16,16 @@ export class GroupsRoutes extends Controller {
    */
   @Get('')
   @Middlewares([shouldBeAuthenticated])
-  public async getGroups(): Promise<MuscleGroup[]> {
-    return MuscleGroupController.getAll();
+  public async getGroups(
+    @Request() req: express.Request
+  ): Promise<MuscleGroup[] | null | undefined> {
+    if (!req.auth) {
+      return;
+    }
+
+    const { email } = await AuthService.getUserInfo(req.auth.token);
+
+    return MuscleGroupController.getAll(email);
   }
 
   /**
@@ -29,9 +37,16 @@ export class GroupsRoutes extends Controller {
   @Get('{id}')
   @Middlewares([shouldBeAuthenticated])
   public async getGroup(
-    @Path() id: number
-  ): Promise<MuscleGroup | null> {
-    return MuscleGroupController.get(id);
+    @Path() id: number,
+    @Request() req: express.Request
+  ): Promise<MuscleGroup | null | undefined> {
+    if (!req.auth) {
+      return;
+    }
+
+    const { email } = await AuthService.getUserInfo(req.auth.token);
+
+    return MuscleGroupController.get(id, email);
   }
 
   /**
