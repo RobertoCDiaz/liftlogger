@@ -82,7 +82,7 @@ export default class TemplateController {
    */
   static async addMovementsToTemplate(templateId: number, movementsIds: number[], userEmail: string): Promise<number> {
     const template = await prisma.template.findFirst({ where: { id: templateId, user_email: userEmail } });
-    const movements = await prisma.template.findMany({ where: { id: { in: movementsIds }, user_email: userEmail } });
+    const movements = await prisma.movement.findMany({ where: { id: { in: movementsIds }, user_email: userEmail } });
 
     if (!template || (movements.length !== movementsIds.length)) {
       return 0;
