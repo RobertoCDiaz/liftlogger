@@ -21,6 +21,7 @@ model User {
   templates  Template[]
   sessions   LiftingSession[]
   weightings Weighting[]
+  notes      Note[]
 
   @@map("users")
 }
@@ -76,6 +77,7 @@ model Movement {
   sets               LiftingSet[]
   group_movements    GroupMovements[]
   movement_templates MovementTemplates[]
+  notes              MovementNote[]
 
   @@map("movements")
 }
@@ -147,4 +149,33 @@ model MovementTemplates {
 
   @@id([movement_id, template_id])
   @@map("movement_templates")
+}
+
+// Notes made for a movement on a specific date. It could be notes on how to improve the movement form,
+// reminders for next sessions such as increase weight, etc.
+model MovementNote {
+  id    Int    @id @default(autoincrement())
+  notes String @db.Text
+  date  Int    @db.UnsignedInt
+
+  movement_id Int
+  movement    Movement @relation(fields: [movement_id], references: [id])
+
+  @@map("movement_notes")
+}
+
+// General notes to show on graphs.
+// User will create notes to mark events on their graphs, such as a change of
+// diet, a resting period due to injuries, etc. This way they can track, for example,
+// if a diet is really affecting their weight loss.
+model Note {
+  id       Int    @id @default(autoincrement())
+  notes    String @db.Text
+  date     Int    @db.UnsignedInt
+  priority Int    @default(1)
+
+  user_email String @db.VarChar(255)
+  user       User   @relation(fields: [user_email], references: [email])
+
+  @@map("notes")
 }
