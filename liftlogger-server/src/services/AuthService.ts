@@ -41,8 +41,7 @@ export class AuthService {
    * @param accessToken Provided Access Token.
    * @returns Information on the access token's owner.
    */
-  async getUserInfo(accessToken: string): Promise<UserInfo> {
-
+  static async getUserInfo(accessToken: string): Promise<UserInfo> {
     const headers = new Headers();
 
     headers.set('Authorization', `Bearer ${accessToken}`);

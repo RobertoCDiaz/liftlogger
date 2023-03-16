@@ -1,5 +1,5 @@
 import { PrismaClient, Weighting } from '@prisma/client';
-import { WeightingCreationParams } from '../models/Weighting';
+import { WeightingCreationParams } from '../models/WeightingModel';
 
 const prisma = new PrismaClient();
 
@@ -9,8 +9,12 @@ export class WeightingController {
    *
    * @returns List of entries.
    */
-  static async getEntries(): Promise<Weighting[]> {
-    return await prisma.weighting.findMany();
+  static async getEntries(userEmail: string): Promise<Weighting[]> {
+    return await prisma.weighting.findMany({
+      where: {
+        user_email: userEmail,
+      },
+    });
   }
 
   /**
@@ -20,14 +24,6 @@ export class WeightingController {
    * @returns Data inserted, fetched directly from DB.
    */
   static async createEntry(data: WeightingCreationParams): Promise<Weighting> {
-    // TODO: Create a logger class.
-    console.log('🔵 Inserting new Weighting...');
-    console.log(data);
-
-    if (!data.datetime) {
-      data.datetime = new Date();
-    }
-
     const newEntry = await prisma.weighting.create({
       data: data
     });

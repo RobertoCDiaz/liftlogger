@@ -15,8 +15,8 @@ export class GroupsService {
    *
    * @returns An array of Group objects representing the groups.
    */
-  getGroups(): Observable<Group[]> {
-    return this.http.get<Group[]>('groups');
+  async getGroups(): Promise<Observable<Group[]>> {
+    return this.http.getAuth<Group[]>('groups');
   }
 
   /**
@@ -25,8 +25,8 @@ export class GroupsService {
    * @param group Group to be inserted into DB.
    * @returns Succesfully created group.
    */
-  createGroup(group: Group): Observable<Group> {
-    return this.http.post<Group, Group>('groups', group);
+  async createGroup(group: Group): Promise<Observable<Group>> {
+    return await this.http.postAuth<Group, Group>('groups', group);
   }
 
   /**
@@ -97,7 +97,7 @@ export class GroupsService {
       }
 
       if (group.groups) {
-        const childWasChecked = this.toggleGroup(group, group.groups, singleSelection);
+        const childWasChecked = this.toggleGroup(groupToBeToggled, group.groups, singleSelection);
 
         if (childWasChecked && !singleSelection) {
           checkedCount++;
