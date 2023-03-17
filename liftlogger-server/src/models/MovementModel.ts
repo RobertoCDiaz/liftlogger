@@ -6,8 +6,9 @@ import { MuscleGroupForMovementModel } from "./MuscleGroupModel";
  * Omits `id` from the Movement type. It also adds a `muscleGroups` obligatory property, which will
  * be the Muscle Groups this specific Movement belongs to.
  */
-export type MovementCreationParams = Omit<Movement, 'id' | 'description'> & {
+export type MovementCreationParams = Omit<Movement, 'id' | 'description' | 'primary_group_id'> & {
   description?: string;
+  primary_group_id?: number;
 };
 
 /**

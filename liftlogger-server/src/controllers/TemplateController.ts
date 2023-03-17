@@ -19,11 +19,7 @@ export default class TemplateController {
         user_email: userEmail,
       },
       include: {
-        movement_templates: {
-          select: {
-            movement: true,
-          },
-        },
+        movements: true,
       },
     });
 
@@ -43,11 +39,7 @@ export default class TemplateController {
         user_email: userEmail,
       },
       include: {
-        movement_templates: {
-          select: {
-            movement: true,
-          },
-        },
+        movements: true,
       },
     });
 
@@ -63,38 +55,15 @@ export default class TemplateController {
    * @returns Template created.
    */
   static async create(template: TemplateCreationParams, movementsIds?: number[]) {
-    const newTemplate = await prisma.template.create({ data: template });
-
-    if (movementsIds) {
-      await this.addMovementsToTemplate(newTemplate.id, movementsIds, newTemplate.user_email);
-    }
+    const newTemplate = await prisma.template.create({
+      data: {
+        ...template,
+        movements: movementsIds && {
+          connect: movementsIds.map(id => ({ id: id })),
+        }
+      }
+    });
 
     return newTemplate;
-  }
-
-  /**
-   * Add movements to a template.
-   *
-   * @param templateId Template in which the movements will be inserted to.
-   * @param movementsIds Ids of the movements to be inserted.
-   * @param userEmail Owner of the template/movements.
-   * @returns Number of movements inserted into the template.
-   */
-  static async addMovementsToTemplate(templateId: number, movementsIds: number[], userEmail: string): Promise<number> {
-    const template = await prisma.template.findFirst({ where: { id: templateId, user_email: userEmail } });
-    const movements = await prisma.movement.findMany({ where: { id: { in: movementsIds }, user_email: userEmail } });
-
-    if (!template || (movements.length !== movementsIds.length)) {
-      return 0;
-    }
-
-    const result = await prisma.movementTemplates.createMany({
-      data: movementsIds.map(movementId => ({
-        template_id: templateId,
-        movement_id: movementId,
-      })),
-    })
-
-    return result.count;
   }
 }

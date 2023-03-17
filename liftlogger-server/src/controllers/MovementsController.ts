@@ -19,14 +19,6 @@ export default class MovementsController {
         id: movementId,
         user_email: userEmail,
       },
-      include: {
-        group_movements: {
-          select: {
-            is_primary_group: true,
-            group: true,
-          },
-        },
-      },
     });
 
     return movements;
@@ -44,14 +36,6 @@ export default class MovementsController {
       where: {
         user_email: userEmail,
       },
-      include: {
-        group_movements: {
-          select: {
-            is_primary_group: true,
-            group: true,
-          },
-        },
-      },
     });
 
     return movements;
@@ -65,35 +49,16 @@ export default class MovementsController {
    * @returns Newly created movement
    */
   static async createMovement(movement: MovementCreationParams, muscleGroups: MuscleGroupForMovementModel[]): Promise<Movement> {
-    const newMovement = await prisma.movement.create({ data: movement });
-
-    await this.setMuscleGroupsForMovement(newMovement.id, muscleGroups, newMovement.user_email)
+    const newMovement = await prisma.movement.create({
+      data: {
+        ...movement,
+        groups: {
+          connect: muscleGroups.map(group => ({ id: group.group_id })),
+        },
+        primary_group_id: muscleGroups.filter(group => group.is_primary)[0].group_id ?? null,
+      },
+    });
 
     return newMovement;
-  }
-
-  /**
-   * Sets the MuscleGroups for a Movement, and whether they are a primary group or not.
-   *
-   * @param movementId Movement ID.
-   * @param movementGroups List of groups for the movement.
-   * @param userEmail Owner of the movement/groups.
-   */
-  private static async setMuscleGroupsForMovement(movementId: number, movementGroups: MuscleGroupForMovementModel[], userEmail: string) {
-    const movement = await prisma.movement.findFirst({ where: { id: movementId, user_email: userEmail } });
-    const groups = await prisma.muscleGroup.findMany({ where: { id: { in: movementGroups.map(group => group.group_id) }, user_email: userEmail } });
-
-    if (!movement || (groups.length !== movementGroups.length)) {
-      console.log('mal')
-      return;
-    }
-
-    await prisma.groupMovements.createMany({
-      data: movementGroups.map(group => ({
-        movement_id: movementId,
-        group_id: group.group_id,
-        is_primary_group: group.is_primary,
-      }))
-    });
   }
 }

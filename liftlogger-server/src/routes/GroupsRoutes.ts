@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { MuscleGroup } from "@prisma/client";
-import { Body, Controller, Get, Middlewares, Path, Post, Request, Route } from "tsoa";
+import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from "tsoa";
 import MuscleGroupController from "../controllers/MuscleGroupsController";
 import { MuscleGroupCreationParams } from "../models/MuscleGroupModel";
 import { AuthService } from "../services/AuthService";
@@ -12,11 +12,13 @@ export class GroupsRoutes extends Controller {
   /**
    * Fetches the MuscleGroups DB table for all its content.
    *
+   * @param withMovements Whether the groups should be fetched along their movements or not. Defaults to `false`.
    * @returns All the Muscle Groups stored in DB.
    */
   @Get('')
   @Middlewares([shouldBeAuthenticated])
   public async getGroups(
+    @Query() withMovements: boolean = false,
     @Request() req: express.Request
   ): Promise<MuscleGroup[] | null | undefined> {
     if (!req.auth) {
@@ -25,7 +27,7 @@ export class GroupsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return MuscleGroupController.getAll(email);
+    return MuscleGroupController.getAll(email, withMovements);
   }
 
   /**
@@ -67,10 +69,6 @@ export class GroupsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    const newGroup = await MuscleGroupController.createGroup({ ...group, user_email: email })
-
-    this.setStatus(200);
-
-    return newGroup;
+    return await MuscleGroupController.createGroup({ ...group, user_email: email });
   }
 }

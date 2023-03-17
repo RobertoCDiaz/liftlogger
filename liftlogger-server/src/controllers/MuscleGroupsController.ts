@@ -8,10 +8,22 @@ export default class MuscleGroupController {
    * Gets all the groups stored in DB from the provided user.
    *
    * @param userEmail Email of the user whose MuscleGroups are to be fetched.
+   * @param withMovements Whether the groups should be fetched along their movements or not. Defaults to `false`.
    * @returns List of groups.
    */
-  static async getAll(userEmail: string): Promise<MuscleGroup[]> {
-    return await prisma.muscleGroup.findMany({ where: { user_email: userEmail } });
+  static async getAll(userEmail: string, withMovements: boolean = false): Promise<MuscleGroup[]> {
+    return await prisma.muscleGroup.findMany({
+      where: {
+        user_email: userEmail,
+      },
+      include: {
+        movements: withMovements && {
+          include: {
+            groups: true
+          }
+        }
+      }
+    });
   }
 
   /**
@@ -37,10 +49,6 @@ export default class MuscleGroupController {
    * @returns Created group.
    */
   static async createGroup(group: MuscleGroupCreationParams): Promise<MuscleGroup> {
-    // TODO: Create a logger class.
-    console.log('🔵 Inserting new MuscleGroup...');
-    console.log(group);
-
     return await prisma.muscleGroup.create({
       data: group,
     })
