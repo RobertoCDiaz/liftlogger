@@ -1,0 +1,16 @@
+<div class="main">
+  <span class="material-icons" (click)="fireMenuClicked()">
+    menu
+  </span>
+  <h1 class="title">
+    {{ title ? title : 'LiftLogger'}}
+  </h1>
+  <a [href]="actionUrl">
+    <span *ngIf="actionUrl" class="material-icons">
+      {{ actionIcon }}
+    </span>
+  </a>
+</div>
+<div class="bar-content">
+  <ng-content></ng-content>
+</div>

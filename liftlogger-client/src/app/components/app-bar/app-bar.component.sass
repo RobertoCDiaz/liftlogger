@@ -1,0 +1,28 @@
+@use '../../../styles'
+
+:host
+  background-color: styles.$primary-color
+  @include styles.shadow
+
+  &.rounded
+    border-radius: 0 0 .5em .5em
+
+  *
+    color: styles.$white
+
+  .main
+    @include styles.flex($direction: row)
+    padding: 1em
+    align-items: center
+    gap: 1em
+
+    .title
+      flex-grow: 1
+
+    span.material-icons
+      cursor: pointer
+      @include styles.no-selection
+
+  .bar-content
+    *
+      color: styles.$white
