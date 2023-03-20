@@ -1,9 +1,11 @@
-// TODO: Refactor group selection. (Should it be delegated to the global groups service?)
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Group } from '../models/Groups';
 import { HttpService } from './http.service';
 
+/**
+ * Collection of methods and operations to help in the MuscleGroups handling.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -11,12 +13,13 @@ export class GroupsService {
   constructor(private http: HttpService) { }
 
   /**
-   * Retrieves a list of groups.
+   * Retrieves the groups owned by the current user.
    *
-   * @returns An array of Group objects representing the groups.
+   * @param withMovements Whether the returned groups should also include their Movements or not
+   * @returns An array of Group objects representing the groups
    */
-  async getGroups(): Promise<Observable<Group[]>> {
-    return this.http.getAuth<Group[]>('groups');
+  getUserGroups(withMovements: boolean = false): Observable<Group[]> {
+    return this.http.get<Group[]>('groups' + (withMovements ? '?withMovements=true' : ''));
   }
 
   /**
@@ -25,8 +28,10 @@ export class GroupsService {
    * @param group Group to be inserted into DB.
    * @returns Succesfully created group.
    */
-  async createGroup(group: Group): Promise<Observable<Group>> {
-    return await this.http.postAuth<Group, Group>('groups', group);
+  createGroup(group: Group): Observable<Group> {
+    return this.http.post<Group, Group>('groups', group);
+  }
+
   }
 
   /**

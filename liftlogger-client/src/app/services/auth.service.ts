@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService as OAuthService, User } from '@auth0/auth0-angular';
-import { Observable } from 'rxjs';
+import { from, map, Observable } from 'rxjs';
 import { environment } from 'src/environment/environment';
 import { HttpService } from './http.service';
 
@@ -37,8 +37,8 @@ export class AuthService {
         prompt: 'login',
         screen_hint: shouldSignUp ? 'signup' : 'login',
       },
-    }).subscribe(async value => {
-      await this.tryToCreateUser();
+    }).subscribe(value => {
+      this.tryToCreateUser();
 
       localStorage.setItem(environment.auth0ClientId + '.isAuthenticated', "true");
       this.router.navigate(['/dashboard'])
@@ -71,13 +71,13 @@ export class AuthService {
    * backend endpoint, but to make sure they are stored once they login, we need to make the request
    * every time a user logs in.
    */
-  private async tryToCreateUser() {
-    this.oAuthService.user$.subscribe(async user => {
+  private tryToCreateUser() {
+    this.oAuthService.user$.subscribe(user => {
       if (!user) {
         return;
       }
 
-      const createRequest = await this.http.postAuth<{ email: string }, boolean>('auth/createUser', { email: user.email || '' });
+      const createRequest = this.http.post<{ email: string }, boolean>('auth/createUser', { email: user.email || '' });
 
       createRequest.subscribe();
     });
