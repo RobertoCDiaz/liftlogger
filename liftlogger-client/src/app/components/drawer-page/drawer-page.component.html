@@ -1,0 +1,19 @@
+<mat-sidenav-container class="sidenavContainer">
+  <mat-sidenav #mainSidenav mode="over">
+    <app-main-sidenav />
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="main-page">
+      <app-bar
+        [actionIcon]="actionIcon"
+        [actionUrl]="actionUrl"
+        (menuClicked)="mainSidenav.toggle()"
+        [title]="pageName">
+        <ng-content select="[slot=appbar-content]"></ng-content>
+      </app-bar>
+      <div class="content">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
