@@ -27,6 +27,9 @@ $red: #ED2929
   -ms-user-select: none // IE 10 and IE 11
   user-select: none // Standard syntax
 
+@mixin transition
+  transition: 50ms
+
 html, body
   min-height: 100vh
   height: auto
@@ -48,7 +51,3 @@ a
 @mixin isXL
   @media screen and (min-width: 1200px)
     @content
-
-// debuggin styles
-// *
-//   border: 1px solid red
