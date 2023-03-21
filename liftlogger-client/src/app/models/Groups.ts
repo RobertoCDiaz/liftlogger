@@ -1,3 +1,5 @@
+import { Movement } from "./Movement";
+
 /**
  * Represents a group of muscles and its properties.
  */
@@ -30,15 +32,17 @@ export type Group = {
   /**
    * Indicates if the muscle group is selected or not.
    */
-  checked?: boolean,
+  checked?: boolean;
 
   /**
    * Indicates if the muscle group is a primary muscle group or not.
    */
-  isPrimary?: boolean,
+  isPrimary?: boolean;
 
   /**
    * An array of sub-groups for a muscle group.
    */
-  groups?: Group[]
+  groups?: Group[];
+
+  movements?: Movement[];
 }
