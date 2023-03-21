@@ -27,6 +27,13 @@ import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-m
 import { MainLoginButtonComponent } from './components/main-login-button/main-login-button.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { MainSidenavComponent } from './components/main-sidenav/main-sidenav.component';
+import { AppBarComponent } from './components/app-bar/app-bar.component';
+import { DrawerPageComponent } from './components/drawer-page/drawer-page.component';
+import { MovementsLibraryComponent } from './pages/movements-library/movements-library.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { MovementsPickerGroupItemComponent } from './components/movements-picker-group-item/movements-picker-group-item.component';
+import { MovementsPickerMovementItemComponent } from './components/movements-picker-movement-item/movements-picker-movement-item.component';
+import { MovementsPickerComponent } from './components/movements-picker/movements-picker.component';
 
 import { environment } from 'src/environment/environment';
 
@@ -51,6 +58,13 @@ import { environment } from 'src/environment/environment';
     MainLoginButtonComponent,
     LandingComponent,
     MainSidenavComponent,
+    AppBarComponent,
+    DrawerPageComponent,
+    MovementsLibraryComponent,
+    SearchBarComponent,
+    MovementsPickerGroupItemComponent,
+    MovementsPickerMovementItemComponent,
+    MovementsPickerComponent,
   ],
   imports: [
     BrowserModule,
