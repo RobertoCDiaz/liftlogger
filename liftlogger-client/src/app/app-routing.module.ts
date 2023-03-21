@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'dashboard', component: MainComponent, canActivate: [AuthGuard] },
   { path: 'movements', component: MovementsLibraryComponent, canActivate: [AuthGuard] },
+  { path: 'movements/create', component: CreateMovementComponent, canActivate: [AuthGuard] },
   { path: 'add-weighting', component: AddWeightingComponent, canActivate: [AuthGuard] },
   { path: 'create-template', component: CreateTemplateComponent, canActivate: [AuthGuard] },
   { path: 'create-muscle-group', component: CreateMuscleGroupComponent, canActivate: [AuthGuard] },
