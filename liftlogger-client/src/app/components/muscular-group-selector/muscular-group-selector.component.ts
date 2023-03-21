@@ -1,20 +1,29 @@
-// TODO: Handle no-data UI.
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Group } from 'src/app/models/Groups';
+import { Group } from 'src/app/models/Group';
 import { GroupsService } from 'src/app/services/groups.service';
+
+/**
+ * Defines the state for the MuscularGroupSelectorComponent.
+ */
+export class MuscularGroupSelectorState {
+  /**
+   * Muscle groups to display in the component.
+   */
+  userGroups: Group[] = [];
+
+  /**
+   * Whether the component should allow multiselection or not. Defaults to `true`.
+   */
+  isMultiSelectable: boolean = true;
+}
 
 @Component({
   selector: 'app-muscular-group-selector',
   templateUrl: './muscular-group-selector.component.html',
-  styleUrls: ['./muscular-group-selector.component.sass']
+  styleUrls: ['./muscular-group-selector.component.sass'],
+  providers: [MuscularGroupSelectorState],
 })
 export class MuscularGroupSelectorComponent {
-
-  /**
-   * Source of data to populate the component.
-   */
-  groups: Group[];
-
   /**
    * Whether multiple groups can be selected at once or not.
    */
@@ -32,25 +41,26 @@ export class MuscularGroupSelectorComponent {
 
   /**
    * Fires up when a group selection is changed (e.g. a group is checked or unchecked).
+   *
+   * param: `$event: Group[]` List of selected groups
    */
   @Output() selectionChanged = new EventEmitter<Group[]>();
 
-  constructor(private groupsService: GroupsService) { }
+  constructor(private groupsService: GroupsService, public state: MuscularGroupSelectorState) { }
 
-  async ngOnInit() {
-    (await this.groupsService.getGroups()).subscribe(groups => {
-      this.groups = this.groupsService.organizeGroups(groups);
+  ngOnInit() {
+    this.groupsService.getUserGroups().subscribe(userGroups => {
+      this.state.userGroups = this.groupsService.organizeGroups(userGroups);
     });
+
+    this.state.isMultiSelectable = this.isMultipleChoice;
   }
 
   /**
-   * Emits the currently selected groups through the `selectionChanged` emitter when
-   * a group is toggled.
+   * Emits the `selectionChanged` event with the currently selected groups.
    */
-  groupToggled() {
-    const selectedGroups = this.groupsService.getSelectedGroups(this.groups);
-
-    this.selectionChanged.emit(selectedGroups);
+  handleItemToggled() {
+    this.selectionChanged.emit(this.groupsService.getSelectedGroups(this.state.userGroups));
   }
 
 }

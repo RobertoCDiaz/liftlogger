@@ -4,10 +4,15 @@
 </div>
 <div class="container">
 
-  <app-muscular-group-selector-item
-    [data]="groups"
-    *ngFor="let group of groups"
-    [isMultipleChoice]="isMultipleChoice"
-    (itemToggled)="groupToggled()"
-    [group]="group" />
+  <div class="emptyMsg" *ngIf="state.userGroups.length === 0 else groupsList">
+    <span class="material-icons">playlist_remove</span>
+    <p>You don't have any muscle groups created yet!</p>
+  </div>
+
+  <ng-template #groupsList>
+    <app-muscular-group-selector-item
+      *ngFor="let group of state.userGroups"
+      (itemToggled)="handleItemToggled()"
+      [group]="group" />
+  </ng-template>
 </div>
