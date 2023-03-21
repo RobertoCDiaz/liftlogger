@@ -1,0 +1,30 @@
+<div class="group-item">
+  <div class="info" (click)="toggleContent()">
+    <p class="name">{{ group.name }}</p>
+    <span class="material-icons">{{ isOpen ? 'expand_less' : 'expand_more' }}</span>
+  </div>
+  <div class="list" [ngClass]="{ 'display': isOpen }">
+    <!-- <div class="movement-container" *ngFor="let movement of group.movements; last as isLast">
+      <mat-divider></mat-divider>
+      <app-movements-picker-movement-item
+        [movement]="movement" />
+      <mat-divider *ngIf="isLast"></mat-divider>
+    </div> -->
+    <ng-container *ngTemplateOutlet="group.movements && group.movements.length > 0 ? hasMovements : doesntHaveMovements"></ng-container>
+  </div>
+</div>
+
+<ng-template #hasMovements>
+  <div class="movement-container" *ngFor="let movement of group.movements; last as isLast">
+    <mat-divider></mat-divider>
+    <app-movements-picker-movement-item
+      [movement]="movement" />
+    <mat-divider *ngIf="isLast"></mat-divider>
+  </div>
+</ng-template>
+
+<ng-template #doesntHaveMovements>
+  <div class="no-movements">
+    <p>No movements found for this group</p>
+  </div>
+</ng-template>

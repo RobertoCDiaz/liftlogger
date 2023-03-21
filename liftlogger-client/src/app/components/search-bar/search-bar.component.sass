@@ -1,0 +1,16 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex($direction: row)
+  align-items: center
+  border-bottom: 1px solid styles.$dark-gray
+
+  span
+    @include styles.no-selection
+    padding: .5em
+    padding-right: 0
+
+  input
+    all: unset
+    flex-grow: 1
+    padding: .5em

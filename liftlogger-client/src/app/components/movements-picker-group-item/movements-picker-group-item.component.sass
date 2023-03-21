@@ -1,0 +1,27 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex($direction: column)
+  .info
+    @include styles.flex($direction: row)
+    @include styles.no-selection
+    align-items: center
+
+    padding: 1em
+    cursor: pointer
+
+    .name
+      flex-grow: 1
+      font-size: 1.2rem
+  .list
+    display: none
+
+    &.display
+      @include styles.flex($direction: column)
+
+    .no-movements
+      @include styles.flex($direction: column)
+      align-items: center
+      padding: 2em
+      border-top: 1px solid styles.$light-gray
+      border-bottom: 1px solid styles.$light-gray
