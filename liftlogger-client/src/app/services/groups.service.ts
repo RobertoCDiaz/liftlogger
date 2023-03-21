@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Group } from '../models/Groups';
+import { Group } from '../models/Group';
 import { HttpService } from './http.service';
 
 /**
@@ -32,6 +32,29 @@ export class GroupsService {
     return this.http.post<Group, Group>('groups', group);
   }
 
+  /**
+   * Given a list of Groups, search its Movements for a match in
+   * their names or descriptions.
+   *
+   * @param searchQuery Query to filter Movements
+   * @param groups List of groups to search Movements in
+   * @returns Filtered Groups, with only the Movements that match the criteria
+   */
+  searchMovementsInGroups(searchQuery: string, groups: Group[]): Group[] {
+    const groupsCopy: Group[] = JSON.parse(JSON.stringify(groups));
+
+    return groupsCopy.filter(group => {
+      if (!group.movements) {
+        return false;
+      }
+
+      group.movements = group.movements.filter(movement => {
+        return movement.name.toLowerCase().includes(searchQuery) ||
+          movement.description.toLowerCase().includes(searchQuery);
+      })
+
+      return group.movements.length > 0;
+    });
   }
 
   /**
@@ -72,79 +95,6 @@ export class GroupsService {
   }
 
   /**
-   * Toggles the checked state of a group with the specified name, and optionally
-   * toggles the checked state of all other groups to false if singleSelection is
-   * set to true.
-   *
-   * @param groupToBeToggled - Group reference to be toggled.
-   * @param groups - An array of Group objects representing the groups to search.
-   * @param singleSelection - A flag indicating whether only one group can be checked at a time.
-   * @returns A boolean indicating whether at least one group is checked.
-   */
-  toggleGroup(groupToBeToggled: Group, groups: Group[], singleSelection: boolean = false): boolean {
-    let checkedCount = 0;
-
-    for (let group of groups) {
-      if (singleSelection) {
-        group.checked = false;
-      }
-
-      if (group.id === groupToBeToggled.id) {
-        group.checked = !group.checked;
-
-        if (group.isPrimary) {
-          group.isPrimary = false;
-        }
-      }
-
-      if (group.checked) {
-        checkedCount++;
-      }
-
-      if (group.groups) {
-        const childWasChecked = this.toggleGroup(groupToBeToggled, group.groups, singleSelection);
-
-        if (childWasChecked && !singleSelection) {
-          checkedCount++;
-        }
-      }
-    }
-
-    if (!singleSelection || checkedCount <= 1) {
-      return checkedCount > 0;
-    }
-
-    for (let group of groups) {
-      if (group.id !== groupToBeToggled.id && group.checked) {
-        group.checked = false;
-      }
-    }
-
-    return true;
-  }
-
-  /**
-   * Sets a group with the specified name as the primary group, and unsets all other
-   * groups as primary.
-   *
-   * @param targetGroup - Group to be set as primary group.
-   * @param groups - An array of Group objects representing the groups to search.
-   */
-  setGroupAsPrimary(targetGroup: Group, groups: Group[]): void {
-    for (let group of groups) {
-      group.isPrimary = false;
-
-      if (group.id === targetGroup.id && group.checked) {
-        group.isPrimary = true;
-      }
-
-      if (group.groups) {
-        this.setGroupAsPrimary(targetGroup, group.groups);
-      }
-    }
-  }
-
-  /**
    * Retrieves an array of strings representing the names of all checked groups in a list.
    *
    * @param groups - An array of Group objects representing the groups to search.
@@ -164,5 +114,24 @@ export class GroupsService {
     }
 
     return selectedGroups;
+  }
+
+  /**
+   * Traverse a list of groups and unchecks their `checked` and `isPrimary` properties.
+   *
+   * @param groups List of groups to uncheck
+   * @param onlyUncheckPrimaryState Whether if just the `isPrimary` property should be unchecked or not. Defaults to `false`
+   */
+  unCheckAllGroups(groups: Group[], onlyUncheckPrimaryState: boolean = false) {
+    for (let group of groups) {
+      if (!onlyUncheckPrimaryState) {
+        group.checked = false;
+      }
+      group.isPrimary = false;
+
+      if (group.groups) {
+        this.unCheckAllGroups(group.groups, onlyUncheckPrimaryState);
+      }
+    }
   }
 }
