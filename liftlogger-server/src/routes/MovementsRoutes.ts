@@ -6,6 +6,7 @@ import { MovementCreationParams, MovementCreationRequestParams } from "../models
 import { AuthService } from "../services/AuthService";
 import { shouldBeAuthenticated } from "../middlewares/auth";
 import MovementNotesController from "../controllers/MovementNotesController";
+import { MovementJournalEntry } from "../models/MovementJournal";
 
 @Route('movements')
 export class MovementRoutes extends Controller {
@@ -105,5 +106,30 @@ export class MovementRoutes extends Controller {
     }
 
     return await MovementNotesController.getMovementNotes(id);
+  }
+
+  /**
+   * Requests for the workout journal of a Movement.
+   *
+   * A Workout Journal of a Movement is the list of Lifting Sessions in which the
+   * Movement was trained in, along with the sets of every Lifting Session for that Movement.
+   *
+   * @param id Identifier of the Movement which journal is to be retrieved
+   * @param req Request object
+   * @returns The workout journal
+   */
+  @Get('{id}/journal')
+  @Middlewares([shouldBeAuthenticated])
+  public async getMovementJournal(
+    @Path() id: number,
+    @Request() req: express.Request,
+  ): Promise<MovementJournalEntry[] | null | undefined> {
+    if (!req.auth) {
+      return;
+    }
+
+    const { email } = await AuthService.getUserInfo(req.auth.token);
+
+    return MovementsController.getMovementJournal(id, email);
   }
 }

@@ -18,10 +18,6 @@ export class AuthRoutes extends Controller {
   public async createUser(
     @Body() user: UserCreationParams
   ): Promise<boolean> {
-    // TODO: Create a logger class.
-    console.log('🔵 Trying to create new User:');
-    console.log(user);
-
     const userExists = (await UserController.get(user.email)) !== null;
 
     if (userExists) {
