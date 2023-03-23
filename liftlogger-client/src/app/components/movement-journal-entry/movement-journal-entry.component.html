@@ -1,0 +1,26 @@
+<ng-container *ngIf="this.entry">
+  <div class="details-container">
+    <div class="item">
+      <span class="material-symbols-outlined">event</span>
+      <span>{{ entryDate }}</span>
+    </div>
+    <div class="item">
+      <span class="material-icons">electric_bolt</span>
+      <span>{{ entry.value.toFixed(2) }}</span>
+    </div>
+  </div>
+
+  <div class="sets-container">
+    <div *ngFor="let set of entry.session.sets" class="set">
+      <div class="data">
+        <span class="amount">{{ set.reps }}</span>
+        <span class="unit">reps</span>
+      </div>
+      <div class="data">
+        <span class="amount">{{ set.weight }}</span>
+        <span class="unit">kg</span>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
