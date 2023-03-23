@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatDividerModule } from '@angular/material/divider';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './pages/main/main.component';
@@ -34,6 +35,8 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
 import { MovementsPickerGroupItemComponent } from './components/movements-picker-group-item/movements-picker-group-item.component';
 import { MovementsPickerMovementItemComponent } from './components/movements-picker-movement-item/movements-picker-movement-item.component';
 import { MovementsPickerComponent } from './components/movements-picker/movements-picker.component';
+import { ContentLoaderComponent } from './components/content-loader/content-loader.component';
+import { MovementJournalEntryComponent } from './components/movement-journal-entry/movement-journal-entry.component';
 
 import { environment } from 'src/environment/environment';
 
@@ -65,6 +68,8 @@ import { environment } from 'src/environment/environment';
     MovementsPickerGroupItemComponent,
     MovementsPickerMovementItemComponent,
     MovementsPickerComponent,
+    ContentLoaderComponent,
+    MovementJournalEntryComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +79,7 @@ import { environment } from 'src/environment/environment';
     HttpClientModule,
     MatSidenavModule,
     MatDividerModule,
+    NgxSkeletonLoaderModule,
     AuthModule.forRoot({
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,
@@ -81,7 +87,7 @@ import { environment } from 'src/environment/environment';
         redirect_uri: environment.auth0CallbackUrl,
         audience: environment.auth0Audience
       }
-    })
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
