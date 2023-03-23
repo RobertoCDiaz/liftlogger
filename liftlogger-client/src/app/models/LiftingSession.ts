@@ -32,5 +32,5 @@ export type LiftingSession = {
   /**
    * List of sets that belong to this session.
    */
-  sets: LiftingSet;
+  sets: LiftingSet[];
 }
