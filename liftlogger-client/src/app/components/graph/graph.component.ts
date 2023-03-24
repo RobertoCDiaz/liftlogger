@@ -2,11 +2,12 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import Chart from 'chart.js/auto';
 import * as moment from 'moment';
 
+// TODO: extract period logic to its own service?
 /**
  * Represents a time period, which can be either "YTD" (year-to-date), "All", or a string
- * representing a number of days, months, or years (in the format `${amount: number}${'d' | 'm' | 'y'}`).
+ * representing a number of days, week, months, or years (in the format `${amount: number}${'d' | 'w' | 'm' | 'y'}`).
  */
-export type Period = 'YTD' | 'All' | `${number}${'d' | 'm' | 'y'}`;
+export type Period = 'YTD' | 'All' | `${number}${'d' | 'w' | 'm' | 'y'}`;
 
 /**
  * Defines the shape for an input data-point.
@@ -144,6 +145,7 @@ export class GraphComponent implements OnChanges {
 
     const unitsParser: Record<string, moment.unitOfTime.DurationConstructor> = {
       'd': 'days',
+      'w': 'weeks',
       'm': 'months',
       'y': 'years',
     };
