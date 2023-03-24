@@ -7,6 +7,7 @@ import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-m
 import { CreateTemplateComponent } from './pages/create-template/create-template.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { MainComponent } from './pages/main/main.component';
+import { MovementDetailsComponent } from './pages/movement-details/movement-details.component';
 import { MovementsLibraryComponent } from './pages/movements-library/movements-library.component';
 
 const routes: Routes = [
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'dashboard', component: MainComponent, canActivate: [AuthGuard] },
   { path: 'movements', component: MovementsLibraryComponent, canActivate: [AuthGuard] },
   { path: 'movements/create', component: CreateMovementComponent, canActivate: [AuthGuard] },
+  { path: 'movements/:id', component: MovementDetailsComponent, canActivate: [AuthGuard] },
   { path: 'add-weighting', component: AddWeightingComponent, canActivate: [AuthGuard] },
   { path: 'create-template', component: CreateTemplateComponent, canActivate: [AuthGuard] },
   { path: 'create-muscle-group', component: CreateMuscleGroupComponent, canActivate: [AuthGuard] },

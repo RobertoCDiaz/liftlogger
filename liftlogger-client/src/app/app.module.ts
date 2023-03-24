@@ -38,6 +38,7 @@ import { MovementsPickerComponent } from './components/movements-picker/movement
 import { ContentLoaderComponent } from './components/content-loader/content-loader.component';
 import { MovementJournalEntryComponent } from './components/movement-journal-entry/movement-journal-entry.component';
 import { GraphComponent } from './components/graph/graph.component';
+import { MovementDetailsComponent } from './pages/movement-details/movement-details.component';
 
 import { environment } from 'src/environment/environment';
 
@@ -72,6 +73,7 @@ import { environment } from 'src/environment/environment';
     ContentLoaderComponent,
     MovementJournalEntryComponent,
     GraphComponent,
+    MovementDetailsComponent,
   ],
   imports: [
     BrowserModule,
