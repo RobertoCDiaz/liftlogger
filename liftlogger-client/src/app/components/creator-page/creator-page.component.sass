@@ -5,6 +5,7 @@
   height: 100vh
 
   .content
+    @include styles.responsiveContent
     @include styles.flex(column)
     flex-grow: 1
     gap: 2em
@@ -25,15 +26,10 @@
         flex-grow: 1
 
     @include styles.isLarge
-      width: 80vw
-      align-self: center
       display: grid
       grid-template-columns: 1fr 1fr
       grid-template-rows: 1fr 0fr
       grid-template-areas: "header content" "footer footer"
-
-      @include styles.isXL
-        width: 60vw
 
       .header:
         grid-area: header

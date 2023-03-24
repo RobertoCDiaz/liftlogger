@@ -4,12 +4,6 @@
     <span class="material-icons">{{ isOpen ? 'expand_less' : 'expand_more' }}</span>
   </div>
   <div class="list" [ngClass]="{ 'display': isOpen }">
-    <!-- <div class="movement-container" *ngFor="let movement of group.movements; last as isLast">
-      <mat-divider></mat-divider>
-      <app-movements-picker-movement-item
-        [movement]="movement" />
-      <mat-divider *ngIf="isLast"></mat-divider>
-    </div> -->
     <ng-container *ngTemplateOutlet="group.movements && group.movements.length > 0 ? hasMovements : doesntHaveMovements"></ng-container>
   </div>
 </div>

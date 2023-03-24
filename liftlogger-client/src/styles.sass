@@ -14,6 +14,15 @@ $dark-gray: #808080
 $light-gray: #C0C0C0
 $red: #ED2929
 
+// responsive mixins
+@mixin isLarge
+  @media screen and (min-width: 900px)
+    @content
+
+@mixin isXL
+  @media screen and (min-width: 1700px)
+    @content
+
 // mixins
 @mixin flex($direction: row)
   display: flex
@@ -30,9 +39,18 @@ $red: #ED2929
 @mixin transition
   transition: 50ms
 
+@mixin responsiveContent
+  @include isLarge
+    width: 85vw
+    align-self: center
+
+    @include isXL
+      width: 80vw
+
 html, body
   min-height: 100vh
   height: auto
+  background-color: #f7f7f7
 
 // global styles
 html, body, *
@@ -43,11 +61,3 @@ html, body, *
 
 a
   all: unset
-
-@mixin isLarge
-  @media screen and (min-width: 900px)
-    @content
-
-@mixin isXL
-  @media screen and (min-width: 1700px)
-    @content

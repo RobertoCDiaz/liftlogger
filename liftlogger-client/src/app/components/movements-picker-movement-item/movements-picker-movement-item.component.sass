@@ -1,7 +1,7 @@
 @use '../../../styles'
 
 .item
-  @include styles.flex($direction: column)
+  @include styles.flex(column)
   @include styles.no-selection
   @include styles.transition
   padding: .5em 2em
@@ -21,7 +21,7 @@
     font-size: 1.1rem
 
   .groups
-    @include styles.flex($direction: row)
+    @include styles.flex(row)
     gap: .25em
 
     .group-chip

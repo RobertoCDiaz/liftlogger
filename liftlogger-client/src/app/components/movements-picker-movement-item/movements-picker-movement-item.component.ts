@@ -15,6 +15,11 @@ export class MovementsPickerMovementItemComponent {
 
   constructor(public state: MovementsPickerState) { }
 
+  ngOnInit() {
+    // puts primary group upfront
+    this.movement.groups?.sort((a, b) => this.movement.primary_group_id === b.id ? 1 : 0)
+  }
+
   /**
    * Updates the MovementsPicker state, and notifies of a new
    * selected Movement

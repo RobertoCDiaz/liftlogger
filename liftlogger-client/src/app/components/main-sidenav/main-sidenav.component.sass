@@ -1,7 +1,7 @@
 @use '../../../styles'
 
 :host
-  @include styles.flex($direction: column)
+  @include styles.flex(column)
   min-width: 70vw
   max-width: 80vw
 
@@ -10,7 +10,7 @@
     max-width: 30vw
 
   .profile
-    @include styles.flex($direction: column)
+    @include styles.flex(column)
     background-color: styles.$primary-color
     padding: 2em
     gap: .5em
@@ -33,13 +33,13 @@
       text-align: center
 
   .menu
-    @include styles.flex($direction: column)
+    @include styles.flex(column)
 
     *
       color: styles.$text-color
 
     .item
-      @include styles.flex($direction: row)
+      @include styles.flex(row)
       @include styles.no-selection
       @include styles.transition
       gap: 1em
