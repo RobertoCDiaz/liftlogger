@@ -55,9 +55,9 @@ export class GraphComponent implements OnChanges {
   /**
    * Whether the y-axis grid and values should be shown in the graph or not.
    *
-   * @default true
+   * @default false
    */
-  @Input() displayYAxis: boolean = true;
+  @Input() displayYAxis: boolean = false;
 
   /**
    * Name to show for each data point. This will give
@@ -160,7 +160,6 @@ export class GraphComponent implements OnChanges {
   setupGraph() {
     // only includes entries within the selected period
     const filteredEntries = this.data.filter(entry =>
-      // moment(entry.date) > this.periodsMinDates[this.period]
       moment(entry.date) > this.parsePeriod(this.period)
     ).sort((a, b) => a.date - b.date);
 
