@@ -1,0 +1,60 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex(column)
+
+  .page-content
+    @include styles.responsiveContent
+    @include styles.flex(column)
+    gap: 2em
+    padding: 0 1em
+
+    .month
+      @include styles.flex(column)
+      gap: 1em
+
+      .month-title
+        font-size: 2rem
+        grid-area: title
+        justify-self: center
+
+      .calendar
+        display: none
+        grid-area: calendar
+        place-self: center
+        width: 75%
+
+      .entries
+        @include styles.flex(column)
+        gap: 1em
+        grid-area: entries
+
+      @include styles.isLarge
+        display: grid
+        grid-template-columns: 5fr 3fr
+        column-gap: 2em
+        grid-template-areas: "title entries" "calendar entries" "empty entries"
+
+        .calendar
+          display: block
+
+        .entries
+          @include styles.shadow
+          background-color: styles.$white
+          padding: 1em
+          border-radius: .5em
+
+  .empty
+    display: grid
+    place-items: center
+    padding: 4em
+    gap: 1em
+
+    *
+      color: styles.$dark-gray
+
+    span
+      font-size: 4rem
+
+    p
+      text-align: center

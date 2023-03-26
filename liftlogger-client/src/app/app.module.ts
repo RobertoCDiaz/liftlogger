@@ -39,6 +39,8 @@ import { ContentLoaderComponent } from './components/content-loader/content-load
 import { MovementJournalEntryComponent } from './components/movement-journal-entry/movement-journal-entry.component';
 import { GraphComponent } from './components/graph/graph.component';
 import { MovementDetailsComponent } from './pages/movement-details/movement-details.component';
+import { MovementJournalComponent } from './pages/movement-journal/movement-journal.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
 
 import { environment } from 'src/environment/environment';
 
@@ -74,6 +76,8 @@ import { environment } from 'src/environment/environment';
     MovementJournalEntryComponent,
     GraphComponent,
     MovementDetailsComponent,
+    MovementJournalComponent,
+    CalendarComponent,
   ],
   imports: [
     BrowserModule,

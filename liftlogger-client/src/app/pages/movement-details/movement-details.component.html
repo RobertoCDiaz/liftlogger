@@ -19,7 +19,7 @@
 
   <div class="progress">
     <app-graph #graph [data]="graphData" [showFakeData]="journal.length === 0"/>
-    <a href="">Movement journal ></a>
+    <a *ngIf="movement" routerLink="journal">Movement journal ></a>
   </div>
 
   <div class="stats">

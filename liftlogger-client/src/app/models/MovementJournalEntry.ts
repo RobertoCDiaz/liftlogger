@@ -26,3 +26,18 @@ export type MovementJournalEntry = {
    */
   session: LiftingSession;
 }
+
+/**
+ * Defines the structure of a MovementJournal of a single month.
+ */
+export type MovementMonthlyJournal = {
+  /**
+   * Unix time that represents the very first Moment in a month. Used for reference.
+   */
+  monthTime: number;
+
+  /**
+   * List of entries in this month.
+   */
+  entries: MovementJournalEntry[];
+}
