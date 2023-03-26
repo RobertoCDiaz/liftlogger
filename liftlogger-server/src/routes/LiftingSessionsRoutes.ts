@@ -1,9 +1,12 @@
 import { LiftingSession } from '@prisma/client';
 import * as express from 'express';
-import { Body, Controller, Get, Middlewares, Path, Post, Request, Route } from "tsoa";
+import { Body, Controller, Get, Middlewares, Path, Post, Request, Route } from 'tsoa';
 import LiftingSessionController from '../controllers/LiftingSessionsController';
-import { shouldBeAuthenticated } from "../middlewares/auth";
-import { LiftingSessionCreationParams, LiftingSessionWithSetsCreationRequestParams } from '../models/LiftingSessionModel';
+import { shouldBeAuthenticated } from '../middlewares/auth';
+import {
+  LiftingSessionCreationParams,
+  LiftingSessionWithSetsCreationRequestParams,
+} from '../models/LiftingSessionModel';
 import { AuthService } from '../services/AuthService';
 
 @Route('sessions')
@@ -20,7 +23,7 @@ export class LiftingSessionsRoutes extends Controller {
   @Middlewares([shouldBeAuthenticated])
   async getSession(
     @Path() id: number,
-    @Request() req: express.Request
+    @Request() req: express.Request,
   ): Promise<LiftingSession | null | undefined> {
     if (!req.auth) {
       return;
@@ -40,9 +43,7 @@ export class LiftingSessionsRoutes extends Controller {
    */
   @Get('')
   @Middlewares([shouldBeAuthenticated])
-  async getSessions(
-    @Request() req: express.Request
-  ): Promise<LiftingSession[] | null | undefined> {
+  async getSessions(@Request() req: express.Request): Promise<LiftingSession[] | null | undefined> {
     if (!req.auth) {
       return;
     }
@@ -64,7 +65,7 @@ export class LiftingSessionsRoutes extends Controller {
   @Middlewares([shouldBeAuthenticated])
   async createSession(
     @Body() body: LiftingSessionWithSetsCreationRequestParams,
-    @Request() req: express.Request
+    @Request() req: express.Request,
   ): Promise<LiftingSession | null | undefined> {
     if (!req.auth) {
       return;
@@ -74,7 +75,7 @@ export class LiftingSessionsRoutes extends Controller {
 
     const session = {
       ...body.session,
-      user_email: email
+      user_email: email,
     } satisfies LiftingSessionCreationParams;
 
     return await LiftingSessionController.createSessionWithSets(session, body.sets);

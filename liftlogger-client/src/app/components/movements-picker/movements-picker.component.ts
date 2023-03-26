@@ -47,7 +47,7 @@ export class MovementsPickerState {
   selector: 'app-movements-picker',
   templateUrl: './movements-picker.component.html',
   styleUrls: ['./movements-picker.component.sass'],
-  providers: [MovementsPickerState]
+  providers: [MovementsPickerState],
 })
 export class MovementsPickerComponent {
   /**
@@ -76,7 +76,11 @@ export class MovementsPickerComponent {
    */
   @Input() disableHref: boolean = false;
 
-  constructor(private groupsService: GroupsService, private state: MovementsPickerState, private router: Router) { }
+  constructor(
+    private groupsService: GroupsService,
+    private state: MovementsPickerState,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     // retrieves groups from server
@@ -88,7 +92,7 @@ export class MovementsPickerComponent {
     // sets up the `movementSelected` event on Movement clicked
     this.state.getSelectedMovement().subscribe(movement => {
       this.movementSelected.emit(movement);
-    })
+    });
 
     // sets `isHrefDisabledSubject` on this component's state
     this.state.isHrefDisabledSubject = this.disableHref;

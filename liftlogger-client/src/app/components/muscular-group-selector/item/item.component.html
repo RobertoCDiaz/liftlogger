@@ -1,26 +1,15 @@
-<div
-  class="group"
-  [ngClass]="{ checked: group.checked }">
-    <span
-    (click)="toggleChecked()"
-    class="checkbox material-icons">
+<div class="group" [ngClass]="{ checked: group.checked }">
+  <span (click)="toggleChecked()" class="checkbox material-icons">
     {{ group.checked ? 'check_box' : 'check_box_outline_blank' }}
-    </span>
-    <span class="name"
-    (dblclick)="setPrimary()">
-      {{ group.name }}
-    </span>
-    <span *ngIf="group.isPrimary" class="primary material-icons">
-      star
-    </span>
-    <span *ngIf="group.groups" (click)="toggleExpanded()" class="expand material-icons">
-      expand_more
-    </span>
+  </span>
+  <span class="name" (dblclick)="setPrimary()">
+    {{ group.name }}
+  </span>
+  <span *ngIf="group.isPrimary" class="primary material-icons"> star </span>
+  <span *ngIf="group.groups" (click)="toggleExpanded()" class="expand material-icons">
+    expand_more
+  </span>
 </div>
-<div
-  class="children"
-  *ngIf="isExpanded">
-  <app-muscular-group-selector-item
-    *ngFor="let subgroup of group.groups"
-    [group]="subgroup"/>
+<div class="children" *ngIf="isExpanded">
+  <app-muscular-group-selector-item *ngFor="let subgroup of group.groups" [group]="subgroup" />
 </div>

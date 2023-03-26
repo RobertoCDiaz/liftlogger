@@ -1,4 +1,4 @@
-import { LiftingSet } from "./LiftingSet";
+import { LiftingSet } from './LiftingSet';
 
 /**
  * A weightlifting session.
@@ -33,4 +33,4 @@ export type LiftingSession = {
    * List of sets that belong to this session.
    */
   sets: LiftingSet[];
-}
+};

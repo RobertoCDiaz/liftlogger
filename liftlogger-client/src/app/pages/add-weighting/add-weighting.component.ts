@@ -6,12 +6,12 @@ import { WeightingsService } from 'src/app/services/weightings.service';
 @Component({
   selector: 'app-add-weighting',
   templateUrl: './add-weighting.component.html',
-  styleUrls: ['./add-weighting.component.sass']
+  styleUrls: ['./add-weighting.component.sass'],
 })
 export class AddWeightingComponent {
   data: Record<string, any> = {};
 
-  constructor(private weightingsService: WeightingsService, private location: Location) { }
+  constructor(private weightingsService: WeightingsService, private location: Location) {}
 
   onDataChanged(value: number, fieldName: string): void {
     this.data[fieldName] = Number(value);
@@ -25,5 +25,4 @@ export class AddWeightingComponent {
       this.location.back();
     });
   }
-
 }

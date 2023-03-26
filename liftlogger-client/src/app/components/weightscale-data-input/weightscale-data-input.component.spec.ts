@@ -8,9 +8,8 @@ describe('WeightscaleDataInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WeightscaleDataInputComponent ]
-    })
-    .compileComponents();
+      declarations: [WeightscaleDataInputComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(WeightscaleDataInputComponent);
     component = fixture.componentInstance;

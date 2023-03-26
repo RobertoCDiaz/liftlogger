@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
   selector: 'app-bar',
   templateUrl: './app-bar.component.html',
-  styleUrls: ['./app-bar.component.sass']
+  styleUrls: ['./app-bar.component.sass'],
 })
 export class AppBarComponent {
   /**

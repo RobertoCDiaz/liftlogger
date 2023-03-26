@@ -5,7 +5,7 @@ import { MovementJournalEntry } from 'src/app/models/MovementJournalEntry';
 @Component({
   selector: 'app-movement-journal-entry',
   templateUrl: './movement-journal-entry.component.html',
-  styleUrls: ['./movement-journal-entry.component.sass']
+  styleUrls: ['./movement-journal-entry.component.sass'],
 })
 export class MovementJournalEntryComponent implements OnChanges {
   /**
@@ -23,6 +23,6 @@ export class MovementJournalEntryComponent implements OnChanges {
       return;
     }
 
-    this.entryDate = moment(this.entry.date * 1000).format('MMMM Do, Y')
+    this.entryDate = moment(this.entry.date * 1000).format('MMMM Do, Y');
   }
 }

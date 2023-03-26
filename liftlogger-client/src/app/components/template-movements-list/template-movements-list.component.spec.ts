@@ -8,9 +8,8 @@ describe('TemplateMovementsListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TemplateMovementsListComponent ]
-    })
-    .compileComponents();
+      declarations: [TemplateMovementsListComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TemplateMovementsListComponent);
     component = fixture.componentInstance;

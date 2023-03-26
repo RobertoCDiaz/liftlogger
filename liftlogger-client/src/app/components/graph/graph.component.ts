@@ -17,12 +17,12 @@ export type GraphInput = {
    * Value it will be given in the y-axis.
    * E.g.: Weight, Intensity Value, etc.
    */
-  data: number,
+  data: number;
 
   /**
    * Value to graph in the x-axis. Commonly, a date unix timestamp.
    */
-  date: number,
+  date: number;
 };
 
 @Component({
@@ -97,7 +97,7 @@ export class GraphComponent implements OnChanges {
    */
   @Input() availablePeriods: Period[] = ['1m', '3m', '6m', '1y', 'YTD', 'All'];
 
-  constructor() { }
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.setupGraph();
@@ -144,10 +144,10 @@ export class GraphComponent implements OnChanges {
     const units: string = period.slice(-1);
 
     const unitsParser: Record<string, moment.unitOfTime.DurationConstructor> = {
-      'd': 'days',
-      'w': 'weeks',
-      'm': 'months',
-      'y': 'years',
+      d: 'days',
+      w: 'weeks',
+      m: 'months',
+      y: 'years',
     };
 
     return moment().subtract(amount, unitsParser[units]);
@@ -159,14 +159,14 @@ export class GraphComponent implements OnChanges {
    */
   setupGraph() {
     // only includes entries within the selected period
-    const filteredEntries = this.data.filter(entry =>
-      moment(entry.date) > this.parsePeriod(this.period)
-    ).sort((a, b) => a.date - b.date);
+    const filteredEntries = this.data
+      .filter(entry => moment(entry.date) > this.parsePeriod(this.period))
+      .sort((a, b) => a.date - b.date);
 
     // include medias values
     let accumulator = 0;
     const mediasData = filteredEntries.map<number>((currentEntry, idx) => {
-      accumulator += currentEntry.data
+      accumulator += currentEntry.data;
 
       return accumulator / (idx + 1);
     });
@@ -181,39 +181,45 @@ export class GraphComponent implements OnChanges {
 
     this.chartObject = new Chart(ctx, {
       type: 'line',
-      data: !this.showFakeData ? {
-        labels: filteredEntries.map((d) => new Date(d.date).toLocaleDateString()),
-        datasets: [
-          {
-            label: this.dataLabel,
-            data: filteredEntries.map((d, i) => d.data),
-            cubicInterpolationMode: 'monotone',
-            borderColor: this.showMediaValues ? '#0373DB60' : '#0373DB',
-            borderWidth: this.showMediaValues ? 1.5 : 2,
-            fill: false,
-          },
-          {
-            label: 'Media Value:',
-            data: this.showMediaValues ? mediasData : [],
-            cubicInterpolationMode: 'monotone',
-            borderColor: '#0373DB',
-            borderWidth: 2
+      data: !this.showFakeData
+        ? {
+            labels: filteredEntries.map(d => new Date(d.date).toLocaleDateString()),
+            datasets: [
+              {
+                label: this.dataLabel,
+                data: filteredEntries.map((d, i) => d.data),
+                cubicInterpolationMode: 'monotone',
+                borderColor: this.showMediaValues ? '#0373DB60' : '#0373DB',
+                borderWidth: this.showMediaValues ? 1.5 : 2,
+                fill: false,
+              },
+              {
+                label: 'Media Value:',
+                data: this.showMediaValues ? mediasData : [],
+                cubicInterpolationMode: 'monotone',
+                borderColor: '#0373DB',
+                borderWidth: 2,
+              },
+            ],
           }
-        ],
-      } : {
-        // fake data
-        labels: new Array(30).fill(0).map((_, idx) => moment().subtract(30 - idx, 'days').format('DD/MM/YYYY')),
-        datasets: [
-          {
-            label: this.dataLabel,
-            data: new Array(30).fill(0).map((d, idx) => idx * idx),
-            cubicInterpolationMode: 'monotone',
-            borderColor: '#80808020',
-            borderWidth: 1.5,
-            fill: false,
+        : {
+            // fake data
+            labels: new Array(30).fill(0).map((_, idx) =>
+              moment()
+                .subtract(30 - idx, 'days')
+                .format('DD/MM/YYYY'),
+            ),
+            datasets: [
+              {
+                label: this.dataLabel,
+                data: new Array(30).fill(0).map((d, idx) => idx * idx),
+                cubicInterpolationMode: 'monotone',
+                borderColor: '#80808020',
+                borderWidth: 1.5,
+                fill: false,
+              },
+            ],
           },
-        ],
-      },
       options: {
         layout: {
           padding: {
@@ -225,7 +231,7 @@ export class GraphComponent implements OnChanges {
         elements: {
           point: {
             radius: 1,
-          }
+          },
         },
         plugins: {
           legend: {
@@ -240,7 +246,7 @@ export class GraphComponent implements OnChanges {
             },
             ticks: {
               maxTicksLimit: 3,
-            }
+            },
           },
           y: {
             beginAtZero: false,

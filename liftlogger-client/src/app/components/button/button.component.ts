@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 enum ButtonType {
   'default' = 'default',
   'primary' = 'primary',
-  'no-border' = 'no-border'
+  'no-border' = 'no-border',
 }
 
 /**
@@ -17,7 +17,7 @@ enum ButtonType {
 @Component({
   selector: 'app-button',
   templateUrl: './button.component.html',
-  styleUrls: ['./button.component.sass']
+  styleUrls: ['./button.component.sass'],
 })
 export class ButtonComponent {
   /**

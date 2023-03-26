@@ -3,10 +3,10 @@ import { MovementJournalEntry, MovementMonthlyJournal } from '../models/Movement
 import * as moment from 'moment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MovementJournalsService {
-  constructor() { }
+  constructor() {}
 
   /**
    * Returns the journal entry with the hightest score value from a list of entries.
@@ -63,7 +63,10 @@ export class MovementJournalsService {
     const monthsHashMap: Record<string, MovementJournalEntry[]> = {};
 
     wholeJournal.forEach(entry => {
-      const currentMonthTime: string = moment(entry.date * 1000).startOf('month').unix().toString();
+      const currentMonthTime: string = moment(entry.date * 1000)
+        .startOf('month')
+        .unix()
+        .toString();
 
       if (!monthsHashMap[currentMonthTime]) {
         monthsHashMap[currentMonthTime] = [];
@@ -77,7 +80,7 @@ export class MovementJournalsService {
       monthTime: parseInt(monthTime),
     }));
 
-    monthlyJournals.sort((a, b) => b.monthTime > a.monthTime ? 1 : -1);
+    monthlyJournals.sort((a, b) => (b.monthTime > a.monthTime ? 1 : -1));
 
     return monthlyJournals;
   }

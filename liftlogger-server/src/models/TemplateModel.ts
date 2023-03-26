@@ -1,5 +1,5 @@
-import { Template } from "@prisma/client";
-import { ModelRequestParams } from "../utils/ModelRequestParams";
+import { Template } from '@prisma/client';
+import { ModelRequestParams } from '../utils/ModelRequestParams';
 
 /**
  * Required data to create a new Template.
@@ -20,5 +20,5 @@ export type TemplateCreationRequestParams = {
   /**
    * Ids of the movements to be included in the new template.
    */
-  movements_ids: number[]
-}
+  movements_ids: number[];
+};

@@ -1,5 +1,5 @@
-import { LiftingSession } from "./LiftingSession";
-import { Movement } from "./Movement";
+import { LiftingSession } from './LiftingSession';
+import { Movement } from './Movement';
 
 /**
  * Individual set perfomed during a weighlifting session.
@@ -39,4 +39,4 @@ export type LiftingSet = {
    * Movement made during this set.
    */
   movement?: Movement;
-}
+};

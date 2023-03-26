@@ -4,9 +4,11 @@
   (titleChanged)="setMovementName($event)"
   (descriptionChanged)="setMovementDescription($event)"
   (onCreate)="createMovement()"
-  [createEnabled]="isCreationEnabled">
+  [createEnabled]="isCreationEnabled"
+>
   <app-muscular-group-selector
     text="Which group does this target?"
     secondaryText="Double click a group's name to mark it as primary"
-    (selectionChanged)="handleGroupSelectionChanged($event)"/>
+    (selectionChanged)="handleGroupSelectionChanged($event)"
+  />
 </app-creator-page>

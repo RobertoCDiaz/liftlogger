@@ -6,8 +6,8 @@ import { RegisterRoutes } from '../build/routes';
 
 const app = express();
 
-app.use(cors({ origin: '*' })) // allow all origins
-app.use(bodyParser.json()) // parse json request bodies
+app.use(cors({ origin: '*' })); // allow all origins
+app.use(bodyParser.json()); // parse json request bodies
 
 // tsoa routes under `src/routes` directory
 RegisterRoutes(app);

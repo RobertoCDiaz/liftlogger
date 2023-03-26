@@ -8,9 +8,8 @@ describe('MainLoginButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MainLoginButtonComponent ]
-    })
-    .compileComponents();
+      declarations: [MainLoginButtonComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MainLoginButtonComponent);
     component = fixture.componentInstance;

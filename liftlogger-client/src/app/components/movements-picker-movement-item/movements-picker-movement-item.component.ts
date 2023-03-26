@@ -5,7 +5,7 @@ import { MovementsPickerState } from '../movements-picker/movements-picker.compo
 @Component({
   selector: 'app-movements-picker-movement-item',
   templateUrl: './movements-picker-movement-item.component.html',
-  styleUrls: ['./movements-picker-movement-item.component.sass']
+  styleUrls: ['./movements-picker-movement-item.component.sass'],
 })
 export class MovementsPickerMovementItemComponent {
   /**
@@ -13,11 +13,11 @@ export class MovementsPickerMovementItemComponent {
    */
   @Input() movement: Movement;
 
-  constructor(public state: MovementsPickerState) { }
+  constructor(public state: MovementsPickerState) {}
 
   ngOnInit() {
     // puts primary group upfront
-    this.movement.groups?.sort((a, b) => this.movement.primary_group_id === b.id ? 1 : 0)
+    this.movement.groups?.sort((a, b) => (this.movement.primary_group_id === b.id ? 1 : 0));
   }
 
   /**

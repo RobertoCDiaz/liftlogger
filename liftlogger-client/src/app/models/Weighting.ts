@@ -10,4 +10,4 @@ export type Weighting = {
   visceral_fat?: number;
   user_email?: string;
   ignored?: boolean;
-}
+};

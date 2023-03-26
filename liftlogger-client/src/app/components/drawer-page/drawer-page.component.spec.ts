@@ -8,9 +8,8 @@ describe('DrawerPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DrawerPageComponent ]
-    })
-    .compileComponents();
+      declarations: [DrawerPageComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DrawerPageComponent);
     component = fixture.componentInstance;

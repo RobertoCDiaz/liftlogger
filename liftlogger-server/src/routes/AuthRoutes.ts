@@ -1,7 +1,7 @@
-import { Body, Controller, Middlewares, Post, Route } from "tsoa";
-import UserController from "../controllers/UsersController";
-import { shouldBeAuthenticated } from "../middlewares/auth";
-import { UserCreationParams } from "../models/UserModel";
+import { Body, Controller, Middlewares, Post, Route } from 'tsoa';
+import UserController from '../controllers/UsersController';
+import { shouldBeAuthenticated } from '../middlewares/auth';
+import { UserCreationParams } from '../models/UserModel';
 
 @Route('auth')
 export class AuthRoutes extends Controller {
@@ -15,9 +15,7 @@ export class AuthRoutes extends Controller {
    */
   @Post('createUser')
   @Middlewares([shouldBeAuthenticated])
-  public async createUser(
-    @Body() user: UserCreationParams
-  ): Promise<boolean> {
+  public async createUser(@Body() user: UserCreationParams): Promise<boolean> {
     const userExists = (await UserController.get(user.email)) !== null;
 
     if (userExists) {

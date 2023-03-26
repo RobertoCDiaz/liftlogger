@@ -1,8 +1,8 @@
 import { Template } from '@prisma/client';
 import * as express from 'express';
-import { Body, Controller, Get, Middlewares, Path, Post, Request, Route } from "tsoa";
+import { Body, Controller, Get, Middlewares, Path, Post, Request, Route } from 'tsoa';
 import TemplateController from '../controllers/TemplateController';
-import { shouldBeAuthenticated } from "../middlewares/auth";
+import { shouldBeAuthenticated } from '../middlewares/auth';
 import { TemplateCreationRequestParams } from '../models/TemplateModel';
 import { AuthService } from '../services/AuthService';
 
@@ -19,7 +19,7 @@ export class TemplateRoutes extends Controller {
   @Middlewares([shouldBeAuthenticated])
   async getTemplate(
     @Path() id: number,
-    @Request() req: express.Request
+    @Request() req: express.Request,
   ): Promise<Template | null | undefined> {
     if (!req.auth) {
       return;
@@ -41,7 +41,7 @@ export class TemplateRoutes extends Controller {
   @Get('')
   @Middlewares([shouldBeAuthenticated])
   async getTemplatesFromUser(
-    @Request() req: express.Request
+    @Request() req: express.Request,
   ): Promise<Template[] | null | undefined> {
     if (!req.auth) {
       return;
@@ -65,7 +65,7 @@ export class TemplateRoutes extends Controller {
   @Middlewares([shouldBeAuthenticated])
   async createTemplate(
     @Body() body: TemplateCreationRequestParams,
-    @Request() req: express.Request
+    @Request() req: express.Request,
   ): Promise<Template | null | undefined> {
     if (!req.auth) {
       return;

@@ -1,5 +1,5 @@
-import { MuscleGroup, PrismaClient } from "@prisma/client";
-import { MuscleGroupCreationParams } from "../models/MuscleGroupModel";
+import { MuscleGroup, PrismaClient } from '@prisma/client';
+import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
 
 const prisma = new PrismaClient();
 
@@ -19,10 +19,10 @@ export default class MuscleGroupController {
       include: {
         movements: withMovements && {
           include: {
-            groups: true
-          }
-        }
-      }
+            groups: true,
+          },
+        },
+      },
     });
   }
 
@@ -38,8 +38,8 @@ export default class MuscleGroupController {
       where: {
         id: id,
         user_email: userEmail,
-      }
-    })
+      },
+    });
   }
 
   /**
@@ -51,6 +51,6 @@ export default class MuscleGroupController {
   static async createGroup(group: MuscleGroupCreationParams): Promise<MuscleGroup> {
     return await prisma.muscleGroup.create({
       data: group,
-    })
+    });
   }
 }

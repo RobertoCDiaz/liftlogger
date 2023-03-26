@@ -1,10 +1,15 @@
 <div class="profile">
-  <img *ngIf="pictureUrl" [src]="pictureUrl" alt="profile picture">
+  <img *ngIf="pictureUrl" [src]="pictureUrl" alt="profile picture" />
   <div *ngIf="!pictureUrl" class="picturePlaceholder"></div>
   <p class="email">{{ userEmail }}</p>
 </div>
 <div class="menu">
-  <a *ngFor="let item of items" class="item" [ngClass]="{ 'selected': urlMatches(item.url) }" href="{{ item.url }}">
+  <a
+    *ngFor="let item of items"
+    class="item"
+    [ngClass]="{ selected: urlMatches(item.url) }"
+    href="{{ item.url }}"
+  >
     <span class="material-icons">{{ item.icon }}</span>
     <span>{{ item.name }}</span>
   </a>

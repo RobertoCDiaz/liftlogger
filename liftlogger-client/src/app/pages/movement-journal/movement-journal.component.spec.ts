@@ -8,9 +8,8 @@ describe('MovementJournalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MovementJournalComponent ]
-    })
-    .compileComponents();
+      declarations: [MovementJournalComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MovementJournalComponent);
     component = fixture.componentInstance;

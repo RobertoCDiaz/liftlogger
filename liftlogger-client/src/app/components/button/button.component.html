@@ -1,11 +1,11 @@
 <button
-  type="{{isSubmitButton ? 'submit' : 'button'}}"
+  type="{{ isSubmitButton ? 'submit' : 'button' }}"
   class="app-button {{ type }}"
   (click)="onButtonClicked()"
-  [ngClass]="{ 'disabled': disabled }">
-    <span
-      class="material-icons" *ngIf="icon">
-      {{ icon }}
-    </span>
-    <span><ng-content></ng-content></span>
+  [ngClass]="{ disabled: disabled }"
+>
+  <span class="material-icons" *ngIf="icon">
+    {{ icon }}
+  </span>
+  <span><ng-content></ng-content></span>
 </button>

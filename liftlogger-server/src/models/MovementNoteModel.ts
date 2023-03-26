@@ -1,4 +1,4 @@
-import { MovementNote } from "@prisma/client";
+import { MovementNote } from '@prisma/client';
 
 /**
  * Data required to create a new Movement Note.
@@ -11,4 +11,4 @@ export type MovementNoteCreationParams = Omit<MovementNote, 'id' | 'movement_id'
  */
 export type MovementNoteCreationRequestParams = Omit<MovementNoteCreationParams, 'date'> & {
   date?: number;
-}
+};

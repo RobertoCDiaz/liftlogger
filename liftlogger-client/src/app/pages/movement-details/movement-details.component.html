@@ -1,6 +1,4 @@
-<app-page-header>
-  Movement Details
-</app-page-header>
+<app-page-header> Movement Details </app-page-header>
 
 <div class="page-content">
   <div class="details">
@@ -16,50 +14,64 @@
     </p>
   </div>
 
-
   <div class="progress">
-    <app-graph #graph [data]="graphData" [showFakeData]="journal.length === 0"/>
+    <app-graph #graph [data]="graphData" [showFakeData]="journal.length === 0" />
     <a *ngIf="movement" routerLink="journal">Movement journal ></a>
   </div>
 
   <div class="stats">
-    <ng-container *ngTemplateOutlet="loading || journal.length > 0 ? hasHistory : emptyHistory"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="loading || journal.length > 0 ? hasHistory : emptyHistory"
+    ></ng-container>
   </div>
 
   <ng-template #emptyHistory>
     <div class="empty">
-      <span class="material-symbols-outlined">
-        auto_graph
-      </span>
+      <span class="material-symbols-outlined"> auto_graph </span>
       <p class="msg">You're stats will show up here once you workout using this movement!</p>
     </div>
   </ng-template>
 
   <ng-template #hasHistory>
-      <p class="title">Stats</p>
-      <section>
-        <p class="title">Last Session</p>
-        <div class="section-loader">
-          <app-content-loader [displayIf]="!loading" [lineCount]="3" [fontSize]="1" [isSecondary]="true">
-            <app-movement-journal-entry [entry]="lastSession" />
-          </app-content-loader>
-        </div>
-      </section>
-      <section>
-        <p class="title">Best Session</p>
-        <div class="section-loader">
-          <app-content-loader [displayIf]="!loading" [lineCount]="3" [fontSize]="1" [isSecondary]="true">
-            <app-movement-journal-entry [entry]="bestSession" />
-          </app-content-loader>
-        </div>
-      </section>
-      <section>
-        <p class="title">PR</p>
-        <div class="section-loader">
-          <app-content-loader [displayIf]="!loading" [lineCount]="1" [fontSize]="1" [isSecondary]="true">
-            <app-movement-journal-entry [entry]="prSet" />
-          </app-content-loader>
-        </div>
-      </section>
+    <p class="title">Stats</p>
+    <section>
+      <p class="title">Last Session</p>
+      <div class="section-loader">
+        <app-content-loader
+          [displayIf]="!loading"
+          [lineCount]="3"
+          [fontSize]="1"
+          [isSecondary]="true"
+        >
+          <app-movement-journal-entry [entry]="lastSession" />
+        </app-content-loader>
+      </div>
+    </section>
+    <section>
+      <p class="title">Best Session</p>
+      <div class="section-loader">
+        <app-content-loader
+          [displayIf]="!loading"
+          [lineCount]="3"
+          [fontSize]="1"
+          [isSecondary]="true"
+        >
+          <app-movement-journal-entry [entry]="bestSession" />
+        </app-content-loader>
+      </div>
+    </section>
+    <section>
+      <p class="title">PR</p>
+      <div class="section-loader">
+        <app-content-loader
+          [displayIf]="!loading"
+          [lineCount]="1"
+          [fontSize]="1"
+          [isSecondary]="true"
+        >
+          <app-movement-journal-entry [entry]="prSet" />
+        </app-content-loader>
+      </div>
+    </section>
   </ng-template>
 </div>

@@ -8,9 +8,8 @@ describe('CreateMuscleGroupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateMuscleGroupComponent ]
-    })
-    .compileComponents();
+      declarations: [CreateMuscleGroupComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CreateMuscleGroupComponent);
     component = fixture.componentInstance;

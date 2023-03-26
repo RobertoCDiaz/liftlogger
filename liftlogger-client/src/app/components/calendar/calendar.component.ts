@@ -9,7 +9,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.sass']
+  styleUrls: ['./calendar.component.sass'],
 })
 export class CalendarComponent {
   /**
@@ -43,5 +43,4 @@ export class CalendarComponent {
     this.daysInMonth = new Array(this.currentMonth.daysInMonth()).fill(0).map((v, i) => i + 1);
     this.emptySquares = new Array(this.currentMonth.startOf('month').day()).fill(0);
   }
-
 }

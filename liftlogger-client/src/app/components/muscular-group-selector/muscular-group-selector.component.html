@@ -3,8 +3,7 @@
   <p class="secondary" *ngIf="secondaryText">{{ secondaryText }}</p>
 </div>
 <div class="container">
-
-  <div class="emptyMsg" *ngIf="state.userGroups.length === 0 else groupsList">
+  <div class="emptyMsg" *ngIf="state.userGroups.length === 0; else groupsList">
     <span class="material-icons">playlist_remove</span>
     <p>You don't have any muscle groups created yet!</p>
   </div>
@@ -13,6 +12,7 @@
     <app-muscular-group-selector-item
       *ngFor="let group of state.userGroups"
       (itemToggled)="handleItemToggled()"
-      [group]="group" />
+      [group]="group"
+    />
   </ng-template>
 </div>

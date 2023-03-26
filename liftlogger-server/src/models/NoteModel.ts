@@ -1,5 +1,5 @@
-import { Note } from "@prisma/client";
-import { ModelRequestParams } from "../utils/ModelRequestParams";
+import { Note } from '@prisma/client';
+import { ModelRequestParams } from '../utils/ModelRequestParams';
 
 /**
  * Data required to create a new note. `id` is omitted, and `priority` is turned into an

@@ -1,21 +1,43 @@
 <app-page-header>Add Weightscale Data</app-page-header>
 <form class="content" (ngSubmit)="onSubmit()">
   <div class="inputs">
-    <app-weightscale-data-input (dataChanged)="onDataChanged($event, 'weight')" data="weight">Weight (kg)</app-weightscale-data-input>
-    <app-weightscale-data-input (dataChanged)="onDataChanged($event, 'fat_percentage')" data="fat_percentage">Fat (%)</app-weightscale-data-input>
-    <app-weightscale-data-input (dataChanged)="onDataChanged($event, 'muscle_mass')" data="muscle_mass">Muscle Mass (kg)</app-weightscale-data-input>
-    <app-weightscale-data-input (dataChanged)="onDataChanged($event, 'water_percentage')" data="water_percentage">Water (%)</app-weightscale-data-input>
-    <app-weightscale-data-input (dataChanged)="onDataChanged($event, 'protein_percentage')" data="protein_percentage">Protein (%)</app-weightscale-data-input>
-    <app-weightscale-data-input (dataChanged)="onDataChanged($event, 'metabolism')" data="metabolism">Metabolism (kcal)</app-weightscale-data-input>
-    <app-weightscale-data-input (dataChanged)="onDataChanged($event, 'visceral_fat')" data="visceral_fat">Visceral Fat</app-weightscale-data-input>
+    <app-weightscale-data-input (dataChanged)="onDataChanged($event, 'weight')" data="weight"
+      >Weight (kg)</app-weightscale-data-input
+    >
+    <app-weightscale-data-input
+      (dataChanged)="onDataChanged($event, 'fat_percentage')"
+      data="fat_percentage"
+      >Fat (%)</app-weightscale-data-input
+    >
+    <app-weightscale-data-input
+      (dataChanged)="onDataChanged($event, 'muscle_mass')"
+      data="muscle_mass"
+      >Muscle Mass (kg)</app-weightscale-data-input
+    >
+    <app-weightscale-data-input
+      (dataChanged)="onDataChanged($event, 'water_percentage')"
+      data="water_percentage"
+      >Water (%)</app-weightscale-data-input
+    >
+    <app-weightscale-data-input
+      (dataChanged)="onDataChanged($event, 'protein_percentage')"
+      data="protein_percentage"
+      >Protein (%)</app-weightscale-data-input
+    >
+    <app-weightscale-data-input
+      (dataChanged)="onDataChanged($event, 'metabolism')"
+      data="metabolism"
+      >Metabolism (kcal)</app-weightscale-data-input
+    >
+    <app-weightscale-data-input
+      (dataChanged)="onDataChanged($event, 'visceral_fat')"
+      data="visceral_fat"
+      >Visceral Fat</app-weightscale-data-input
+    >
   </div>
   <div class="options">
     <!-- TODO: Add ability to add custom date to new entry -->
-    <app-button type="no-border" [isSubmitButton]="true" icon="today">
-      Add a date
-    </app-button>
-    <app-button type="primary" [isSubmitButton]="true">
-      Submit
-    </app-button>
+    <app-button type="no-border" [isSubmitButton]="true" icon="today"> Add a date </app-button>
+    <app-button type="primary" [isSubmitButton]="true"> Submit </app-button>
   </div>
 </form>

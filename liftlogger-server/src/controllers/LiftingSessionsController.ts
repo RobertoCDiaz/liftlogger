@@ -1,6 +1,6 @@
-import { LiftingSession, PrismaClient } from "@prisma/client";
-import { LiftingSessionCreationParams } from "../models/LiftingSessionModel";
-import { LiftingSetCreationParams } from "../models/LiftingSetModel";
+import { LiftingSession, PrismaClient } from '@prisma/client';
+import { LiftingSessionCreationParams } from '../models/LiftingSessionModel';
+import { LiftingSetCreationParams } from '../models/LiftingSetModel';
 
 const prisma = new PrismaClient();
 
@@ -12,15 +12,18 @@ export default class LiftingSessionController {
    * @param userEmail Owner's email
    * @returns The fetched session, or nothing if not found
    */
-  static async get(sessionId: number, userEmail: string): Promise<LiftingSession | null | undefined> {
+  static async get(
+    sessionId: number,
+    userEmail: string,
+  ): Promise<LiftingSession | null | undefined> {
     return await prisma.liftingSession.findFirst({
       where: {
         id: sessionId,
-        user_email: userEmail
+        user_email: userEmail,
       },
       include: {
-        sets: true
-      }
+        sets: true,
+      },
     });
   }
 
@@ -33,11 +36,11 @@ export default class LiftingSessionController {
   static async getAll(userEmail: string): Promise<LiftingSession[] | null | undefined> {
     return await prisma.liftingSession.findMany({
       where: {
-        user_email: userEmail
+        user_email: userEmail,
       },
       include: {
-        sets: true
-      }
+        sets: true,
+      },
     });
   }
 
@@ -48,19 +51,22 @@ export default class LiftingSessionController {
    * @param sets List of sets that were made in the session
    * @returns The created data, directly from DB
    */
-  static async createSessionWithSets(session: LiftingSessionCreationParams, sets: LiftingSetCreationParams[]): Promise<LiftingSession | null | undefined> {
+  static async createSessionWithSets(
+    session: LiftingSessionCreationParams,
+    sets: LiftingSetCreationParams[],
+  ): Promise<LiftingSession | null | undefined> {
     return await prisma.liftingSession.create({
       data: {
         ...session,
         sets: {
           createMany: {
-            data: sets
+            data: sets,
           },
         },
       },
       include: {
-        sets: true
-      }
+        sets: true,
+      },
     });
   }
 }

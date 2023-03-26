@@ -1,5 +1,5 @@
 import { MuscleGroup } from '@prisma/client';
-import { Prettify } from '../utils/Prettify'
+import { Prettify } from '../utils/Prettify';
 
 /**
  * Actual Params definition.
@@ -9,7 +9,7 @@ import { Prettify } from '../utils/Prettify'
 export type MuscleGroupCreationParams = Omit<MuscleGroup, 'id' | 'parent_group_id'> & {
   // type Params = Omit<MuscleGroup, 'id' | 'parent_group_id'> & {
   parent_group_id?: number;
-}
+};
 
 /**
  * Relationship of belonging of a Movement to a MuscleGroup.
@@ -17,7 +17,7 @@ export type MuscleGroupCreationParams = Omit<MuscleGroup, 'id' | 'parent_group_i
 export type MuscleGroupForMovementModel = {
   group_id: number;
   is_primary: boolean;
-}
+};
 
 /**
  * Export a prettified version of Params with a proper name.

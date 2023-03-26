@@ -7,7 +7,7 @@ import { MovementsService } from 'src/app/services/movements.service';
 @Component({
   selector: 'app-create-movement',
   templateUrl: './create-movement.component.html',
-  styleUrls: ['./create-movement.component.sass']
+  styleUrls: ['./create-movement.component.sass'],
 })
 export class CreateMovementComponent {
   /**
@@ -30,13 +30,18 @@ export class CreateMovementComponent {
    */
   selectedGroups: Group[] = [];
 
-  constructor(private movementsService: MovementsService, private router: Router) { }
+  constructor(private movementsService: MovementsService, private router: Router) {}
 
   /**
    * Calls for the creation of this new Movement.
    */
   createMovement() {
-    if (!this.movementName || !this.movementDescription || this.movementName === '' || this.movementDescription === '') {
+    if (
+      !this.movementName ||
+      !this.movementDescription ||
+      this.movementName === '' ||
+      this.movementDescription === ''
+    ) {
       alert('You have missing information');
       return;
     }

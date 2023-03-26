@@ -1,9 +1,10 @@
-<div *ngIf="showPeriodSelector" class="period-selector" [ngClass]="{ 'disabled': data.length <= 0}">
+<div *ngIf="showPeriodSelector" class="period-selector" [ngClass]="{ disabled: data.length <= 0 }">
   <span
     *ngFor="let label of availablePeriods"
-    [ngClass]="{ 'selected': period === label }"
+    [ngClass]="{ selected: period === label }"
     (click)="changePeriod(label)"
-    class="item">
+    class="item"
+  >
     {{ label }}
   </span>
 </div>

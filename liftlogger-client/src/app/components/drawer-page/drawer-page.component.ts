@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-drawer-page',
   templateUrl: './drawer-page.component.html',
-  styleUrls: ['./drawer-page.component.sass']
+  styleUrls: ['./drawer-page.component.sass'],
 })
 export class DrawerPageComponent {
   /**

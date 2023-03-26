@@ -28,13 +28,12 @@ export type UserInfo = {
    * URL to the user's profile picture.
    */
   pictureUrl: string;
-}
+};
 
 /**
  * Collection of functions to help in User Auth.
  */
 export class AuthService {
-
   /**
    * Fetches user information for a given access token.
    *
@@ -46,6 +45,6 @@ export class AuthService {
 
     headers.set('Authorization', `Bearer ${accessToken}`);
 
-    return await (await fetch(process.env.AUTH0_ISSUER_URL + '/userinfo', { headers })).json()
+    return await (await fetch(process.env.AUTH0_ISSUER_URL + '/userinfo', { headers })).json();
   }
 }

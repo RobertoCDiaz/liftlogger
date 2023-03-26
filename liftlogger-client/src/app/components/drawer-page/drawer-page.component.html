@@ -8,7 +8,8 @@
         [actionIcon]="actionIcon"
         [actionUrl]="actionUrl"
         (menuClicked)="mainSidenav.toggle()"
-        [title]="pageName">
+        [title]="pageName"
+      >
         <ng-content select="[slot=appbar-content]"></ng-content>
       </app-bar>
       <div class="content">

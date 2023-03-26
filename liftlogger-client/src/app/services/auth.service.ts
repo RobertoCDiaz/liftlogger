@@ -6,10 +6,14 @@ import { environment } from 'src/environment/environment';
 import { HttpService } from './http.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  constructor(private oAuthService: OAuthService, private http: HttpService, private router: Router) { }
+  constructor(
+    private oAuthService: OAuthService,
+    private http: HttpService,
+    private router: Router,
+  ) {}
 
   /**
    * Fetches the information for the current user, such as email, profile
@@ -32,17 +36,19 @@ export class AuthService {
       return;
     }
 
-    this.oAuthService.loginWithPopup({
-      authorizationParams: {
-        prompt: 'login',
-        screen_hint: shouldSignUp ? 'signup' : 'login',
-      },
-    }).subscribe(value => {
-      this.tryToCreateUser();
+    this.oAuthService
+      .loginWithPopup({
+        authorizationParams: {
+          prompt: 'login',
+          screen_hint: shouldSignUp ? 'signup' : 'login',
+        },
+      })
+      .subscribe(value => {
+        this.tryToCreateUser();
 
-      localStorage.setItem(environment.auth0ClientId + '.isAuthenticated', "true");
-      this.router.navigate(['/dashboard'])
-    });
+        localStorage.setItem(environment.auth0ClientId + '.isAuthenticated', 'true');
+        this.router.navigate(['/dashboard']);
+      });
   }
 
   /**
@@ -77,7 +83,9 @@ export class AuthService {
         return;
       }
 
-      const createRequest = this.http.post<{ email: string }, boolean>('auth/createUser', { email: user.email || '' });
+      const createRequest = this.http.post<{ email: string }, boolean>('auth/createUser', {
+        email: user.email || '',
+      });
 
       createRequest.subscribe();
     });

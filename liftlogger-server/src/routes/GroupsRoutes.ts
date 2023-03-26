@@ -1,11 +1,11 @@
 import * as express from 'express';
-import { MuscleGroup } from "@prisma/client";
-import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from "tsoa";
-import MuscleGroupController from "../controllers/MuscleGroupsController";
-import { MuscleGroupCreationParams } from "../models/MuscleGroupModel";
-import { AuthService } from "../services/AuthService";
-import { ModelRequestParams } from "../utils/ModelRequestParams";
-import { shouldBeAuthenticated } from "../middlewares/auth";
+import { MuscleGroup } from '@prisma/client';
+import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
+import MuscleGroupController from '../controllers/MuscleGroupsController';
+import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
+import { AuthService } from '../services/AuthService';
+import { ModelRequestParams } from '../utils/ModelRequestParams';
+import { shouldBeAuthenticated } from '../middlewares/auth';
 
 @Route('groups')
 export class GroupsRoutes extends Controller {
@@ -19,7 +19,7 @@ export class GroupsRoutes extends Controller {
   @Middlewares([shouldBeAuthenticated])
   public async getGroups(
     @Query() withMovements: boolean = false,
-    @Request() req: express.Request
+    @Request() req: express.Request,
   ): Promise<MuscleGroup[] | null | undefined> {
     if (!req.auth) {
       return;
@@ -40,7 +40,7 @@ export class GroupsRoutes extends Controller {
   @Middlewares([shouldBeAuthenticated])
   public async getGroup(
     @Path() id: number,
-    @Request() req: express.Request
+    @Request() req: express.Request,
   ): Promise<MuscleGroup | null | undefined> {
     if (!req.auth) {
       return;

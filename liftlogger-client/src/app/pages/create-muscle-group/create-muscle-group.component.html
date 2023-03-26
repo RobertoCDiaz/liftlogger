@@ -4,12 +4,12 @@
   [createEnabled]="isCreationEnabled"
   (titleChanged)="groupNameChanged($event)"
   (descriptionChanged)="groupDescriptionChanged($event)"
-  inputTitle="Group name">
-
+  inputTitle="Group name"
+>
   <app-muscular-group-selector
     text="Subgroup of"
     secondaryText="Leave this empty to create a root group"
     (selectionChanged)="onSelectionChanged($event)"
-    [isMultipleChoice]="false" />
-
+    [isMultipleChoice]="false"
+  />
 </app-creator-page>

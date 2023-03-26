@@ -21,12 +21,12 @@ export type SidenavItem = {
    * Where the item will redirect the user to.
    */
   url: string;
-}
+};
 
 @Component({
   selector: 'app-main-sidenav',
   templateUrl: './main-sidenav.component.html',
-  styleUrls: ['./main-sidenav.component.sass']
+  styleUrls: ['./main-sidenav.component.sass'],
 })
 export class MainSidenavComponent {
   pictureUrl?: string;
@@ -40,30 +40,29 @@ export class MainSidenavComponent {
     {
       icon: 'insights',
       name: 'Dashboard',
-      url: '/dashboard'
+      url: '/dashboard',
     },
     {
       icon: 'sports_gymnastics',
       name: 'Movements',
-      url: '/movements'
+      url: '/movements',
     },
     {
       icon: 'event_busy',
       name: 'Templates',
-      url: '/templates'
+      url: '/templates',
     },
     {
       icon: 'accessibility_new',
       name: 'Muscle Groups',
-      url: '/muscle-groups'
+      url: '/muscle-groups',
     },
     {
       icon: 'fitness_center',
       name: 'Training Journal',
-      url: '/journal'
+      url: '/journal',
     },
   ];
-
 
   ngOnInit() {
     this.authService.getUserInfo().subscribe(user => {
@@ -72,7 +71,7 @@ export class MainSidenavComponent {
       }
 
       this.pictureUrl = user.picture;
-      this.userEmail = user.email
+      this.userEmail = user.email;
     });
   }
 

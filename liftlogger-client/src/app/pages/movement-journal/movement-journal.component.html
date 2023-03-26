@@ -1,7 +1,9 @@
 <app-page-header>{{ movement.name }}</app-page-header>
 
 <div class="page-content">
-  <ng-container *ngTemplateOutlet="isLoading || monthlyJournals.length > 0 ? data : noData"></ng-container>
+  <ng-container
+    *ngTemplateOutlet="isLoading || monthlyJournals.length > 0 ? data : noData"
+  ></ng-container>
 </div>
 
 <ng-template #data>
@@ -12,7 +14,11 @@
       <app-content-loader [displayIf]="false" [fontSize]="2"></app-content-loader>
       <div class="calendar"></div>
       <div class="entries">
-        <app-content-loader [displayIf]="false" [lineCount]="10" [isSecondary]="true"></app-content-loader>
+        <app-content-loader
+          [displayIf]="false"
+          [lineCount]="10"
+          [isSecondary]="true"
+        ></app-content-loader>
       </div>
     </div>
   </ng-template>
@@ -20,11 +26,13 @@
   <ng-template #loadedData>
     <div class="month" *ngFor="let month of monthlyJournals">
       <p class="month-title">{{ getMonthFormat(month) }}</p>
-      <app-calendar class="calendar" [initialMonthTime]="month.monthTime" [highlightedDays]="getDayNumbers(month)"></app-calendar>
+      <app-calendar
+        class="calendar"
+        [initialMonthTime]="month.monthTime"
+        [highlightedDays]="getDayNumbers(month)"
+      ></app-calendar>
       <div class="entries">
-        <app-movement-journal-entry
-          *ngFor="let entry of month.entries"
-          [entry]="entry"/>
+        <app-movement-journal-entry *ngFor="let entry of month.entries" [entry]="entry" />
       </div>
     </div>
   </ng-template>
@@ -37,4 +45,3 @@
     <p>Start training this movement to start seeing your progress here!</p>
   </div>
 </ng-template>
-

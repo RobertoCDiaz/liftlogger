@@ -1,4 +1,4 @@
-import { Movement } from "./Movement";
+import { Movement } from './Movement';
 
 /**
  * Represents a group of muscles and its properties.
@@ -12,7 +12,7 @@ export type Group = {
   /**
    * The name of the muscle group.
    */
-  name: string,
+  name: string;
 
   /**
    * A brief description of the muscle group.
@@ -45,4 +45,4 @@ export type Group = {
   groups?: Group[];
 
   movements?: Movement[];
-}
+};

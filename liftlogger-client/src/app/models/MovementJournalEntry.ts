@@ -1,4 +1,4 @@
-import { LiftingSession } from "./LiftingSession";
+import { LiftingSession } from './LiftingSession';
 
 /**
  * Defines an entry for a Movement's Workout Journal.
@@ -25,7 +25,7 @@ export type MovementJournalEntry = {
    * along with the sets of every Lifting Session for that Movement.
    */
   session: LiftingSession;
-}
+};
 
 /**
  * Defines the structure of a MovementJournal of a single month.
@@ -40,4 +40,4 @@ export type MovementMonthlyJournal = {
    * List of entries in this month.
    */
   entries: MovementJournalEntry[];
-}
+};

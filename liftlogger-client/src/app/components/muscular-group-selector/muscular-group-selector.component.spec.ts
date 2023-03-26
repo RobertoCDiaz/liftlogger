@@ -8,9 +8,8 @@ describe('MuscularGroupSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MuscularGroupSelectorComponent ]
-    })
-    .compileComponents();
+      declarations: [MuscularGroupSelectorComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MuscularGroupSelectorComponent);
     component = fixture.componentInstance;
