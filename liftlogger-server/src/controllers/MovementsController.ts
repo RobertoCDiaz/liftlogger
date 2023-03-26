@@ -71,9 +71,10 @@ export default class MovementsController {
    *
    * @param movementId Identifier of the Movement which journal is to be retrieved
    * @param email User email to check against
+   * @param recentsFirst Whether the list should be ordered from more recent to older entries or not. Defaults to false.
    * @returns The list of LiftingSessions
    */
-  static async getMovementJournal(movementId: number, email: string): Promise<MovementJournalEntry[] | null | undefined> {
+  static async getMovementJournal(movementId: number, email: string, recentsFirst: boolean = false): Promise<MovementJournalEntry[] | null | undefined> {
     const sessions = await prisma.liftingSession.findMany({
       where: {
         user_email: email,
@@ -91,7 +92,7 @@ export default class MovementsController {
         },
       },
       orderBy: {
-        start_time: 'asc',
+        start_time: recentsFirst ? 'desc' : 'asc',
       }
     });
 

@@ -1,6 +1,6 @@
 import * as express from "express";
 import { Movement, MovementNote } from "@prisma/client";
-import { Body, Controller, Get, Middlewares, Path, Post, Request, Route } from "tsoa";
+import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from "tsoa";
 import MovementsController from "../controllers/MovementsController";
 import { MovementCreationParams, MovementCreationRequestParams } from "../models/MovementModel";
 import { AuthService } from "../services/AuthService";
@@ -122,14 +122,17 @@ export class MovementRoutes extends Controller {
   @Middlewares([shouldBeAuthenticated])
   public async getMovementJournal(
     @Path() id: number,
+    @Query() recentsFirst: boolean = false,
     @Request() req: express.Request,
   ): Promise<MovementJournalEntry[] | null | undefined> {
     if (!req.auth) {
       return;
     }
 
+    console.log(recentsFirst)
+
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return MovementsController.getMovementJournal(id, email);
+    return MovementsController.getMovementJournal(id, email, recentsFirst);
   }
 }

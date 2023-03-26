@@ -24,8 +24,15 @@ export class MovementsService {
     return this.http.get('movements/' + id);
   }
 
-  getMovementJournal(id: number): Observable<MovementJournalEntry[]> {
-    return this.http.get(`movements/${id}/journal`);
+  /**
+   * Gets a list of all the individual sessions in which a Movement was trained. It does NOT return LiftingSessions, but a miniset of them instead, with specific information regarding a single Movement.
+   *
+   * @param id Movement whose entries are to be fetched
+   * @param recentsFirst Whether the list should already come ordered from more recent to older
+   * @returns JournalEntries for the Movement
+   */
+  getMovementJournal(id: number, recentsFirst: boolean = false): Observable<MovementJournalEntry[]> {
+    return this.http.get(`movements/${id}/journal?recentsFirst=${recentsFirst}`);
   }
 
   /**
