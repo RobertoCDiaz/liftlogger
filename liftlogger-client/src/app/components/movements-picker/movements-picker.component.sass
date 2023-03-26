@@ -1,0 +1,27 @@
+@use '../../.../../../styles'
+
+.options
+  @include styles.flex(row)
+  gap: 1em
+  padding: 1em
+  justify-items: stretch
+
+  app-search-bar
+    flex-grow: 1
+
+.groups-list
+  @include styles.isLarge
+    @include styles.shadow
+    border-radius: .5em
+    background-color: styles.$white
+
+.empty-list
+  padding: 3em
+  @include styles.flex(column)
+  align-items: center
+
+  *
+    color: styles.$dark-gray
+
+  span
+    font-size: 5rem

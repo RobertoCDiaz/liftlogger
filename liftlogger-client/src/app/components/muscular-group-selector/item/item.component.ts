@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Group } from 'src/app/models/Groups';
+import { Group } from 'src/app/models/Group';
 import { GroupsService } from 'src/app/services/groups.service';
+import { MuscularGroupSelectorState } from '../muscular-group-selector.component';
 
 @Component({
   selector: 'app-muscular-group-selector-item',
@@ -8,12 +9,6 @@ import { GroupsService } from 'src/app/services/groups.service';
   styleUrls: ['./item.component.sass']
 })
 export class ItemComponent {
-
-  /**
-   * Main data source for the whole muscular groups tree.
-   */
-  @Input() data: Group[];
-
   /**
    * The Group object for this item.
    */
@@ -25,46 +20,41 @@ export class ItemComponent {
   @Input() isExpanded: boolean = false;
 
   /**
-   * A boolean value indicating whether multiple groups can be selected at once or not.
-   */
-  @Input() isMultipleChoice: boolean = true;
-
-  /**
    * Fires when this item is toggled (e.g. It is checked or unchecked).
    */
   @Output() itemToggled = new EventEmitter<Group>();
 
-  /**
-   * Constructor of ItemComponent that injects GroupsService.
-   * @param groupsService The GroupsService used to perform group-related operations.
-   */
-  constructor(private groupsService: GroupsService) { }
+  constructor(private state: MuscularGroupSelectorState, private groupService: GroupsService) { }
 
   /**
-   * Toggles the selection state of the specified group.
-   * @param groupName The name of the group to toggle.
+   * Toggles the selection state for the current group.
    */
-  toggleChecked(group: Group): void {
-    this.groupsService.toggleGroup(
-      group,
-      this.data,
-      !this.isMultipleChoice
-    )
+  toggleChecked(): void {
+    // TODO: Also toggle parent groups
+    if (!this.state.isMultiSelectable) {
+      this.groupService.unCheckAllGroups(this.state.userGroups);
+    }
 
-    this.itemToggled.emit(group);
+    this.group.checked = !this.group.checked;
+
+    if (!this.group.checked) {
+      this.group.isPrimary = false;
+    }
+
+    this.itemToggled.emit(this.group);
   }
 
   /**
-   * Sets the specified group as the primary selection and toggles its selection state if it is not already selected.
-   *
-   * @param group Group to be set as primary.
+   * Sets the specified group as the primary selection and toggles its selection state
+   * if it is not already selected.
    */
-  setPrimary(group: Group): void {
+  setPrimary(): void {
+    this.groupService.unCheckAllGroups(this.state.userGroups, true)
     if (!this.group.checked) {
-      this.groupsService.toggleGroup(group, this.data, !this.isMultipleChoice)
+      this.toggleChecked();
     }
 
-    this.groupsService.setGroupAsPrimary(group, this.data);
+    this.group.isPrimary = true;
   }
 
   /**

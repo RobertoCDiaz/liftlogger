@@ -1,0 +1,50 @@
+@use '../../../styles'
+
+:host
+  @include styles.shadow
+  @include styles.no-selection
+  background-color: styles.$white
+  border-radius: .5em
+
+  .days
+    display: grid
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+
+    .day, .day-name
+      display: grid
+      place-items: center
+      place-self: stretch
+
+    .day-name
+      font-weight: bold
+      padding: 1em 0
+      border-bottom: 1px solid styles.$light-gray
+
+    .day
+      height: 4em
+      position: relative
+      display: grid
+
+      p
+        position: relative
+        z-index: 1
+
+      .bubble
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%) scale(0)
+        background-color: styles.$primary-color
+        border-radius: 50%
+        width: 30px
+        height: 30px
+        opacity: 0
+        transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out
+
+      &.highlighted
+        p
+          color: styles.$white
+
+        .bubble
+          opacity: 1
+          transform: translate(-50%, -50%) scale(1)

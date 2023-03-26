@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { Group } from 'src/app/models/Groups';
+import { Group } from 'src/app/models/Group';
 import { GroupsService } from 'src/app/services/groups.service';
 
 /**
@@ -49,17 +49,17 @@ export class CreateMuscleGroupComponent {
    * Tries to create a new group. When a group is succesfully created,
    * it redirects the user one page back in history.
    */
-  async onCreateClicked() {
+  onCreateClicked() {
     if (!this.isCreationEnabled) {
       alert('You have missing properties');
       return;
     }
 
-    (await this.groupsService.createGroup({
+    this.groupsService.createGroup({
       name: this.groupName,
       description: this.groupDescription,
       parent_group_id: this.parentGroup?.id ?? undefined,
-    })).subscribe(resultGroup => {
+    }).subscribe(resultGroup => {
       alert(`[${resultGroup.name}] muscle group was succesfully created!`);
       this.location.back();
     })

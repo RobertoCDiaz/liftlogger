@@ -1,0 +1,15 @@
+<div class="options">
+  <app-search-bar (queryChanged)="handleQueryChange($event)"></app-search-bar>
+</div>
+
+<div class="empty-list" *ngIf="filteredGroups.length === 0 else groupsList">
+  <span class="material-icons">playlist_remove</span>
+  <p>Your movements list is empty!</p>
+</div>
+
+<ng-template #groupsList>
+  <div class="groups-list">
+    <app-movements-picker-group-item *ngFor="let group of filteredGroups" [group]="group">
+    </app-movements-picker-group-item>
+  </div>
+</ng-template>

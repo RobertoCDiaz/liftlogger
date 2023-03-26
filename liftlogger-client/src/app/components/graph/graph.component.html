@@ -1,0 +1,11 @@
+<div *ngIf="showPeriodSelector" class="period-selector" [ngClass]="{ 'disabled': data.length <= 0}">
+  <span
+    *ngFor="let label of availablePeriods"
+    [ngClass]="{ 'selected': period === label }"
+    (click)="changePeriod(label)"
+    class="item">
+    {{ label }}
+  </span>
+</div>
+
+<canvas></canvas>

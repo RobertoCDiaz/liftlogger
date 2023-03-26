@@ -1,0 +1,11 @@
+<ng-container *ngTemplateOutlet="displayIf ? contentContainer : loaderContainer"></ng-container>
+
+<ng-template #loaderContainer>
+  <ngx-skeleton-loader *ngFor="let i of arrCount" [theme]="theme" appearance="custom-content" class="skeleton-loader">
+    <div class="content-placeholder" [ngClass]="{ 'secondary': isSecondary }" [style]="{ height: fontSize + 'rem' }"></div>
+  </ngx-skeleton-loader>
+</ng-template>
+
+<ng-template #contentContainer>
+  <ng-content></ng-content>
+</ng-template>

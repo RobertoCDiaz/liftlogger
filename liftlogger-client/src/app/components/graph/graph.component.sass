@@ -1,0 +1,43 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex(column)
+  align-items: end
+  @include styles.shadow
+  border-radius: .5em
+  background-color: styles.$white
+
+  canvas
+    align-self: stretch
+
+  .period-selector
+    @include styles.flex(row)
+    @include styles.no-selection
+    border: 1px solid styles.$primary-color
+    border-radius: .25em
+    margin: .5em
+
+    .item
+      padding: .25em .5em
+
+    &:not(.disabled) .item
+      cursor: pointer
+      color: styles.$primary-color
+
+      &.selected
+        background-color: styles.$primary-color
+        color: styles.$white
+
+      &:hover
+        background-color: styles.$primary-light-color
+        color: styles.$white
+
+    &.disabled
+      border: 1px solid styles.$dark-gray
+
+      .item
+        color: styles.$dark-gray
+
+        &.selected
+          background-color: styles.$dark-gray
+          color: styles.$white

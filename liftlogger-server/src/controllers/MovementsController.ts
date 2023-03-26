@@ -1,6 +1,7 @@
 import { Movement, PrismaClient } from "@prisma/client";
 import { MovementCreationParams } from "../models/MovementModel";
 import { MuscleGroupForMovementModel } from "../models/MuscleGroupModel";
+import { MovementJournalEntry } from "../models/MovementJournal";
 
 const prisma = new PrismaClient();
 
@@ -60,5 +61,56 @@ export default class MovementsController {
     });
 
     return newMovement;
+  }
+
+  /**
+   * Retrieves the workout journal for a Movement.
+   *
+   * A Workout Journal of a Movement is the list of Lifting Sessions in which the
+   * Movement was trained in, along with the sets of every Lifting Session for that Movement.
+   *
+   * @param movementId Identifier of the Movement which journal is to be retrieved
+   * @param email User email to check against
+   * @param recentsFirst Whether the list should be ordered from more recent to older entries or not. Defaults to false.
+   * @returns The list of LiftingSessions
+   */
+  static async getMovementJournal(movementId: number, email: string, recentsFirst: boolean = false): Promise<MovementJournalEntry[] | null | undefined> {
+    const sessions = await prisma.liftingSession.findMany({
+      where: {
+        user_email: email,
+        sets: {
+          some: {
+            movement_id: movementId
+          }
+        }
+      },
+      include: {
+        sets: {
+          where: {
+            movement_id: movementId,
+          },
+        },
+      },
+      orderBy: {
+        start_time: recentsFirst ? 'desc' : 'asc',
+      }
+    });
+
+    // TODO: Delegate value computation to server?
+    const journal: MovementJournalEntry[] = sessions.map(session => {
+      let acc: number = 0;
+      session.sets.forEach(set => {
+        acc += Math.sqrt(set.reps) * set.weight;
+      });
+
+      return {
+        value: acc / session.sets.length,
+        date: session.start_time,
+        movement_id: movementId,
+        session: session,
+      }
+    });
+
+    return journal;
   }
 }

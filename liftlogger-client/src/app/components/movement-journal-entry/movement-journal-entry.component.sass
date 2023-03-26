@@ -1,0 +1,41 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex(column)
+  gap: .5em
+  padding: .5em 1em
+  border-left: .25em solid styles.$dark-gray
+
+  .sets-container
+    @include styles.flex(column)
+
+    .set
+      @include styles.flex(row)
+      align-items: center
+      justify-content: center
+      gap: 2em
+
+      .data
+        @include styles.flex(row)
+        align-items: center
+        gap: .5em
+
+        .amount
+          font-size: 1.5rem
+
+  .details-container
+    @include styles.flex(row)
+    gap: 1em
+    align-items: center
+    justify-content: center
+
+    .item
+      @include styles.flex(row)
+      gap: .25em
+      align-items: center
+      flex-grow: 1
+      justify-content: center
+
+      span
+        color: styles.$dark-gray
+        font-size: .9rem

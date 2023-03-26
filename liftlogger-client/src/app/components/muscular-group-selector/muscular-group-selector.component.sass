@@ -16,3 +16,16 @@
   .container
     border: 1px solid styles.$light-gray
     border-radius: .5em
+    overflow: hidden
+    background: styles.$white
+
+    .emptyMsg
+      padding: 5em 2em
+      @include styles.flex(column)
+
+      *
+        text-align: center
+        color: styles.$dark-gray
+
+      span
+        font-size: 3rem

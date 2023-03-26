@@ -1,0 +1,86 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex(column)
+
+.page-content
+  @include styles.responsiveContent
+  @include styles.flex(column)
+  gap: 1em
+  padding: 0 1em
+
+  .details
+    @include styles.flex(column)
+
+    .title
+      font-size: 2rem
+      align-self: stretch
+
+    .last-trained
+      @include styles.flex(row)
+      gap: .25em
+      color: styles.$dark-gray
+      align-self: start
+
+      *
+        color: styles.$dark-gray
+
+  .progress
+    @include styles.flex(column)
+    align-items: stretch
+    gap: .5em
+
+    a
+      color: styles.$dark-gray
+      cursor: pointer
+      align-self: end
+
+  .stats
+    @include styles.flex(column)
+    gap: 1em
+
+    > .title
+      font-size: 1.5rem
+
+    section
+      @include styles.flex(column)
+      gap: .5em
+
+  .empty
+    @include styles.flex(column)
+    align-items: center
+    gap: 1em
+    padding: 2em
+
+    *
+      color: styles.$dark-gray
+      text-align: center
+
+    span
+      font-size: 4rem
+
+  @include styles.isLarge
+    display: grid
+    grid-template-columns: 2fr 1fr
+    grid-template-areas: "details stats" "progress stats" "empty empty"
+    column-gap: 2em
+
+    .details
+      grid-area: details
+
+    .progess
+      grid-area: progess
+
+    .stats-container
+      grid-area: stats-container
+
+    .stats
+      @include styles.shadow
+      background-color: styles.$white
+      border-radius: .5em
+      padding: 1em
+      grid-area: stats
+      align-self: center
+
+      .empty
+        grid-area: stats

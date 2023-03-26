@@ -1,14 +1,23 @@
-@use '/src/styles'
+@use '../../../styles'
 
 :host
   @include styles.flex(columns)
 
   input, textarea
     all: unset
-    // font-size: 1.25rem
     width: 100%
+    box-sizing: border-box
     max-width: 100%
     min-width: 100%
+    align-self: stretch
 
   .title
     font-size: 2rem
+
+  @include styles.isLarge
+
+    textarea
+      background-color: styles.$white
+      padding: 1em
+      border-radius: .5em
+      height: 15rem

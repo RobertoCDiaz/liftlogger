@@ -1,0 +1,34 @@
+@use '../../../styles'
+
+.item
+  @include styles.flex(column)
+  @include styles.no-selection
+  @include styles.transition
+  padding: .5em 2em
+  gap: .5em
+  cursor: pointer
+
+  &.selected
+    border-left: 5px solid styles.$primary-color
+
+    .name
+      color: styles.$primary-color
+
+  &:hover
+    background-color: styles.$light-gray
+
+  .name
+    font-size: 1.1rem
+
+  .groups
+    @include styles.flex(row)
+    gap: .25em
+
+    .group-chip
+      background-color: styles.$dark-gray
+      border-radius: 5em
+      color: styles.$white
+      padding: .25em .5em
+
+      &.primary
+        background-color: styles.$text-color

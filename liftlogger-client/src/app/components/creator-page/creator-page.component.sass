@@ -1,20 +1,21 @@
-@use '/src/styles'
+@use '../../../styles'
 
 :host
   @include styles.flex(column)
   height: 100vh
 
   .content
+    @include styles.responsiveContent
     @include styles.flex(column)
     flex-grow: 1
-    gap: 1em
+    gap: 2em
     padding: 2em
 
     .header
       @include styles.flex(column)
       gap: 1em
 
-    .groups-selector
+    .page-content
       flex-grow: 1
 
     .footer
@@ -23,3 +24,18 @@
 
       .action
         flex-grow: 1
+
+    @include styles.isLarge
+      display: grid
+      grid-template-columns: 1fr 1fr
+      grid-template-rows: 1fr 0fr
+      grid-template-areas: "header content" "footer footer"
+
+      .header:
+        grid-area: header
+
+      .page-content
+        grid-area: content
+
+      .footer
+        grid-area: footer

@@ -4,33 +4,14 @@
   <p class="email">{{ userEmail }}</p>
 </div>
 <div class="menu">
-  <a class="item selected" title="Option still unavailable">
-    <span class="material-icons">insights</span>
-    <span>Dashboard</span>
+  <a *ngFor="let item of items" class="item" [ngClass]="{ 'selected': urlMatches(item.url) }" href="{{ item.url }}">
+    <span class="material-icons">{{ item.icon }}</span>
+    <span>{{ item.name }}</span>
   </a>
-  <!-- TODO: Implement movements library -->
-  <a class="item" title="Option still unavailable">
-    <span class="material-icons">sports_gymnastics</span>
-    <span>Movements</span>
-  </a>
-  <!-- TODO: Implement templates library -->
-  <a class="item" title="Option still unavailable">
-    <span class="material-icons">event_busy</span>
-    <span>Templates</span>
-  </a>
-  <!-- TODO: Implement groups library -->
-  <a class="item" title="Option still unavailable">
-    <span class="material-icons">accessibility_new</span>
-    <span>Muscle Groups</span>
-  </a>
-  <!-- TODO: Implement training journal -->
-  <a class="item" title="Option still unavailable">
-    <span class="material-icons">fitness_center</span>
-    <span>Training Journal</span>
-  </a>
+
   <mat-divider></mat-divider>
-  <!-- TODO: Implement app settings -->
-  <a class="item" title="Option still unavailable">
+
+  <a class="item">
     <span class="material-icons">settings</span>
     <span>Settings</span>
   </a>
