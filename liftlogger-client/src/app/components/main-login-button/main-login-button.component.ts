@@ -11,14 +11,14 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-main-login-button',
   templateUrl: './main-login-button.component.html',
-  styleUrls: ['./main-login-button.component.sass']
+  styleUrls: ['./main-login-button.component.sass'],
 })
 export class MainLoginButtonComponent {
   isLoggedIn: boolean = false;
   pictureUrl: string;
   userEmail: string;
 
-  constructor(public oAuthService: OAuthService, private authService: AuthService) { }
+  constructor(public oAuthService: OAuthService, private authService: AuthService) {}
 
   ngOnInit() {
     this.oAuthService.user$.subscribe(user => {
@@ -44,5 +44,4 @@ export class MainLoginButtonComponent {
   handleLogout() {
     this.authService.logOut();
   }
-
 }

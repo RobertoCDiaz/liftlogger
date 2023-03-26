@@ -1,4 +1,4 @@
-import { Group } from "./Group";
+import { Group } from './Group';
 
 /**
  * Represent a Movement entity from DB.
@@ -33,4 +33,4 @@ export type Movement = {
    * List of Muscle Groups this Movement belongs to.
    */
   groups?: Group[];
-}
+};

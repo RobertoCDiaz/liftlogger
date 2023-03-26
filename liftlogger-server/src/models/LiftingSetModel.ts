@@ -1,4 +1,4 @@
-import { LiftingSet } from "@prisma/client";
+import { LiftingSet } from '@prisma/client';
 
 /**
  * Data required to create a LiftingSet. This ommits the ID of the set, as well as the ID of the session

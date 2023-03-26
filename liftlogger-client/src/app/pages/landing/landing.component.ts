@@ -4,10 +4,8 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
-  styleUrls: ['./landing.component.sass']
+  styleUrls: ['./landing.component.sass'],
 })
 export class LandingComponent {
-
-  constructor(public authService: AuthService) { }
-
+  constructor(public authService: AuthService) {}
 }

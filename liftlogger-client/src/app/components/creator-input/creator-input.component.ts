@@ -8,10 +8,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
   selector: 'app-creator-input',
   templateUrl: './creator-input.component.html',
-  styleUrls: ['./creator-input.component.sass']
+  styleUrls: ['./creator-input.component.sass'],
 })
 export class CreatorInputComponent {
-
   /**
    * Whether the input should use a `textarea` as base component or not.
    * When not, it'll use a regular `input` tag.

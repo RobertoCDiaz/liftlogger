@@ -1,5 +1,5 @@
-import { PrismaClient, Template } from "@prisma/client";
-import { TemplateCreationParams } from "../models/TemplateModel";
+import { PrismaClient, Template } from '@prisma/client';
+import { TemplateCreationParams } from '../models/TemplateModel';
 
 const prisma = new PrismaClient();
 
@@ -12,7 +12,10 @@ export default class TemplateController {
    * @param userEmail User email to match it against
    * @returns Fetched template, or nothing if no match was found
    */
-  static async getTemplate(templateId: number, userEmail: string): Promise<Template | null | undefined> {
+  static async getTemplate(
+    templateId: number,
+    userEmail: string,
+  ): Promise<Template | null | undefined> {
     const templates = await prisma.template.findFirst({
       where: {
         id: templateId,
@@ -60,8 +63,8 @@ export default class TemplateController {
         ...template,
         movements: movementsIds && {
           connect: movementsIds.map(id => ({ id: id })),
-        }
-      }
+        },
+      },
     });
 
     return newTemplate;

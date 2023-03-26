@@ -1,5 +1,5 @@
-import { Note, PrismaClient } from "@prisma/client";
-import { NoteCreationParams } from "../models/NoteModel";
+import { Note, PrismaClient } from '@prisma/client';
+import { NoteCreationParams } from '../models/NoteModel';
 
 const prisma = new PrismaClient();
 
@@ -13,16 +13,22 @@ export default class NotesController {
    * @param endDate Later note date to fetch.
    * @returns All of the user's notes
    */
-  static async getNotesFromUser(userEmail: string, startDate?: number, endDate?: number): Promise<Note[] | null | undefined> {
+  static async getNotesFromUser(
+    userEmail: string,
+    startDate?: number,
+    endDate?: number,
+  ): Promise<Note[] | null | undefined> {
     const isIntervalProvided = !!startDate && !!endDate;
 
     return await prisma.note.findMany({
       where: {
         user_email: userEmail,
-        date: isIntervalProvided ? {
-          gte: startDate,
-          lte: endDate,
-        } : undefined
+        date: isIntervalProvided
+          ? {
+              gte: startDate,
+              lte: endDate,
+            }
+          : undefined,
       },
     });
   }

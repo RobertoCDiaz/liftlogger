@@ -6,7 +6,7 @@ import { MuscularGroupSelectorState } from '../muscular-group-selector.component
 @Component({
   selector: 'app-muscular-group-selector-item',
   templateUrl: './item.component.html',
-  styleUrls: ['./item.component.sass']
+  styleUrls: ['./item.component.sass'],
 })
 export class ItemComponent {
   /**
@@ -24,7 +24,7 @@ export class ItemComponent {
    */
   @Output() itemToggled = new EventEmitter<Group>();
 
-  constructor(private state: MuscularGroupSelectorState, private groupService: GroupsService) { }
+  constructor(private state: MuscularGroupSelectorState, private groupService: GroupsService) {}
 
   /**
    * Toggles the selection state for the current group.
@@ -49,7 +49,7 @@ export class ItemComponent {
    * if it is not already selected.
    */
   setPrimary(): void {
-    this.groupService.unCheckAllGroups(this.state.userGroups, true)
+    this.groupService.unCheckAllGroups(this.state.userGroups, true);
     if (!this.group.checked) {
       this.toggleChecked();
     }
@@ -67,5 +67,4 @@ export class ItemComponent {
 
     this.isExpanded = !this.isExpanded;
   }
-
 }

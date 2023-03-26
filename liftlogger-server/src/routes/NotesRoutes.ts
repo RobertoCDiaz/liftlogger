@@ -1,7 +1,7 @@
 import * as express from 'express';
-import { Note } from "@prisma/client";
-import { Body, Controller, Get, Middlewares, Post, Request, Route } from "tsoa";
-import { shouldBeAuthenticated } from "../middlewares/auth";
+import { Note } from '@prisma/client';
+import { Body, Controller, Get, Middlewares, Post, Request, Route } from 'tsoa';
+import { shouldBeAuthenticated } from '../middlewares/auth';
 import { AuthService } from '../services/AuthService';
 import NotesController from '../controllers/NotesController';
 import { NoteCreationRequestParams } from '../models/NoteModel';
@@ -16,9 +16,7 @@ export class NotesRoutes extends Controller {
    */
   @Get('')
   @Middlewares([shouldBeAuthenticated])
-  async getNotes(
-    @Request() req: express.Request
-  ): Promise<Note[] | null | undefined> {
+  async getNotes(@Request() req: express.Request): Promise<Note[] | null | undefined> {
     if (!req.auth) {
       return;
     }
@@ -39,7 +37,7 @@ export class NotesRoutes extends Controller {
   @Middlewares([shouldBeAuthenticated])
   async createNote(
     @Body() note: NoteCreationRequestParams,
-    @Request() req: express.Request
+    @Request() req: express.Request,
   ): Promise<Note | null | undefined> {
     if (!req.auth) {
       return;

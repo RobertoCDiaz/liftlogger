@@ -5,7 +5,7 @@ import { Observable, switchMap } from 'rxjs';
 import { environment } from 'src/environment/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HttpService {
   /**
@@ -13,7 +13,7 @@ export class HttpService {
    */
   private url = environment.serverUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   /**
    * Makes a GET request to the application's backend appending a Authorization Bearer token to it.
@@ -27,7 +27,7 @@ export class HttpService {
       switchMap((tokenId: string) => {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${tokenId}`);
         return this.http.get<ReturnType>(this.url + endpoint, { headers });
-      })
+      }),
     );
   }
 
@@ -45,7 +45,7 @@ export class HttpService {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${tokenId}`);
 
         return this.http.post<ResponseType>(this.url + endpoint, body, { headers });
-      })
+      }),
     );
   }
 }

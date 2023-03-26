@@ -1,4 +1,4 @@
-import { LiftingSession } from "@prisma/client";
+import { LiftingSession } from '@prisma/client';
 
 /**
  * Defines an entry for a Movement's Workout Journal.
@@ -25,4 +25,4 @@ export type MovementJournalEntry = {
    * along with the sets of every Lifting Session for that Movement.
    */
   session: LiftingSession;
-}
+};

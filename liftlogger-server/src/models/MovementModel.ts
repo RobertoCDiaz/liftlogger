@@ -1,6 +1,6 @@
-import { Movement } from "@prisma/client";
-import { ModelRequestParams } from "../utils/ModelRequestParams";
-import { MuscleGroupForMovementModel } from "./MuscleGroupModel";
+import { Movement } from '@prisma/client';
+import { ModelRequestParams } from '../utils/ModelRequestParams';
+import { MuscleGroupForMovementModel } from './MuscleGroupModel';
 
 /**
  * Omits `id` from the Movement type. It also adds a `muscleGroups` obligatory property, which will
@@ -18,4 +18,4 @@ export type MovementCreationParams = Omit<Movement, 'id' | 'description' | 'prim
 export type MovementCreationRequestParams = {
   movement: ModelRequestParams<MovementCreationParams>;
   muscleGroups: MuscleGroupForMovementModel[];
-}
+};

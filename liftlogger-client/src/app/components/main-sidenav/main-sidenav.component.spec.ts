@@ -8,9 +8,8 @@ describe('MainSidenavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MainSidenavComponent ]
-    })
-    .compileComponents();
+      declarations: [MainSidenavComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MainSidenavComponent);
     component = fixture.componentInstance;

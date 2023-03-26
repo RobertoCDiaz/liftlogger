@@ -12,7 +12,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./creator-page.component.sass'],
 })
 export class CreatorPageComponent {
-
   /**
    * Name of the page. This wil be placed as the title in the header bar.
    */
@@ -50,7 +49,7 @@ export class CreatorPageComponent {
    */
   @Output() descriptionChanged = new EventEmitter<string>();
 
-  constructor(private location: Location) { }
+  constructor(private location: Location) {}
 
   /**
    * Navigates one page back when `Cancel` is clicked.
@@ -83,5 +82,4 @@ export class CreatorPageComponent {
   onDescriptionChanged(value: string): void {
     this.descriptionChanged.emit(value);
   }
-
 }

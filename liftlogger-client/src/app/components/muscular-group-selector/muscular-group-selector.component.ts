@@ -46,7 +46,7 @@ export class MuscularGroupSelectorComponent {
    */
   @Output() selectionChanged = new EventEmitter<Group[]>();
 
-  constructor(private groupsService: GroupsService, public state: MuscularGroupSelectorState) { }
+  constructor(private groupsService: GroupsService, public state: MuscularGroupSelectorState) {}
 
   ngOnInit() {
     this.groupsService.getUserGroups().subscribe(userGroups => {
@@ -62,5 +62,4 @@ export class MuscularGroupSelectorComponent {
   handleItemToggled() {
     this.selectionChanged.emit(this.groupsService.getSelectedGroups(this.state.userGroups));
   }
-
 }

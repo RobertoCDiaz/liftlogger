@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
-import { MatSidenavModule } from '@angular/material/sidenav'
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
@@ -18,13 +18,13 @@ import { WeightscaleDataInputComponent } from './components/weightscale-data-inp
 import { ButtonComponent } from './components/button/button.component';
 import { CreateTemplateComponent } from './pages/create-template/create-template.component';
 import { TemplateMovementItemComponent } from './components/template-movement-item/template-movement-item.component';
-import { TemplateMovementsListComponent } from './components/template-movements-list/template-movements-list.component'
+import { TemplateMovementsListComponent } from './components/template-movements-list/template-movements-list.component';
 import { CreateMovementComponent } from './pages/create-movement/create-movement.component';
 import { CreatorInputComponent } from './components/creator-input/creator-input.component';
 import { CreatorPageComponent } from './components/creator-page/creator-page.component';
 import { MuscularGroupSelectorComponent } from './components/muscular-group-selector/muscular-group-selector.component';
 import { ItemComponent } from './components/muscular-group-selector/item/item.component';
-import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-muscle-group.component'
+import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-muscle-group.component';
 import { MainLoginButtonComponent } from './components/main-login-button/main-login-button.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { MainSidenavComponent } from './components/main-sidenav/main-sidenav.component';
@@ -93,11 +93,11 @@ import { environment } from 'src/environment/environment';
       clientId: environment.auth0ClientId,
       authorizationParams: {
         redirect_uri: environment.auth0CallbackUrl,
-        audience: environment.auth0Audience
-      }
+        audience: environment.auth0Audience,
+      },
     }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

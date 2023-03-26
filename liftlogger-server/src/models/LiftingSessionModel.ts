@@ -1,6 +1,6 @@
-import { LiftingSession } from "@prisma/client";
-import { ModelRequestParams } from "../utils/ModelRequestParams";
-import { LiftingSetCreationParams } from "./LiftingSetModel";
+import { LiftingSession } from '@prisma/client';
+import { ModelRequestParams } from '../utils/ModelRequestParams';
+import { LiftingSetCreationParams } from './LiftingSetModel';
 
 /**
  * Data required to create a new Liftin Session.
@@ -24,4 +24,4 @@ export type LiftingSessionWithSetsCreationRequestParams = {
    * Data to create the sets that will be associated with the new session.
    */
   sets: LiftingSetCreationParams[];
-}
+};

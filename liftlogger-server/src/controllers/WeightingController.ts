@@ -25,7 +25,7 @@ export class WeightingController {
    */
   static async createEntry(data: WeightingCreationParams): Promise<Weighting> {
     const newEntry = await prisma.weighting.create({
-      data: data
+      data: data,
     });
 
     return newEntry;

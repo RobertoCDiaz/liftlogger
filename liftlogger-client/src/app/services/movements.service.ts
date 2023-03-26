@@ -9,10 +9,10 @@ import { HttpService } from './http.service';
  * Collection of methods and operations to help in the Movements handling.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MovementsService {
-  constructor(private http: HttpService) { }
+  constructor(private http: HttpService) {}
 
   /**
    * Fetches a single Movement from the server.
@@ -31,7 +31,10 @@ export class MovementsService {
    * @param recentsFirst Whether the list should already come ordered from more recent to older
    * @returns JournalEntries for the Movement
    */
-  getMovementJournal(id: number, recentsFirst: boolean = false): Observable<MovementJournalEntry[]> {
+  getMovementJournal(
+    id: number,
+    recentsFirst: boolean = false,
+  ): Observable<MovementJournalEntry[]> {
     return this.http.get(`movements/${id}/journal?recentsFirst=${recentsFirst}`);
   }
 
@@ -45,16 +48,19 @@ export class MovementsService {
   createMovement(movement: Movement, groups: Group[]): Observable<Movement> {
     // TODO: Fix this mess of typing, maybe locate server and client models in one place?
     // TODO: Fix setting primary group on server automatically
-    return this.http.post<{
-      movement: Movement,
-      muscleGroups: {
-        group_id: number,
-        is_primary: boolean
-      }[]
-    }, Movement>('movements', {
+    return this.http.post<
+      {
+        movement: Movement;
+        muscleGroups: {
+          group_id: number;
+          is_primary: boolean;
+        }[];
+      },
+      Movement
+    >('movements', {
       movement: {
         name: movement.name,
-        description: movement.description
+        description: movement.description,
       },
       muscleGroups: groups.map(group => ({
         group_id: group.id!!,

@@ -1,9 +1,7 @@
 <div class="main">
-  <span class="material-icons" (click)="fireMenuClicked()">
-    menu
-  </span>
+  <span class="material-icons" (click)="fireMenuClicked()"> menu </span>
   <h1 class="title">
-    {{ title ? title : 'LiftLogger'}}
+    {{ title ? title : 'LiftLogger' }}
   </h1>
   <a [href]="actionUrl">
     <span *ngIf="actionUrl" class="material-icons">

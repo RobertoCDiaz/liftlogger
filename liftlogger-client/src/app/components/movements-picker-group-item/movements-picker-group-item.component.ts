@@ -4,7 +4,7 @@ import { Group } from 'src/app/models/Group';
 @Component({
   selector: 'app-movements-picker-group-item',
   templateUrl: './movements-picker-group-item.component.html',
-  styleUrls: ['./movements-picker-group-item.component.sass']
+  styleUrls: ['./movements-picker-group-item.component.sass'],
 })
 export class MovementsPickerGroupItemComponent {
   /**

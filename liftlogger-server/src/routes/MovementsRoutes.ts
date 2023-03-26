@@ -1,12 +1,12 @@
-import * as express from "express";
-import { Movement, MovementNote } from "@prisma/client";
-import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from "tsoa";
-import MovementsController from "../controllers/MovementsController";
-import { MovementCreationParams, MovementCreationRequestParams } from "../models/MovementModel";
-import { AuthService } from "../services/AuthService";
-import { shouldBeAuthenticated } from "../middlewares/auth";
-import MovementNotesController from "../controllers/MovementNotesController";
-import { MovementJournalEntry } from "../models/MovementJournal";
+import * as express from 'express';
+import { Movement, MovementNote } from '@prisma/client';
+import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
+import MovementsController from '../controllers/MovementsController';
+import { MovementCreationParams, MovementCreationRequestParams } from '../models/MovementModel';
+import { AuthService } from '../services/AuthService';
+import { shouldBeAuthenticated } from '../middlewares/auth';
+import MovementNotesController from '../controllers/MovementNotesController';
+import { MovementJournalEntry } from '../models/MovementJournal';
 
 @Route('movements')
 export class MovementRoutes extends Controller {
@@ -90,7 +90,7 @@ export class MovementRoutes extends Controller {
   @Middlewares([shouldBeAuthenticated])
   public async getMovementNotes(
     @Path() id: number,
-    @Request() req: express.Request
+    @Request() req: express.Request,
   ): Promise<MovementNote[] | null | undefined> {
     if (!req.auth) {
       return;

@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 @Component({
   selector: 'app-content-loader',
   templateUrl: './content-loader.component.html',
-  styleUrls: ['./content-loader.component.sass']
+  styleUrls: ['./content-loader.component.sass'],
 })
 export class ContentLoaderComponent implements OnInit {
   /**
@@ -44,7 +44,7 @@ export class ContentLoaderComponent implements OnInit {
   /**
    * Theming for the `ngx-skeleton-loader` component.
    */
-  theme = {}
+  theme = {};
 
   ngOnInit(): void {
     // setups the `arrCount` array to display the desired amount of loader lines

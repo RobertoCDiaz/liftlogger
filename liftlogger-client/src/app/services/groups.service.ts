@@ -7,10 +7,10 @@ import { HttpService } from './http.service';
  * Collection of methods and operations to help in the MuscleGroups handling.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GroupsService {
-  constructor(private http: HttpService) { }
+  constructor(private http: HttpService) {}
 
   /**
    * Retrieves the groups owned by the current user.
@@ -49,9 +49,11 @@ export class GroupsService {
       }
 
       group.movements = group.movements.filter(movement => {
-        return movement.name.toLowerCase().includes(searchQuery) ||
-          movement.description.toLowerCase().includes(searchQuery);
-      })
+        return (
+          movement.name.toLowerCase().includes(searchQuery) ||
+          movement.description.toLowerCase().includes(searchQuery)
+        );
+      });
 
       return group.movements.length > 0;
     });
@@ -71,7 +73,7 @@ export class GroupsService {
       if (!group.id) return;
 
       groupsById[group.id] = group;
-    })
+    });
 
     const rootGroups: Group[] = [];
     groups.forEach(group => {
@@ -79,7 +81,7 @@ export class GroupsService {
         // If a group has no parent, it is a root group
         rootGroups.push(group);
         return;
-      };
+      }
 
       // If a group has a parent, find the parent group by ID
       const parent = groupsById[group.parent_group_id];
@@ -89,7 +91,7 @@ export class GroupsService {
 
       // Add the current group as a sub-group of its parent
       parent.groups.push(group);
-    })
+    });
 
     return rootGroups;
   }
@@ -105,7 +107,7 @@ export class GroupsService {
 
     for (let group of groups) {
       if (group.checked) {
-        selectedGroups.push(group)
+        selectedGroups.push(group);
       }
 
       if (group.groups) {

@@ -13,10 +13,15 @@ import { MovementsService } from 'src/app/services/movements.service';
 @Component({
   selector: 'app-movement-journal',
   templateUrl: './movement-journal.component.html',
-  styleUrls: ['./movement-journal.component.sass']
+  styleUrls: ['./movement-journal.component.sass'],
 })
 export class MovementJournalComponent {
-  constructor(private movementsService: MovementsService, private journalsService: MovementJournalsService, private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private movementsService: MovementsService,
+    private journalsService: MovementJournalsService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   /**
    * Movement to display.
@@ -62,7 +67,7 @@ export class MovementJournalComponent {
       this.monthlyJournals = this.journalsService.getMonthyJournals(journal);
 
       this.isLoading = false;
-    })
+    });
   }
 
   /**

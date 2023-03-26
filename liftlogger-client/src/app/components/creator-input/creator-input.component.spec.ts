@@ -8,9 +8,8 @@ describe('CreatorInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreatorInputComponent ]
-    })
-    .compileComponents();
+      declarations: [CreatorInputComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CreatorInputComponent);
     component = fixture.componentInstance;

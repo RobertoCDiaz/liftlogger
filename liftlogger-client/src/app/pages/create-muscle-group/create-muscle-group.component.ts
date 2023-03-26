@@ -9,7 +9,7 @@ import { GroupsService } from 'src/app/services/groups.service';
 @Component({
   selector: 'app-create-muscle-group',
   templateUrl: './create-muscle-group.component.html',
-  styleUrls: ['./create-muscle-group.component.sass']
+  styleUrls: ['./create-muscle-group.component.sass'],
 })
 export class CreateMuscleGroupComponent {
   /**
@@ -32,7 +32,7 @@ export class CreateMuscleGroupComponent {
    */
   private groupDescription: string;
 
-  constructor(private groupsService: GroupsService, private location: Location) { }
+  constructor(private groupsService: GroupsService, private location: Location) {}
 
   /**
    * Sets the parent group when a new Muscle Group is selected.
@@ -55,14 +55,16 @@ export class CreateMuscleGroupComponent {
       return;
     }
 
-    this.groupsService.createGroup({
-      name: this.groupName,
-      description: this.groupDescription,
-      parent_group_id: this.parentGroup?.id ?? undefined,
-    }).subscribe(resultGroup => {
-      alert(`[${resultGroup.name}] muscle group was succesfully created!`);
-      this.location.back();
-    })
+    this.groupsService
+      .createGroup({
+        name: this.groupName,
+        description: this.groupDescription,
+        parent_group_id: this.parentGroup?.id ?? undefined,
+      })
+      .subscribe(resultGroup => {
+        alert(`[${resultGroup.name}] muscle group was succesfully created!`);
+        this.location.back();
+      });
   }
 
   /**
@@ -93,7 +95,6 @@ export class CreateMuscleGroupComponent {
    */
   checkCreationAbility(): void {
     // creation is not enabled if no group or description is specified
-    this.isCreationEnabled = !(!this.groupName || !this.groupDescription)
+    this.isCreationEnabled = !(!this.groupName || !this.groupDescription);
   }
-
 }

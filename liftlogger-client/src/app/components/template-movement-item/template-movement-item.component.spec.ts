@@ -8,9 +8,8 @@ describe('TemplateMovementItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TemplateMovementItemComponent ]
-    })
-    .compileComponents();
+      declarations: [TemplateMovementItemComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TemplateMovementItemComponent);
     component = fixture.componentInstance;

@@ -8,9 +8,8 @@ describe('MovementsPickerMovementItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MovementsPickerMovementItemComponent ]
-    })
-    .compileComponents();
+      declarations: [MovementsPickerMovementItemComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MovementsPickerMovementItemComponent);
     component = fixture.componentInstance;

@@ -7,8 +7,12 @@
   <p class="day-name">F</p>
   <p class="day-name">S</p>
   <p class="emptyDay" *ngFor="let empty of emptySquares"></p>
-  <div class="day" *ngFor="let d of daysInMonth" [ngClass]="{ 'highlighted': highlightedDays.includes(d)}">
-    <p >{{ d }}</p>
+  <div
+    class="day"
+    *ngFor="let d of daysInMonth"
+    [ngClass]="{ highlighted: highlightedDays.includes(d) }"
+  >
+    <p>{{ d }}</p>
     <div class="bubble"></div>
   </div>
 </div>

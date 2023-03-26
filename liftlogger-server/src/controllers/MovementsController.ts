@@ -1,7 +1,7 @@
-import { Movement, PrismaClient } from "@prisma/client";
-import { MovementCreationParams } from "../models/MovementModel";
-import { MuscleGroupForMovementModel } from "../models/MuscleGroupModel";
-import { MovementJournalEntry } from "../models/MovementJournal";
+import { Movement, PrismaClient } from '@prisma/client';
+import { MovementCreationParams } from '../models/MovementModel';
+import { MuscleGroupForMovementModel } from '../models/MuscleGroupModel';
+import { MovementJournalEntry } from '../models/MovementJournal';
 
 const prisma = new PrismaClient();
 
@@ -14,7 +14,10 @@ export default class MovementsController {
    * @param userEmail Owner's email.
    * @returns The fetched movement, or nothing if no match was found.
    */
-  static async getMovement(movementId: number, userEmail: string): Promise<Movement | null | undefined> {
+  static async getMovement(
+    movementId: number,
+    userEmail: string,
+  ): Promise<Movement | null | undefined> {
     const movements = await prisma.movement.findFirst({
       where: {
         id: movementId,
@@ -49,7 +52,10 @@ export default class MovementsController {
    * @param muscleGroups A list of MuscleGroups ids the new movement belong to, and whether they primary groups or not.
    * @returns Newly created movement
    */
-  static async createMovement(movement: MovementCreationParams, muscleGroups: MuscleGroupForMovementModel[]): Promise<Movement> {
+  static async createMovement(
+    movement: MovementCreationParams,
+    muscleGroups: MuscleGroupForMovementModel[],
+  ): Promise<Movement> {
     const newMovement = await prisma.movement.create({
       data: {
         ...movement,
@@ -74,15 +80,19 @@ export default class MovementsController {
    * @param recentsFirst Whether the list should be ordered from more recent to older entries or not. Defaults to false.
    * @returns The list of LiftingSessions
    */
-  static async getMovementJournal(movementId: number, email: string, recentsFirst: boolean = false): Promise<MovementJournalEntry[] | null | undefined> {
+  static async getMovementJournal(
+    movementId: number,
+    email: string,
+    recentsFirst: boolean = false,
+  ): Promise<MovementJournalEntry[] | null | undefined> {
     const sessions = await prisma.liftingSession.findMany({
       where: {
         user_email: email,
         sets: {
           some: {
-            movement_id: movementId
-          }
-        }
+            movement_id: movementId,
+          },
+        },
       },
       include: {
         sets: {
@@ -93,7 +103,7 @@ export default class MovementsController {
       },
       orderBy: {
         start_time: recentsFirst ? 'desc' : 'asc',
-      }
+      },
     });
 
     // TODO: Delegate value computation to server?
@@ -108,7 +118,7 @@ export default class MovementsController {
         date: session.start_time,
         movement_id: movementId,
         session: session,
-      }
+      };
     });
 
     return journal;

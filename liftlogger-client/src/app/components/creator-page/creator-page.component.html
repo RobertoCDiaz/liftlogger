@@ -3,30 +3,28 @@
 <div class="content">
   <div class="header">
     <app-creator-input
-    placeholder="{{ inputTitle }}..."
-    (valueChanged)="onTitleChanged($event)"
-    [isTitle]="true"/>
+      placeholder="{{ inputTitle }}..."
+      (valueChanged)="onTitleChanged($event)"
+      [isTitle]="true"
+    />
     <app-creator-input
       placeholder="Description..."
       (valueChanged)="onDescriptionChanged($event)"
-      [isTextArea]="true"/>
+      [isTextArea]="true"
+    />
   </div>
   <div class="page-content">
     <ng-content></ng-content>
   </div>
   <div class="footer">
-    <app-button
-      type="no-border"
-      (onClicked)="onCancelClicked()">
-      Cancel
-    </app-button>
+    <app-button type="no-border" (onClicked)="onCancelClicked()"> Cancel </app-button>
     <app-button
       type="primary"
       class="action"
       (onClicked)="onCreateClicked()"
-      [disabled]="!createEnabled">
+      [disabled]="!createEnabled"
+    >
       Create
     </app-button>
   </div>
 </div>
-

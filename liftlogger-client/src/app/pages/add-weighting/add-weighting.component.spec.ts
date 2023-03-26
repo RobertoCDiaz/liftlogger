@@ -8,9 +8,8 @@ describe('AddWeightingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddWeightingComponent ]
-    })
-    .compileComponents();
+      declarations: [AddWeightingComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AddWeightingComponent);
     component = fixture.componentInstance;
