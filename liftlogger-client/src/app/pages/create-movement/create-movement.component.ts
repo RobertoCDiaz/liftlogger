@@ -70,6 +70,11 @@ export class CreateMovementComponent {
       return;
     }
 
+    if (this.selectedGroups.length === 0) {
+      this.isCreationEnabled = false;
+      return;
+    }
+
     this.isCreationEnabled = true;
   }
 
@@ -100,5 +105,6 @@ export class CreateMovementComponent {
    */
   handleGroupSelectionChanged(selectedGroups: Group[]) {
     this.selectedGroups = selectedGroups;
+    this.updateCreationEnabled();
   }
 }
