@@ -129,8 +129,6 @@ export class MovementRoutes extends Controller {
       return;
     }
 
-    console.log(recentsFirst)
-
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
     return MovementsController.getMovementJournal(id, email, recentsFirst);
