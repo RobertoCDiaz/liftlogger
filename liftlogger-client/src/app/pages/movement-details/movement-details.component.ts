@@ -107,11 +107,11 @@ export class MovementDetailsComponent {
     this.bestSession = this.journalsService.getBestSession(this.journal);
     this.prSet = this.journalsService.getPRSession(this.journal);
 
-    this.lastTrainedDate = moment(this.lastSession.date * 1000).format('DD/MM/YYYY');
+    this.lastTrainedDate = moment(this.lastSession.date).format('DD/MM/YYYY');
 
     // sets up the graph data from the journal entries
     this.graphData = this.journal.map(entry => ({
-      date: entry.date * 1000,
+      date: entry.date,
       data: entry.value,
     }));
   }

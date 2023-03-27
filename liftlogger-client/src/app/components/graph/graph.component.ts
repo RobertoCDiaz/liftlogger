@@ -20,9 +20,9 @@ export type GraphInput = {
   data: number;
 
   /**
-   * Value to graph in the x-axis. Commonly, a date unix timestamp.
+   * Date of the data-point.
    */
-  date: number;
+  date: Date;
 };
 
 @Component({
@@ -161,7 +161,7 @@ export class GraphComponent implements OnChanges {
     // only includes entries within the selected period
     const filteredEntries = this.data
       .filter(entry => moment(entry.date) > this.parsePeriod(this.period))
-      .sort((a, b) => a.date - b.date);
+      .sort((a, b) => (a.date > b.date ? 1 : -1));
 
     // include medias values
     let accumulator = 0;

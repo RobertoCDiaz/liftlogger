@@ -25,7 +25,7 @@ export class MovementJournalsService {
    * @returns Most recent entry
    */
   getLastSession(journal: MovementJournalEntry[]): MovementJournalEntry {
-    return [...journal].sort((a, b) => b.date - a.date)[0];
+    return [...journal].sort((a, b) => (b.date > a.date ? 1 : -1))[0];
   }
 
   /**
@@ -63,24 +63,23 @@ export class MovementJournalsService {
     const monthsHashMap: Record<string, MovementJournalEntry[]> = {};
 
     wholeJournal.forEach(entry => {
-      const currentMonthTime: string = moment(entry.date * 1000)
-        .startOf('month')
-        .unix()
-        .toString();
+      const currentMonthStartTime: string = moment(entry.date).startOf('month').toString();
 
-      if (!monthsHashMap[currentMonthTime]) {
-        monthsHashMap[currentMonthTime] = [];
+      if (!monthsHashMap[currentMonthStartTime]) {
+        monthsHashMap[currentMonthStartTime] = [];
       }
 
-      monthsHashMap[currentMonthTime].push(entry);
+      monthsHashMap[currentMonthStartTime].push(entry);
     });
 
-    const monthlyJournals: MovementMonthlyJournal[] = Object.keys(monthsHashMap).map(monthTime => ({
-      entries: monthsHashMap[monthTime],
-      monthTime: parseInt(monthTime),
-    }));
+    const monthlyJournals: MovementMonthlyJournal[] = Object.keys(monthsHashMap).map(
+      monthStartTime => ({
+        entries: monthsHashMap[monthStartTime],
+        startOfMonth: new Date(monthStartTime),
+      }),
+    );
 
-    monthlyJournals.sort((a, b) => (b.monthTime > a.monthTime ? 1 : -1));
+    monthlyJournals.sort((a, b) => (b.startOfMonth > a.startOfMonth ? 1 : -1));
 
     return monthlyJournals;
   }
@@ -92,7 +91,10 @@ export class MovementJournalsService {
    * @param representation Format in which the month is to be represented. Defaults to `MMMM, Y`
    * @returns Month name representation
    */
-  getMonthlyJournalStringName(journal: MovementMonthlyJournal, representation: string = 'MMMM, Y') {
-    return moment(journal.monthTime * 1000).format(representation);
+  getMonthlyJournalStringName(
+    journal: MovementMonthlyJournal,
+    representation: string = 'MMMM, Y',
+  ): string {
+    return moment(journal.startOfMonth).format(representation);
   }
 }

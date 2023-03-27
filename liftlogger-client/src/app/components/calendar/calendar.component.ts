@@ -15,7 +15,7 @@ export class CalendarComponent {
   /**
    * Month time for the initial month to be displayed. Defaults to the current month.
    */
-  @Input() initialMonthTime: number = moment().unix() * 1000;
+  @Input() initialMonthTime: Date = new Date();
 
   /**
    * List of days of the month to be highlighted.

@@ -7,7 +7,7 @@ export type MovementJournalEntry = {
   /**
    * Date in which a Movement's session was made.
    */
-  date: number;
+  date: Date;
 
   /**
    * Movement identifier.

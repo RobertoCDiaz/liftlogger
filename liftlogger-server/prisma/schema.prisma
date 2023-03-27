@@ -102,8 +102,8 @@ model Template {
 // Each session has a start time, an end time, and an optional note.
 model LiftingSession {
   id         Int     @id @default(autoincrement())
-  start_time Int     @db.UnsignedInt
-  end_time   Int     @db.UnsignedInt
+  start_time DateTime
+  end_time   DateTime
   notes      String? @db.Text
   user_email String
 
