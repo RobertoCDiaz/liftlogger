@@ -40,4 +40,7 @@
     <app-button type="no-border" [isSubmitButton]="true" icon="today"> Add a date </app-button>
     <app-button type="primary" [isSubmitButton]="true"> Submit </app-button>
   </div>
+  <div class="graph-container">
+    <app-graph [data]="graphData" [showFakeData]="!graphData" [showMediaValues]="true"></app-graph>
+  </div>
 </form>

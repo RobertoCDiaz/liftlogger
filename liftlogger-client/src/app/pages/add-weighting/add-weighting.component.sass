@@ -1,14 +1,34 @@
-@use '/src/styles'
+@use '../../../styles'
 
-.content
+:host
   @include styles.flex(column)
-  gap: 2em
-  padding: 2em
 
-  .inputs
+  .content
+    @include styles.responsiveContent
     @include styles.flex(column)
-    gap: .5em
+    gap: 2em
+    padding: 2em
 
-  .options
-    @include styles.flex(column)
-    gap: 1em
+    .inputs
+      @include styles.flex(column)
+      gap: .5em
+      grid-area: inputs
+
+    .options
+      @include styles.flex(column)
+      gap: 1em
+      grid-area: options
+
+    .graph-container
+      grid-area: graph-container
+      display: none
+
+    @include styles.isLarge
+      display: grid
+      grid-template-columns: 1fr 2fr
+      gap: 4em
+      grid-template-areas: "inputs graph-container" "options graph-container"
+
+      .graph-container
+        display: block
+        align-items: stretch

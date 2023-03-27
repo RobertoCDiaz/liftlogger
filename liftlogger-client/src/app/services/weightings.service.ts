@@ -9,7 +9,22 @@ import { HttpService } from './http.service';
 export class WeightingsService {
   constructor(private http: HttpService) {}
 
+  /**
+   * Makes a request to create a new Weighting entry for the current user.
+   *
+   * @param weighting Weighting data
+   * @returns New Weighting record
+   */
   createEntry(weighting: Weighting): Observable<Weighting> {
     return this.http.post<Weighting, Weighting>('weightings', weighting);
+  }
+
+  /**
+   * Requests the server to fetch all the weightings from the current user.
+   *
+   * @returns All the weightings from the user.
+   */
+  getUserEntries(): Observable<Weighting[]> {
+    return this.http.get<Weighting[]>('weightings');
   }
 }

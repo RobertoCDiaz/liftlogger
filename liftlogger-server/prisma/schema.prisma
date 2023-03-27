@@ -30,7 +30,7 @@ model User {
 // You can choose to ignore some registers by setting `ignored` to true, so that those are not taken into account to critical computations.
 model Weighting {
   id                 Int     @id @default(autoincrement())
-  datetime           Int     @db.UnsignedInt
+  datetime           DateTime
   weight             Float
   fat_percentage     Float
   muscle_mass        Float

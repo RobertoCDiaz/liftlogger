@@ -27,5 +27,5 @@ export type WeightingCreationRequestParams = Omit<
   ModelRequestParams<WeightingCreationParams>,
   'datetime'
 > & {
-  datetime?: number;
+  datetime?: Date;
 };

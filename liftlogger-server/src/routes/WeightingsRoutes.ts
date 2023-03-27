@@ -51,7 +51,7 @@ export class WeightingRoutes extends Controller {
     const newEntry = await WeightingController.createEntry({
       ...weightingData,
       user_email: email,
-      datetime: weightingData.datetime ?? Math.round(new Date().getTime() / 1000),
+      datetime: weightingData.datetime ?? new Date(),
     });
 
     return newEntry;
