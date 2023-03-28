@@ -1,24 +1,26 @@
 # LiftLogger
 
-**Log your everyday training progress**
+**Track your progress, reach your goals**
 
 LiftLogger is created to help fitness enthusiasts track their training progress, monitor their body metrics, and visualize their growth and improvement over time. With this app, you can easily create personalized training templates, add and remove weightlifting movements, and log your daily weightscale information, making it easy to stay on top of your fitness goals.
 
 ## Project installation and configuration
 
-1. Clone this repository:
+1. Install docker. More at https://docs.docker.com/get-docker/.
+
+2. Clone this repository:
 
 ```bash
 git clone https://github.com/RobertoCDiaz/liftlogger.git
 ```
 
-2. Navigate to the repo directory:
+3. Navigate to the repo directory:
 
 ```bash
 cd liftlogger
 ```
 
-3. Create a `.env` file using `.env-template` as a reference. Then configure the commented variables.
+4. Create a `.env` file using `.env-template` as a reference. Then configure the commented variables.
 
 ```bash
 cp .env-template .env
