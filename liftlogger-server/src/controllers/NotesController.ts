@@ -15,8 +15,8 @@ export default class NotesController {
    */
   static async getNotesFromUser(
     userEmail: string,
-    startDate?: number,
-    endDate?: number,
+    startDate?: Date,
+    endDate?: Date,
   ): Promise<Note[] | null | undefined> {
     const isIntervalProvided = !!startDate && !!endDate;
 

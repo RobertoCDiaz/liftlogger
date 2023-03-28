@@ -46,7 +46,7 @@ export class NotesRoutes extends Controller {
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
     // sets current date if no date was included in request body
-    const noteDate = note.date ?? Math.round(new Date().getTime() / 1000);
+    const noteDate = note.date ?? new Date();
 
     return NotesController.createNote({ ...note, user_email: email, date: noteDate });
   }
