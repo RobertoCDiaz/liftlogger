@@ -12,12 +12,12 @@ export type LiftingSession = {
   /**
    * When did the session started.
    */
-  start_time: number;
+  start_time: Date;
 
   /**
    * When did the session was finished.
    */
-  end_time: number;
+  end_time: Date;
 
   /**
    * Notes from the user about this specific session.

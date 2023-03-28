@@ -1,6 +1,6 @@
 import { EnvironmentPlugin } from 'webpack';
 
-module.exports = {
+export default {
   plugins: [
     new EnvironmentPlugin([
       'SERVER_URL',

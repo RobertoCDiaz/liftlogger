@@ -7,7 +7,7 @@ export type MovementJournalEntry = {
   /**
    * Date in which a Movement's session was made.
    */
-  date: number;
+  date: Date;
 
   /**
    * Movement identifier.
@@ -34,7 +34,7 @@ export type MovementMonthlyJournal = {
   /**
    * Unix time that represents the very first Moment in a month. Used for reference.
    */
-  monthTime: number;
+  startOfMonth: Date;
 
   /**
    * List of entries in this month.

@@ -10,5 +10,5 @@ export type MovementNoteCreationParams = Omit<MovementNote, 'id' | 'movement_id'
  * It makes `date` an optional property, so it can be set to `now()` automatically.
  */
 export type MovementNoteCreationRequestParams = Omit<MovementNoteCreationParams, 'date'> & {
-  date?: number;
+  date?: Date;
 };

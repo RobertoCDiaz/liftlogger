@@ -14,5 +14,5 @@ export type NoteCreationParams = Omit<Note, 'id' | 'priority'> & {
  * current `new Date()` will be used.
  */
 export type NoteCreationRequestParams = ModelRequestParams<Omit<NoteCreationParams, 'date'>> & {
-  date?: number;
+  date?: Date;
 };

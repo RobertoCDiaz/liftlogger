@@ -16,13 +16,13 @@ export class MovementJournalEntryComponent implements OnChanges {
   /**
    * Date of the entry already formatted to be displayed.
    */
-  entryDate: string;
+  entryDateString: string;
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.entry) {
       return;
     }
 
-    this.entryDate = moment(this.entry.date * 1000).format('MMMM Do, Y');
+    this.entryDateString = moment(this.entry.date).format('MMMM Do, Y');
   }
 }

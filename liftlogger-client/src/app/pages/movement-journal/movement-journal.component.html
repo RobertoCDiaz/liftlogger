@@ -28,7 +28,7 @@
       <p class="month-title">{{ getMonthFormat(month) }}</p>
       <app-calendar
         class="calendar"
-        [initialMonthTime]="month.monthTime"
+        [initialMonthTime]="month.startOfMonth"
         [highlightedDays]="getDayNumbers(month)"
       ></app-calendar>
       <div class="entries">

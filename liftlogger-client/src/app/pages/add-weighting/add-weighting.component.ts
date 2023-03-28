@@ -33,7 +33,7 @@ export class AddWeightingComponent {
 
       this.graphData = this.historicalWeightings.map(w => {
         return {
-          date: new Date(w.datetime!).getTime(),
+          date: w.datetime!,
           data: w.weight,
         };
       });
