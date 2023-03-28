@@ -19,5 +19,3 @@ EXPOSE 4200
 
 # Set the default command to run the built Angular application
 CMD ["npm", "start"]
-# CMD ["bash"]
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
