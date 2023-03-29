@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { Group } from 'src/app/models/Group';
-import { Movement } from 'src/app/models/Movement';
+import { Movement } from 'src/app/models/MovementModel';
 import { GroupsService } from 'src/app/services/groups.service';
 
 /**

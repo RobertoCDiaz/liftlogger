@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GraphInput } from 'src/app/components/graph/graph.component';
-import { Movement } from 'src/app/models/Movement';
+import { Movement } from 'src/app/models/MovementModel';
 import { MovementJournalEntry } from 'src/app/models/MovementJournalEntry';
 import { MovementJournalsService } from 'src/app/services/movement-journals.service';
 import { MovementsService } from 'src/app/services/movements.service';

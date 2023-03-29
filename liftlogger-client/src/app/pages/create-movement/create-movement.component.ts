@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Group } from 'src/app/models/Group';
-import { Movement } from 'src/app/models/Movement';
+import { MovementCreationParams } from 'src/app/models/MovementModel';
 import { MovementsService } from 'src/app/services/movements.service';
 
 @Component({
@@ -51,7 +51,7 @@ export class CreateMovementComponent {
       return;
     }
 
-    const movement: Movement = {
+    const movement: MovementCreationParams = {
       name: this.movementName,
       description: this.movementDescription,
     };

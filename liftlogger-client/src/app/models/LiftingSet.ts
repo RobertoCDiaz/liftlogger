@@ -1,5 +1,5 @@
 import { LiftingSession } from './LiftingSession';
-import { Movement } from './Movement';
+import { Movement } from './MovementModel';
 
 /**
  * Individual set perfomed during a weighlifting session.

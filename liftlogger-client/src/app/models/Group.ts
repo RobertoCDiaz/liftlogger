@@ -1,4 +1,4 @@
-import { Movement } from './Movement';
+import { Movement } from './MovementModel';
 
 /**
  * Represents a group of muscles and its properties.
@@ -45,4 +45,12 @@ export type Group = {
   groups?: Group[];
 
   movements?: Movement[];
+};
+
+/**
+ * Data required to associate a Movement with a MuscleGroup.
+ */
+export type MuscleGroupForMovement = {
+  group_id: number;
+  is_primary: boolean;
 };
