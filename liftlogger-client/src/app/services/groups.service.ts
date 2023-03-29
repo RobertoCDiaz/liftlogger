@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Group } from '../models/Group';
+import { MuscleGroup, MuscleGroupCreationParams } from '../models/MuscleGroupModel';
 import { HttpService } from './http.service';
 
 /**
@@ -18,8 +18,8 @@ export class GroupsService {
    * @param withMovements Whether the returned groups should also include their Movements or not
    * @returns An array of Group objects representing the groups
    */
-  getUserGroups(withMovements: boolean = false): Observable<Group[]> {
-    return this.http.get<Group[]>('groups' + (withMovements ? '?withMovements=true' : ''));
+  getUserGroups(withMovements: boolean = false): Observable<MuscleGroup[]> {
+    return this.http.get<MuscleGroup[]>('groups' + (withMovements ? '?withMovements=true' : ''));
   }
 
   /**
@@ -28,8 +28,8 @@ export class GroupsService {
    * @param group Group to be inserted into DB.
    * @returns Succesfully created group.
    */
-  createGroup(group: Group): Observable<Group> {
-    return this.http.post<Group, Group>('groups', group);
+  createGroup(group: MuscleGroupCreationParams): Observable<MuscleGroup> {
+    return this.http.post<MuscleGroupCreationParams, MuscleGroup>('groups', group);
   }
 
   /**
@@ -40,8 +40,8 @@ export class GroupsService {
    * @param groups List of groups to search Movements in
    * @returns Filtered Groups, with only the Movements that match the criteria
    */
-  searchMovementsInGroups(searchQuery: string, groups: Group[]): Group[] {
-    const groupsCopy: Group[] = JSON.parse(JSON.stringify(groups));
+  searchMovementsInGroups(searchQuery: string, groups: MuscleGroup[]): MuscleGroup[] {
+    const groupsCopy: MuscleGroup[] = JSON.parse(JSON.stringify(groups));
 
     return groupsCopy.filter(group => {
       if (!group.movements) {
@@ -65,8 +65,8 @@ export class GroupsService {
    * @param groups An array of Group objects to be organized.
    * @returns An array of root-level Group objects with their nested sub-groups added to the 'groups' property of each Group, forming a hierarchical structure.
    */
-  organizeGroups(groups: Group[]): Group[] {
-    const groupsById: Record<number, Group> = {};
+  organizeGroups(groups: MuscleGroup[]): MuscleGroup[] {
+    const groupsById: Record<number, MuscleGroup> = {};
 
     // Create a lookup table to easily find a group by its ID
     groups.forEach(group => {
@@ -75,11 +75,11 @@ export class GroupsService {
       groupsById[group.id] = group;
     });
 
-    const rootGroups: Group[] = [];
+    const rootGroups: MuscleGroup[] = [];
     groups.forEach(group => {
       if (!group.parent_group_id) {
         // If a group has no parent, it is a root group
-        rootGroups.push(group);
+        rootGroups.push({ ...group, checked: false, isPrimary: false });
         return;
       }
 
@@ -102,8 +102,8 @@ export class GroupsService {
    * @param groups - An array of Group objects representing the groups to search.
    * @returns An array of strings representing the names of all checked groups.
    */
-  getSelectedGroups(groups: Group[]): Group[] {
-    let selectedGroups: Group[] = [];
+  getSelectedGroups(groups: MuscleGroup[]): MuscleGroup[] {
+    let selectedGroups: MuscleGroup[] = [];
 
     for (let group of groups) {
       if (group.checked) {
@@ -124,7 +124,7 @@ export class GroupsService {
    * @param groups List of groups to uncheck
    * @param onlyUncheckPrimaryState Whether if just the `isPrimary` property should be unchecked or not. Defaults to `false`
    */
-  unCheckAllGroups(groups: Group[], onlyUncheckPrimaryState: boolean = false) {
+  unCheckAllGroups(groups: MuscleGroup[], onlyUncheckPrimaryState: boolean = false) {
     for (let group of groups) {
       if (!onlyUncheckPrimaryState) {
         group.checked = false;

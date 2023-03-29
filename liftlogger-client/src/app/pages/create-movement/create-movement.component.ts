@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Group } from 'src/app/models/Group';
+import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 import { MovementCreationParams } from 'src/app/models/MovementModel';
 import { MovementsService } from 'src/app/services/movements.service';
 
@@ -28,7 +28,7 @@ export class CreateMovementComponent {
   /**
    * Holds what MuscleGroups are selected for this new Movement.
    */
-  selectedGroups: Group[] = [];
+  selectedGroups: MuscleGroup[] = [];
 
   constructor(private movementsService: MovementsService, private router: Router) {}
 
@@ -108,7 +108,7 @@ export class CreateMovementComponent {
    *
    * @param selectedGroups List of selected groups
    */
-  handleGroupSelectionChanged(selectedGroups: Group[]) {
+  handleGroupSelectionChanged(selectedGroups: MuscleGroup[]) {
     this.selectedGroups = selectedGroups;
     this.updateCreationEnabled();
   }

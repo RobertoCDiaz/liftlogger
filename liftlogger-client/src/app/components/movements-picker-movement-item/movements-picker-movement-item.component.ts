@@ -17,7 +17,7 @@ export class MovementsPickerMovementItemComponent {
 
   ngOnInit() {
     // puts primary group upfront
-    this.movement.groups.sort((a, b) => (this.movement.primary_group_id === b.id ? 1 : 0));
+    this.movement.groups?.sort((a, b) => (this.movement.primary_group_id === b.id ? 1 : 0));
   }
 
   /**

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Group } from 'src/app/models/Group';
+import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 
 @Component({
   selector: 'app-movements-picker-group-item',
@@ -10,7 +10,7 @@ export class MovementsPickerGroupItemComponent {
   /**
    * Group to display in this item component.
    */
-  @Input() group: Group;
+  @Input() group: MuscleGroup;
 
   /**
    * Whether the component should display its movements or not.

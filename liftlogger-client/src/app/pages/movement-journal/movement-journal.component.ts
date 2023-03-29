@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { Observable, switchMap } from 'rxjs';
-import { Movement } from 'src/app/models/Movement';
+import { Movement } from 'src/app/models/MovementModel';
 import { MovementMonthlyJournal, MovementJournalEntry } from 'src/app/models/MovementJournalEntry';
 import { MovementJournalsService } from 'src/app/services/movement-journals.service';
 import { MovementsService } from 'src/app/services/movements.service';
@@ -59,7 +59,7 @@ export class MovementJournalComponent {
 
         this.movement = movement;
 
-        return this.movementsService.getMovementJournal(this.movement.id ?? 0, true);
+        return this.movementsService.getMovementJournal(this.movement.id, true);
       }),
     );
 

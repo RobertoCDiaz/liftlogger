@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Group } from '../models/Group';
+import { MuscleGroup } from '../models/MuscleGroupModel';
 import {
   Movement,
   MovementCreationParams,
@@ -49,7 +49,7 @@ export class MovementsService {
    * @param groups List of Muscle Groups this new Movement will belong to
    * @returns Created movement
    */
-  createMovement(movement: MovementCreationParams, groups: Group[]): Observable<Movement> {
+  createMovement(movement: MovementCreationParams, groups: MuscleGroup[]): Observable<Movement> {
     return this.http.post<MovementCreationRequestParams, Movement>('movements', {
       movement,
       muscleGroups: groups.map(group => ({

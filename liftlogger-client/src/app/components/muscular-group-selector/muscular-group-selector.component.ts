@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Group } from 'src/app/models/Group';
+import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 import { GroupsService } from 'src/app/services/groups.service';
 
 /**
@@ -9,7 +9,7 @@ export class MuscularGroupSelectorState {
   /**
    * Muscle groups to display in the component.
    */
-  userGroups: Group[] = [];
+  userGroups: MuscleGroup[] = [];
 
   /**
    * Whether the component should allow multiselection or not. Defaults to `true`.
@@ -44,7 +44,7 @@ export class MuscularGroupSelectorComponent {
    *
    * param: `$event: Group[]` List of selected groups
    */
-  @Output() selectionChanged = new EventEmitter<Group[]>();
+  @Output() selectionChanged = new EventEmitter<MuscleGroup[]>();
 
   constructor(private groupsService: GroupsService, public state: MuscularGroupSelectorState) {}
 

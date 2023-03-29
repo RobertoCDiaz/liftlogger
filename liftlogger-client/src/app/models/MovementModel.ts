@@ -1,4 +1,4 @@
-import { Group, MuscleGroupForMovement } from './Group';
+import { MuscleGroup, MuscleGroupForMovement } from './MuscleGroupModel';
 
 /**
  * Represent a Movement entity from DB.
@@ -32,7 +32,7 @@ export type Movement = {
   /**
    * List of Muscle Groups this Movement belongs to.
    */
-  groups: Group[];
+  groups?: MuscleGroup[];
 };
 
 /**
