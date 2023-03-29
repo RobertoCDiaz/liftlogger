@@ -39,9 +39,9 @@ model Weighting {
   metabolism         Float?
   visceral_fat       Float?
   ignored            Boolean  @default(false)
+  user_email         String
 
-  user_email String
-  user       User   @relation(fields: [user_email], references: [email])
+  user User @relation(fields: [user_email], references: [email])
 
   @@map("weightings")
 }

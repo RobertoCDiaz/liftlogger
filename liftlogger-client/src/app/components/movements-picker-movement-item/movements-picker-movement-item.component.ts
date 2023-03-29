@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Movement } from 'src/app/models/Movement';
+import { Movement } from 'src/app/models/MovementModel';
 import { MovementsPickerState } from '../movements-picker/movements-picker.component';
 
 @Component({

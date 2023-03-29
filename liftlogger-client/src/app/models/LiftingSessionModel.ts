@@ -1,4 +1,4 @@
-import { LiftingSet } from './LiftingSet';
+import { LiftingSet } from './LiftingSetModel';
 
 /**
  * A weightlifting session.
@@ -7,7 +7,7 @@ export type LiftingSession = {
   /**
    * Identifier for the session.
    */
-  id?: number;
+  id: number;
 
   /**
    * When did the session started.
@@ -27,8 +27,10 @@ export type LiftingSession = {
   /**
    * Owner of this session.
    */
-  user_email?: string;
+  user_email: string;
+};
 
+export type LiftingSessionWithSets = LiftingSession & {
   /**
    * List of sets that belong to this session.
    */

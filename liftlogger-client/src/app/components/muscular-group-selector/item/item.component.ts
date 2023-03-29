@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Group } from 'src/app/models/Group';
+import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 import { GroupsService } from 'src/app/services/groups.service';
 import { MuscularGroupSelectorState } from '../muscular-group-selector.component';
 
@@ -12,7 +12,7 @@ export class ItemComponent {
   /**
    * The Group object for this item.
    */
-  @Input() group: Group;
+  @Input() group: MuscleGroup;
 
   /**
    * A boolean value indicating whether the item is currently expanded or not.
@@ -22,7 +22,7 @@ export class ItemComponent {
   /**
    * Fires when this item is toggled (e.g. It is checked or unchecked).
    */
-  @Output() itemToggled = new EventEmitter<Group>();
+  @Output() itemToggled = new EventEmitter<MuscleGroup>();
 
   constructor(private state: MuscularGroupSelectorState, private groupService: GroupsService) {}
 

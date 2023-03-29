@@ -1,13 +1,13 @@
-import { Movement } from './Movement';
+import { Movement } from './MovementModel';
 
 /**
  * Represents a group of muscles and its properties.
  */
-export type Group = {
+export type MuscleGroup = {
   /**
    * Unique identifier of the muscle group.
    */
-  id?: number;
+  id: number;
 
   /**
    * The name of the muscle group.
@@ -17,7 +17,7 @@ export type Group = {
   /**
    * A brief description of the muscle group.
    */
-  description: string;
+  description?: string;
 
   /**
    * Identifier of the parent muscle group, if any.
@@ -27,7 +27,7 @@ export type Group = {
   /**
    * Email of the owner of this muscle group.
    */
-  user_email?: string;
+  user_email: string;
 
   /**
    * Indicates if the muscle group is selected or not.
@@ -42,7 +42,31 @@ export type Group = {
   /**
    * An array of sub-groups for a muscle group.
    */
-  groups?: Group[];
+  groups?: MuscleGroup[];
 
+  /**
+   * List of Movements that workout this MuscleGroup.
+   */
   movements?: Movement[];
+
+  /**
+   * Parent MuscleGroup for this MuscleGroup.
+   */
+  parent_group?: MuscleGroup;
+};
+
+/**
+ * Data required to create a new MuscleGroup.
+ */
+export type MuscleGroupCreationParams = Omit<
+  MuscleGroup,
+  'id' | 'user_email' | 'groups' | 'movements' | 'parent_group'
+>;
+
+/**
+ * Data required to associate a Movement with a MuscleGroup.
+ */
+export type MuscleGroupForMovement = {
+  group_id: number;
+  is_primary: boolean;
 };

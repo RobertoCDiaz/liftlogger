@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Group } from '../models/Group';
-import { Movement } from '../models/Movement';
+import { MuscleGroup } from '../models/MuscleGroupModel';
+import {
+  Movement,
+  MovementCreationParams,
+  MovementCreationRequestParams,
+} from '../models/MovementModel';
 import { MovementJournalEntry } from '../models/MovementJournalEntry';
 import { HttpService } from './http.service';
 
@@ -45,23 +49,9 @@ export class MovementsService {
    * @param groups List of Muscle Groups this new Movement will belong to
    * @returns Created movement
    */
-  createMovement(movement: Movement, groups: Group[]): Observable<Movement> {
-    // TODO: Fix this mess of typing, maybe locate server and client models in one place?
-    // TODO: Fix setting primary group on server automatically
-    return this.http.post<
-      {
-        movement: Movement;
-        muscleGroups: {
-          group_id: number;
-          is_primary: boolean;
-        }[];
-      },
-      Movement
-    >('movements', {
-      movement: {
-        name: movement.name,
-        description: movement.description,
-      },
+  createMovement(movement: MovementCreationParams, groups: MuscleGroup[]): Observable<Movement> {
+    return this.http.post<MovementCreationRequestParams, Movement>('movements', {
+      movement,
       muscleGroups: groups.map(group => ({
         group_id: group.id!!,
         is_primary: group.isPrimary ?? false,

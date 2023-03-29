@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { Group } from 'src/app/models/Group';
-import { Movement } from 'src/app/models/Movement';
+import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
+import { Movement } from 'src/app/models/MovementModel';
 import { GroupsService } from 'src/app/services/groups.service';
 
 /**
@@ -50,15 +49,17 @@ export class MovementsPickerState {
   providers: [MovementsPickerState],
 })
 export class MovementsPickerComponent {
+  constructor(private groupsService: GroupsService, private state: MovementsPickerState) {}
+
   /**
    * List of the MuscleGroups from the current user.
    */
-  userGroups: Group[] = [];
+  userGroups: MuscleGroup[] = [];
 
   /**
    * List of available groups that satisfies the search query.
    */
-  filteredGroups: Group[] = [];
+  filteredGroups: MuscleGroup[] = [];
 
   /**
    * Fires up when a Movement is clicked.
@@ -75,12 +76,6 @@ export class MovementsPickerComponent {
    * Defaults to `false`.
    */
   @Input() disableHref: boolean = false;
-
-  constructor(
-    private groupsService: GroupsService,
-    private state: MovementsPickerState,
-    private router: Router,
-  ) {}
 
   ngOnInit() {
     // retrieves groups from server

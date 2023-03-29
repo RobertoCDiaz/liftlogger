@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { Group } from 'src/app/models/Group';
+import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 import { GroupsService } from 'src/app/services/groups.service';
 
 /**
@@ -15,7 +15,7 @@ export class CreateMuscleGroupComponent {
   /**
    * Currently selected group as parent group for the new group.
    */
-  parentGroup: Group;
+  parentGroup: MuscleGroup;
 
   /**
    * Determines whether the Create button should be enabled or not.
@@ -39,7 +39,7 @@ export class CreateMuscleGroupComponent {
    *
    * @param selectedGroups List of selected groups from the Group Selector component.
    */
-  onSelectionChanged(selectedGroups: Group[]): void {
+  onSelectionChanged(selectedGroups: MuscleGroup[]): void {
     this.parentGroup = selectedGroups[0];
 
     this.checkCreationAbility();
@@ -59,7 +59,7 @@ export class CreateMuscleGroupComponent {
       .createGroup({
         name: this.groupName,
         description: this.groupDescription,
-        parent_group_id: this.parentGroup?.id ?? undefined,
+        parent_group_id: this.parentGroup?.id ?? undefined, //defining a parent group is not necessary
       })
       .subscribe(resultGroup => {
         alert(`[${resultGroup.name}] muscle group was succesfully created!`);

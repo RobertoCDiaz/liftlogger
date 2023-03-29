@@ -1,5 +1,5 @@
-import { LiftingSession } from './LiftingSession';
-import { Movement } from './Movement';
+import { LiftingSession } from './LiftingSessionModel';
+import { Movement } from './MovementModel';
 
 /**
  * Individual set perfomed during a weighlifting session.
@@ -8,12 +8,12 @@ export type LiftingSet = {
   /**
    * Idenfitier for this set in DB.
    */
-  id?: number;
+  id: number;
 
   /**
    * Identifier for the movement made in this set.
    */
-  movement_id?: number;
+  movement_id: number;
 
   /**
    * Number of repetitions of the movement.
@@ -28,7 +28,7 @@ export type LiftingSet = {
   /**
    * Identifier for the LiftingSession of which this set belongs to.
    */
-  session_id?: number;
+  session_id: number;
 
   /**
    * LiftingSession this set belongs to.
