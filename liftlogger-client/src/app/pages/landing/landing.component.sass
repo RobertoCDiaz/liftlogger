@@ -1,57 +1,171 @@
 @use '../../../styles'
-
-$header-height: 60vh
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap')
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css')
 
 :host
-  > .header
-    height: $header-height
+  section
+    display: grid
+    place-items: center
+    @include styles.isLarge
+      min-height: 100vh
 
-    > *
-      position: absolute
+    >.content
+      padding: 2em
+      align-self: stretch
+      @include styles.isLarge
+        width: 60vw
 
-    img
-      height: $header-height
-
-    .backdrop
+    img.showcase
+      border-radius: 1em
       width: 100%
-      height: $header-height
-      background: linear-gradient(rgba(0, 0, 0, 0), 40%,rgba(0, 0, 0, 0.75), 80%, black)
+      align-self: center
+      box-shadow: 0 .5em 1em rgba(0, 0, 0, 0.5)
+      @include styles.isLarge
+        border-radius: 2em
 
-    .content
+  .landing
+    background: linear-gradient(adjust-color(styles.$primary-color, $lightness: 15%), 25%, styles.$primary-color, 75%, adjust-color(styles.$primary-color, $lightness: -15%))
+    align-items: start
+    *
+      color: styles.$white
+
+    >.content
+      @include styles.flex(column)
+      gap: 10em
+      @include styles.isLarge
+        display: grid
+        grid-template-rows: 0fr 1fr
+
+    header
+      @include styles.flex(row)
+      align-items: center
+
+      .app-name
+        @include styles.flex(row)
+        align-items: center
+        flex-grow: 1
+        gap: 1em
+
+        span
+          font-size: 1.5rem
+
+          &.icon
+            font-size: 2rem
+
+      .options
+        display: none
+        @include styles.isLarge
+          @include styles.flex(row)
+          gap: 2em
+
+        a.option
+          cursor: pointer
+          border-radius: .5em
+          padding: .5em
+          @include styles.transition
+
+          &:hover
+            background-color: styles.$white
+            color: styles.$primary-color
+
+    .landing-content
       @include styles.flex(column)
       gap: 4em
-      justify-content: end
-      align-items: center
-      width: 100vw
-      height: $header-height
+      place-self: center
 
-      > .header
+      .info
         @include styles.flex(column)
-        gap: 1em
-        align-items: center
+        gap: 2em
+        align-items: stretch
 
-        h1
-          font-size: 2.5rem
-
-      > .options
-        @include styles.flex(row)
-        gap: 1em
-        align-self: stretch
-        margin: 0 2em
-        margin-bottom: 2em
-
-        > a
-          @include styles.no-selection
-          border: 1px solid styles.$white
-          border-radius: .5em
+        p
           text-align: center
-          padding: .5em
-          flex-grow: 1
-          cursor: pointer
 
-          &.main
-            background-color: styles.$white
-            color: styles.$text-color
+        .slogan
+          font-size: 1.5rem
+          font-weight: bold
+          @include styles.isLarge
+            font-size: 2rem
 
-      *
-        color: styles.$white
+        .buttons
+          @include styles.flex(row)
+          gap: 1em
+          justify-content: center
+
+          a
+            flex-grow: 1
+            text-align: center
+            border: 1px solid styles.$white
+            border-radius: .5em
+            padding: .75em 1em
+            @include styles.isLarge
+              flex-grow: 0
+              width: 8em
+
+      .section-footer
+        @include styles.flex(column)
+        gap: .5em
+        p
+          font-size: .8rem
+          text-align: center
+
+.feature
+  padding: auto 0
+
+  .content
+    @include styles.flex(column)
+    gap: 4em
+    @include styles.isLarge
+      display: grid
+      grid-template-rows: 1fr 2fr
+      place-items: center
+
+    p
+      text-align: center
+
+    .info
+      @include styles.flex(column)
+      gap: 2em
+      @include styles.isLarge
+        gap: 4em
+
+      .title
+        @include styles.flex(column)
+        align-items: center
+        @include styles.isLarge
+          @include styles.flex(row)
+          align-items: center
+          justify-content: center
+          gap: 2em
+
+        .icon
+          font-size: 4rem
+          @include styles.isLarge
+            font-size: 4rem
+          @include styles.isXL
+            font-size: 6rem
+
+        .name
+          font-size: 2rem
+          font-weight: bold
+          text-align: center
+          @include styles.isLarge
+            font-size: 2.5rem
+
+      .description
+        color: styles.$light-gray
+
+  &:not(:nth-child(2))
+    background-color: #333
+
+    *
+      color: styles.$white
+
+  &:nth-child(2)
+    background-color: styles.$background-color
+
+    *
+      color: styles.$text-color
+
+    .content .info .description
+        color: styles.$text-color

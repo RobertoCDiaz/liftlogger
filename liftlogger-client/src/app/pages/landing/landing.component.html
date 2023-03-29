@@ -1,14 +1,83 @@
-<div class="header">
-  <img src="../../../assets/landing-background.png" alt="" />
-  <div class="backdrop"></div>
+<section class="landing">
   <div class="content">
-    <div class="header">
-      <h1>LiftLogger</h1>
-      <p>Track your progress, reach your goals</p>
-    </div>
-    <div class="options">
-      <a (click)="authService.login()">Log in</a>
-      <a (click)="authService.login(true)" class="main">Sign up</a>
+    <header>
+      <p class="app-name">
+        <span class="icon material-icons">fitness_center</span>
+        <span class="name"><b>Lift</b>Logger</span>
+      </p>
+      <div class="options">
+        <a class="option">Features</a>
+        <a class="option">About</a>
+        <a class="option">Get started</a>
+      </div>
+    </header>
+    <div class="landing-content">
+      <div class="info">
+        <p class="slogan">Track your progress, reach your goals</p>
+        <p class="description">
+          LiftLogger is created to help fitness enthusiasts track their training progress, monitor
+          their body metrics, and visualize their growth and improvement over time. With this app,
+          you can easily create personalized training templates, add and remove weightlifting
+          movements, and log your daily weightscale information, making it easy to stay on top of
+          your fitness goals.
+        </p>
+        <div class="buttons">
+          <a (click)="authService.login()">Log in</a>
+          <a (click)="authService.login(true)" class="main">Sign up</a>
+        </div>
+      </div>
+      <div class="section-footer">
+        <p class="item">Made by Roberto Díaz</p>
+        <p class="item">Works with Angular and Node.js</p>
+      </div>
     </div>
   </div>
+</section>
+<div class="features">
+  <section class="feature">
+    <div class="content">
+      <div class="info">
+        <div class="title">
+          <span class="material-icons icon">timer</span>
+          <span class="name">Progress Tracking</span>
+        </div>
+        <p class="description">
+          Keep track of your training progress, including the exercises you perform, sets, reps, and
+          weights lifted.
+        </p>
+      </div>
+      <!-- TODO: Add real pictures of app -->
+      <img src="../../../assets/visualize-progress.png" alt="" class="showcase" />
+    </div>
+  </section>
+  <section class="feature">
+    <div class="content">
+      <div class="info">
+        <div class="title">
+          <span class="material-icons icon">trending_up</span>
+          <span class="name">Visualize Progress</span>
+        </div>
+        <p class="description">
+          View your progress over time with detailed graphs and statistics of your weight, muscle
+          mass, body fat percentage, and more
+        </p>
+      </div>
+      <img src="../../../assets/visualize-progress.png" alt="" class="showcase" />
+    </div>
+  </section>
+  <section class="feature">
+    <div class="content">
+      <div class="info">
+        <div class="title">
+          <span class="material-icons icon">event_note</span>
+          <span class="name">Personalized Training Templates</span>
+        </div>
+        <p class="description">
+          Create custom workout plans based on your fitness goals and track your progress towards
+          achieving them.
+        </p>
+      </div>
+      <img src="../../../assets/visualize-progress.png" alt="" class="showcase" />
+    </div>
+  </section>
 </div>
