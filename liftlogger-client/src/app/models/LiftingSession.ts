@@ -1,4 +1,4 @@
-import { LiftingSet } from './LiftingSet';
+import { LiftingSet } from './LiftingSetModel';
 
 /**
  * A weightlifting session.
