@@ -6,13 +6,14 @@
         <span class="name"><b>Lift</b>Logger</span>
       </p>
       <div class="options">
-        <a class="option">Features</a>
+        <a class="option" href="#features">Features</a>
         <a class="option">About</a>
         <a class="option">Get started</a>
       </div>
     </header>
     <div class="landing-content">
       <div class="info">
+        <app-graph [data]="data" [showPeriodSelector]="false" />
         <p class="slogan">Track your progress, reach your goals</p>
         <p class="description">
           LiftLogger is created to help fitness enthusiasts track their training progress, monitor
@@ -33,51 +34,51 @@
     </div>
   </div>
 </section>
-<div class="features">
+<div class="features" id="features">
   <section class="feature">
     <div class="content">
-      <div class="info">
-        <div class="title">
-          <span class="material-icons icon">timer</span>
-          <span class="name">Progress Tracking</span>
-        </div>
+      <div class="title">
+        <span class="material-icons icon">timer</span>
+        <span class="name">Progress Tracking</span>
+      </div>
+      <div class="showcase">
         <p class="description">
           Keep track of your training progress, including the exercises you perform, sets, reps, and
           weights lifted.
         </p>
+        <!-- TODO: Add real pictures of app -->
+        <img src="../../../assets/visualize-progress.png" alt="" />
       </div>
-      <!-- TODO: Add real pictures of app -->
-      <img src="../../../assets/visualize-progress.png" alt="" class="showcase" />
     </div>
   </section>
   <section class="feature">
     <div class="content">
-      <div class="info">
-        <div class="title">
-          <span class="material-icons icon">trending_up</span>
-          <span class="name">Visualize Progress</span>
-        </div>
+      <div class="title">
+        <span class="material-icons icon">trending_up</span>
+        <span class="name">Visualize Progress</span>
+      </div>
+      <div class="showcase">
         <p class="description">
           View your progress over time with detailed graphs and statistics of your weight, muscle
           mass, body fat percentage, and more
         </p>
+        <img src="../../../assets/visualize-progress.png" alt="" />
       </div>
-      <img src="../../../assets/visualize-progress.png" alt="" class="showcase" />
     </div>
   </section>
   <section class="feature">
     <div class="content">
-      <div class="info">
-        <div class="title">
-          <span class="material-icons icon">event_note</span>
-          <span class="name">Personalized Training Templates</span>
-        </div>
+      <div class="title">
+        <span class="material-icons icon">event_note</span>
+        <span class="name">Personalized Training Templates</span>
+      </div>
+      <div class="showcase">
         <p class="description">
           Create custom workout plans based on your fitness goals and track your progress towards
           achieving them.
         </p>
+        <img src="../../../assets/visualize-progress.png" alt="" />
       </div>
-      <img src="../../../assets/visualize-progress.png" alt="" class="showcase" />
     </div>
   </section>
 </div>
