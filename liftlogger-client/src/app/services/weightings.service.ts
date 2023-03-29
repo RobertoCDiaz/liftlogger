@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Weighting } from '../models/Weighting';
+import { Weighting, WeightingCreationParams } from '../models/WeightingModel';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -15,8 +15,8 @@ export class WeightingsService {
    * @param weighting Weighting data
    * @returns New Weighting record
    */
-  createEntry(weighting: Weighting): Observable<Weighting> {
-    return this.http.post<Weighting, Weighting>('weightings', weighting);
+  createEntry(weighting: WeightingCreationParams): Observable<Weighting> {
+    return this.http.post<WeightingCreationParams, Weighting>('weightings', weighting);
   }
 
   /**

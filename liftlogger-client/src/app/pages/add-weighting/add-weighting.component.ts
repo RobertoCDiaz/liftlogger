@@ -1,5 +1,6 @@
+// TODO: Gather data in a more effective way
 import { Component } from '@angular/core';
-import { Weighting } from 'src/app/models/Weighting';
+import { Weighting } from 'src/app/models/WeightingModel';
 import { WeightingsService } from 'src/app/services/weightings.service';
 import { GraphInput } from 'src/app/components/graph/graph.component';
 import { Router } from '@angular/router';
