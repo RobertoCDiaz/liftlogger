@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { HttpService } from 'src/app/services/http.service';
 
 /**
  * Defines the information required to display an item inside
@@ -29,7 +30,21 @@ export type SidenavItem = {
   styleUrls: ['./main-sidenav.component.sass'],
 })
 export class MainSidenavComponent {
+  // TODO: Delete httpservice dependency
+  constructor(
+    private authService: AuthService,
+    private http: HttpService,
+    private router: Router,
+  ) {}
+
+  /**
+   * URL to the user's profile picture.
+   */
   pictureUrl?: string;
+
+  /**
+   * Email of the current user.
+   */
   userEmail?: string;
 
   /**
@@ -96,5 +111,22 @@ export class MainSidenavComponent {
    */
   urlMatches(url: string): boolean {
     return this.router.url.includes(url);
+  }
+
+  // TODO: Delete
+  showTokenKey() {
+    this.authService
+      .getAuth0Service()
+      .getAccessTokenSilently()
+      .subscribe(token => {
+        alert(token);
+      });
+  }
+
+  // TODO: Delete
+  seedData() {
+    this.http.post('seeding/default', {}).subscribe(result => {
+      this.http.post('seeding/test', {}).subscribe(res2 => {});
+    });
   }
 }
