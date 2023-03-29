@@ -1,4 +1,4 @@
-import { LiftingSession } from './LiftingSession';
+import { LiftingSession } from './LiftingSessionModel';
 import { Movement } from './MovementModel';
 
 /**
