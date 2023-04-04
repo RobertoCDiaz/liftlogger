@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { Movement, MovementNote } from '@prisma/client';
+import { Movement, MovementNote, PrismaClient } from '@prisma/client';
 import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
 import MovementsController from '../controllers/MovementsController';
 import { MovementCreationParams, MovementCreationRequestParams } from '../models/MovementModel';
@@ -29,7 +29,7 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return MovementsController.getMovement(id, email);
+    return new MovementsController(new PrismaClient()).getMovement(id, email);
   }
 
   /**
@@ -49,7 +49,7 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return MovementsController.getMovementsFromUser(email);
+    return new MovementsController(new PrismaClient()).getMovementsFromUser(email);
   }
 
   /**
@@ -76,7 +76,10 @@ export class MovementRoutes extends Controller {
       user_email: userInfo.email,
     } satisfies MovementCreationParams;
 
-    return MovementsController.createMovement(movementCreationData, body.muscleGroups);
+    return new MovementsController(new PrismaClient()).createMovement(
+      movementCreationData,
+      body.muscleGroups,
+    );
   }
 
   /**
@@ -98,7 +101,7 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    const movement = MovementsController.getMovement(id, email);
+    const movement = new MovementsController(new PrismaClient()).getMovement(id, email);
 
     if (!movement) {
       this.setStatus(404);
@@ -131,6 +134,6 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return MovementsController.getMovementJournal(id, email, recentsFirst);
+    return new MovementsController(new PrismaClient()).getMovementJournal(id, email, recentsFirst);
   }
 }
