@@ -29,6 +29,7 @@ services:
       - ${CLIENT_PATH}:/application
     ports:
       - "3000:4200"
+      - "9876:9876"
     depends_on:
       - server      
     networks:

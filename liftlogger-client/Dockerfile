@@ -6,6 +6,11 @@ WORKDIR /application
 
 COPY . /application
 
+# install chromium browser to test the app
+RUN apt update
+RUN apt -y install chromium
+ENV CHROME_BIN /usr/bin/chromium
+
 RUN npm i -g @angular/cli
 
 # Install dependencies

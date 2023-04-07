@@ -6,7 +6,8 @@
     "start": "ng serve --host 0.0.0.0",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test --watch=false --browsers=ChromeHeadlessNoSandbox",
+    "test-watch": "ng test --browsers=ChromeHeadlessNoSandbox",
     "format": "prettier --write .",
     "lint": "eslint --fix . --ext .ts"
   },
