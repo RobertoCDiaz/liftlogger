@@ -1,10 +1,12 @@
-<app-page-header>{{ movement.name }}</app-page-header>
+<ng-container *ngIf="movement">
+  <app-page-header>{{ movement.name }}</app-page-header>
 
-<div class="page-content">
-  <ng-container
-    *ngTemplateOutlet="isLoading || monthlyJournals.length > 0 ? data : noData"
-  ></ng-container>
-</div>
+  <div class="page-content">
+    <ng-container
+      *ngTemplateOutlet="isLoading || monthlyJournals.length > 0 ? data : noData"
+    ></ng-container>
+  </div>
+</ng-container>
 
 <ng-template #data>
   <ng-container *ngTemplateOutlet="isLoading ? loadingData : loadedData"></ng-container>
