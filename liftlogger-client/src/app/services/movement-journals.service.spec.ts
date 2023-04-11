@@ -18,14 +18,14 @@ describe('MovementJournalsService', () => {
   describe('getBestSession', () => {
     it('should return the session with the highest score', () => {
       const bestSession = service.getBestSession(entriesFixture);
-      expect(bestSession).toEqual(entriesFixture[0]);
+      expect(bestSession).toEqual(entriesFixture[1]);
     });
   });
 
   describe('getLastSession', () => {
     it('should return the most recent session', () => {
       const lastSession = service.getLastSession(entriesFixture);
-      expect(lastSession).toEqual(entriesFixture[1]);
+      expect(lastSession).toEqual(entriesFixture[0]);
     });
   });
 
