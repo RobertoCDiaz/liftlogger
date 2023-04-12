@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreatorPageComponent } from './creator-page.component';
+import { AppModule } from 'src/app/app.module';
 
 describe('CreatorPageComponent', () => {
   let component: CreatorPageComponent;
@@ -9,6 +10,7 @@ describe('CreatorPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CreatorPageComponent],
+      imports: [AppModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreatorPageComponent);

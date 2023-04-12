@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContentLoaderComponent } from './content-loader.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 describe('ContentLoaderComponent', () => {
   let component: ContentLoaderComponent;
@@ -8,6 +9,7 @@ describe('ContentLoaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [NgxSkeletonLoaderModule],
       declarations: [ContentLoaderComponent],
     }).compileComponents();
 

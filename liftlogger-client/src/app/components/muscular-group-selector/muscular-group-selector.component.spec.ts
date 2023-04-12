@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MuscularGroupSelectorComponent } from './muscular-group-selector.component';
+import { AppModule } from 'src/app/app.module';
 
 describe('MuscularGroupSelectorComponent', () => {
   let component: MuscularGroupSelectorComponent;
@@ -9,6 +10,7 @@ describe('MuscularGroupSelectorComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MuscularGroupSelectorComponent],
+      imports: [AppModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MuscularGroupSelectorComponent);

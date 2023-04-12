@@ -1,6 +1,8 @@
-<ng-container
-  *ngTemplateOutlet="state.isHrefDisabledSubject ? divContainer : hrefContainer"
-></ng-container>
+<ng-container *ngIf="movement">
+  <ng-container
+    *ngTemplateOutlet="state.isHrefDisabledSubject ? divContainer : hrefContainer"
+  ></ng-container>
+</ng-container>
 
 <ng-template #hrefContainer>
   <a class="item" href="movements/{{ movement.id }}">

@@ -1,4 +1,4 @@
-<div class="group-item">
+<div class="group-item" *ngIf="group">
   <div class="info" (click)="toggleContent()">
     <p class="name">{{ group.name }}</p>
     <span class="material-icons">{{ isOpen ? 'expand_less' : 'expand_more' }}</span>
