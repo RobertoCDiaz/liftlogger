@@ -30,24 +30,30 @@ describe('ButtonComponent', () => {
   });
 
   it('should emmit onClicked event if component is not disabled', () => {
-    spyOn(component.onClicked, 'emit');
-
     component.disabled = false;
+
+    let emitted: boolean = false;
+    component.onClicked.subscribe(() => {
+      emitted = true;
+    });
 
     const button = fixture.debugElement.nativeElement.querySelector('button');
     button.click();
 
-    expect(component.onClicked.emit).toHaveBeenCalled();
+    expect(emitted).toBeTrue();
   });
 
   it('should NOT emmit onClicked event if component is disabled', () => {
-    spyOn(component.onClicked, 'emit');
-
     component.disabled = true;
+
+    let emitted: boolean = false;
+    component.onClicked.subscribe(() => {
+      emitted = true;
+    });
 
     const button = fixture.debugElement.nativeElement.querySelector('button');
     button.click();
 
-    expect(component.onClicked.emit).not.toHaveBeenCalled();
+    expect(emitted).toBeFalse();
   });
 });
