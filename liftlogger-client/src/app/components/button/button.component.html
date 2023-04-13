@@ -1,11 +1,25 @@
-<button
-  type="{{ isSubmitButton ? 'submit' : 'button' }}"
-  class="app-button {{ type }}"
-  (click)="onButtonClicked()"
-  [ngClass]="{ disabled: disabled }"
->
-  <span class="material-icons" *ngIf="icon">
+<ng-container *ngTemplateOutlet="href ? anchorContainer : buttonContainer"></ng-container>
+
+<ng-template #buttonContainer>
+  <button
+    type="{{ isSubmitButton ? 'submit' : 'button' }}"
+    class="app-button {{ type }}"
+    (click)="onButtonClicked()"
+    [ngClass]="{ disabled: disabled }"
+  >
+    <ng-container *ngTemplateOutlet="componentContent"></ng-container>
+  </button>
+</ng-template>
+
+<ng-template #anchorContainer>
+  <a href="{{ href }}" class="app-button {{ type }}">
+    <ng-container *ngTemplateOutlet="componentContent"></ng-container>
+  </a>
+</ng-template>
+
+<ng-template #componentContent>
+  <span id="icon" class="material-icons" *ngIf="icon">
     {{ icon }}
   </span>
   <span><ng-content></ng-content></span>
-</button>
+</ng-template>
