@@ -1,10 +1,10 @@
 <div class="main">
-  <span class="material-icons" (click)="fireMenuClicked()"> menu </span>
+  <span id="menu" class="material-icons" (click)="fireMenuClicked()"> menu </span>
   <h1 class="title">
     {{ title ? title : 'LiftLogger' }}
   </h1>
-  <a [href]="actionUrl">
-    <span *ngIf="actionUrl" class="material-icons">
+  <a [href]="actionUrl" *ngIf="actionUrl">
+    <span class="material-icons">
       {{ actionIcon }}
     </span>
   </a>
