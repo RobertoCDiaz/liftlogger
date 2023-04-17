@@ -1,5 +1,5 @@
 <ng-container *ngIf="movement">
-  <app-page-header>{{ movement.name }}</app-page-header>
+  <app-page-header [pageTitle]="movement.name"></app-page-header>
 
   <div class="page-content">
     <ng-container
@@ -30,7 +30,7 @@
       <p class="month-title">{{ getMonthFormat(month) }}</p>
       <app-calendar
         class="calendar"
-        [initialMonthTime]="month.startOfMonth"
+        [month]="month.startOfMonth"
         [highlightedDays]="getDayNumbers(month)"
       ></app-calendar>
       <div class="entries">
