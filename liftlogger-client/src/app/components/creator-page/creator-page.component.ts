@@ -15,12 +15,12 @@ export class CreatorPageComponent {
   /**
    * Name of the page. This wil be placed as the title in the header bar.
    */
-  @Input() title: String = '$title';
+  @Input() title: string;
 
   /**
    * Placeholder for the main input, commonly used for the item's name.
    */
-  @Input() inputTitle: String = '$inputTitle';
+  @Input() inputTitle: string;
 
   /**
    * Whether the `Create` button should be enabled or not.
