@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AppBarComponent } from './app-bar.component';
+import { getElement } from 'src/app/helpers/testing.helper';
 
 describe('AppBarComponent', () => {
   let component: AppBarComponent;
@@ -21,8 +22,7 @@ describe('AppBarComponent', () => {
   });
 
   it('should render specified title', () => {
-    const titleElement: HTMLHeadingElement =
-      fixture.debugElement.nativeElement.querySelector('h1.title');
+    const titleElement: HTMLHeadingElement = getElement(fixture, 'h1.title');
 
     expect(titleElement.textContent?.trim()).toBe('LiftLogger');
 
@@ -41,7 +41,7 @@ describe('AppBarComponent', () => {
       emitted = true;
     });
 
-    const menuElement = fixture.debugElement.nativeElement.querySelector('#menu');
+    const menuElement: HTMLSpanElement = getElement(fixture, '#menu');
     menuElement.click();
 
     expect(emitted).toBeTrue();
@@ -56,7 +56,7 @@ describe('AppBarComponent', () => {
     component.hideMenu = true;
     fixture.detectChanges();
 
-    const menuElement = fixture.debugElement.nativeElement.querySelector('#menu');
+    const menuElement: HTMLSpanElement = getElement(fixture, '#menu');
     menuElement.click();
 
     expect(emitted).toBeFalse();
@@ -66,12 +66,12 @@ describe('AppBarComponent', () => {
     component.actionUrl = '/create';
     fixture.detectChanges();
 
-    const actionElement = fixture.debugElement.nativeElement.querySelector('a');
+    const actionElement = getElement(fixture, 'a');
     expect(actionElement).toBeTruthy();
   });
 
   it('should NOT render action button if actionurl not set', () => {
-    const actionElement = fixture.debugElement.nativeElement.querySelector('a');
+    const actionElement = getElement(fixture, 'a');
 
     expect(actionElement).toBeFalsy();
   });

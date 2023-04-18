@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ButtonComponent } from './button.component';
+import { getElement } from 'src/app/helpers/testing.helper';
 describe('ButtonComponent', () => {
   let component: ButtonComponent;
   let fixture: ComponentFixture<ButtonComponent>;
@@ -22,7 +23,7 @@ describe('ButtonComponent', () => {
   it('should execute onButtonClicked when button element is clicked', () => {
     spyOn(component, 'onButtonClicked');
 
-    const button = fixture.debugElement.nativeElement.querySelector('button');
+    const button: HTMLButtonElement = getElement(fixture, 'button');
     button.click();
 
     expect(component.onButtonClicked).toHaveBeenCalled();
@@ -36,7 +37,7 @@ describe('ButtonComponent', () => {
       emitted = true;
     });
 
-    const button = fixture.debugElement.nativeElement.querySelector('button');
+    const button: HTMLButtonElement = getElement(fixture, 'button');
     button.click();
 
     expect(emitted).toBeTrue();
@@ -50,43 +51,38 @@ describe('ButtonComponent', () => {
       emitted = true;
     });
 
-    const button = fixture.debugElement.nativeElement.querySelector('button');
+    const button: HTMLButtonElement = getElement(fixture, 'button');
     button.click();
 
     expect(emitted).toBeFalse();
   });
 
   it('should not render the icon element if `icon` property is not specified', () => {
-    const iconElement = fixture.debugElement.nativeElement.querySelector('span.material-icons');
+    const iconElement = getElement(fixture, 'span.material-icons');
 
     expect(iconElement).toBeFalsy();
   });
 
   it('should render the icon element if `icon` property is set', () => {
     component.icon = 'home';
-    fixture.detectChanges();
-
-    const iconElement = fixture.debugElement.nativeElement.querySelector('#icon');
+    const iconElement = getElement(fixture, '#icon');
 
     expect(iconElement).toBeTruthy();
   });
 
   it('should render an <a> tag if an href is set', () => {
     component.href = '/dashboard';
-    fixture.detectChanges();
 
-    const anchorElement = fixture.debugElement.nativeElement.querySelector('a');
-    const buttonElement = fixture.debugElement.nativeElement.querySelector('button');
+    const anchorElement = getElement(fixture, 'a');
+    const buttonElement = getElement(fixture, 'button');
 
     expect(anchorElement).toBeTruthy();
     expect(buttonElement).toBeFalsy();
   });
 
   it('should render an <button> tag if an href is not specified', () => {
-    fixture.detectChanges();
-
-    const anchorElement = fixture.debugElement.nativeElement.querySelector('a');
-    const buttonElement = fixture.debugElement.nativeElement.querySelector('button');
+    const anchorElement = getElement(fixture, 'a');
+    const buttonElement = getElement(fixture, 'button');
 
     expect(anchorElement).toBeFalsy();
     expect(buttonElement).toBeTruthy();
@@ -94,20 +90,15 @@ describe('ButtonComponent', () => {
 
   it('should be a submit button if isSubmitButton equals true', () => {
     component.isSubmitButton = true;
-    fixture.detectChanges();
 
-    const buttonElement: HTMLButtonElement =
-      fixture.debugElement.nativeElement.querySelector('button');
+    const buttonElement: HTMLButtonElement = getElement(fixture, 'button');
 
     expect(buttonElement.type).not.toBe('button');
     expect(buttonElement.type).toBe('submit');
   });
 
   it('should NOT be a submit button if isSubmitButton equals false', () => {
-    fixture.detectChanges();
-
-    const buttonElement: HTMLButtonElement =
-      fixture.debugElement.nativeElement.querySelector('button');
+    const buttonElement: HTMLButtonElement = getElement(fixture, 'button');
 
     expect(buttonElement.type).not.toBe('submit');
     expect(buttonElement.type).toBe('button');
