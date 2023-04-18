@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import * as moment from 'moment';
 
 /**
@@ -11,11 +11,11 @@ import * as moment from 'moment';
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.sass'],
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit, OnChanges {
   /**
-   * Month time for the initial month to be displayed. Defaults to the current month.
+   * Any date to specify the month to display. Defaults to current month.
    */
-  @Input() initialMonthTime: Date = new Date();
+  @Input() month: Date = new Date();
 
   /**
    * List of days of the month to be highlighted.
@@ -28,9 +28,9 @@ export class CalendarComponent {
   daysInMonth: number[] = [];
 
   /**
-   * Month being displayed in the component.
+   * Month being displayed in the component expressed as a `moment.Moment`.
    */
-  currentMonth: moment.Moment;
+  monthMoment: moment.Moment;
 
   /**
    * Auxiliar array to fill in empty spaces in the calendar component to put the first
@@ -39,8 +39,19 @@ export class CalendarComponent {
   emptySquares: number[];
 
   ngOnInit() {
-    this.currentMonth = moment(this.initialMonthTime);
-    this.daysInMonth = new Array(this.currentMonth.daysInMonth()).fill(0).map((v, i) => i + 1);
-    this.emptySquares = new Array(this.currentMonth.startOf('month').day()).fill(0);
+    this.updateComponent();
+  }
+
+  ngOnChanges() {
+    this.updateComponent();
+  }
+
+  /**
+   * Based on the `initialMonthTime` date, sets up the data to show in the component.
+   */
+  updateComponent() {
+    this.monthMoment = moment(this.month);
+    this.daysInMonth = new Array(this.monthMoment.daysInMonth()).fill(0).map((v, i) => i + 1);
+    this.emptySquares = new Array(this.monthMoment.startOf('month').day()).fill(0);
   }
 }
