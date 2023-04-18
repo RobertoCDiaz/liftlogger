@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-content-loader',
   templateUrl: './content-loader.component.html',
   styleUrls: ['./content-loader.component.sass'],
 })
-export class ContentLoaderComponent implements OnInit {
+export class ContentLoaderComponent implements OnInit, OnChanges {
   /**
    * Control boolean that determines if the content should be displayed or not.
    *
@@ -46,14 +46,22 @@ export class ContentLoaderComponent implements OnInit {
    */
   theme = {};
 
-  ngOnInit(): void {
-    // setups the `arrCount` array to display the desired amount of loader lines
-    this.arrCount = new Array(this.lineCount).fill(0);
-
+  ngOnInit() {
     this.theme = {
       padding: 0,
       margin: 0,
       height: this.fontSize + 'rem',
     };
+  }
+
+  ngOnChanges() {
+    this.updatePlaceholdersCount();
+  }
+
+  /**
+   * Setups the `arrCount` array to display the desired amount of loader lines.
+   */
+  updatePlaceholdersCount() {
+    this.arrCount = new Array(this.lineCount).fill(0);
   }
 }
