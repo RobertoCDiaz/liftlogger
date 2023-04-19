@@ -1,13 +1,7 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import Chart from 'chart.js/auto';
 import * as moment from 'moment';
-
-// TODO: extract period logic to its own service?
-/**
- * Represents a time period, which can be either "YTD" (year-to-date), "All", or a string
- * representing a number of days, week, months, or years (in the format `${amount: number}${'d' | 'w' | 'm' | 'y'}`).
- */
-export type Period = 'YTD' | 'All' | `${number}${'d' | 'w' | 'm' | 'y'}`;
+import { Period, PeriodsService } from 'src/app/services/periods.service';
 
 /**
  * Defines the shape for an input data-point.
@@ -31,6 +25,8 @@ export type GraphInput = {
   styleUrls: ['./graph.component.sass'],
 })
 export class GraphComponent implements OnChanges {
+  constructor(private periodsService: PeriodsService) {}
+
   /**
    * Actual data to plot.
    */
@@ -84,11 +80,6 @@ export class GraphComponent implements OnChanges {
   @Input() showFakeData: boolean = false;
 
   /**
-   * Chart.js object.
-   */
-  chartObject: Chart;
-
-  /**
    * Array of available periods to display in the graph and choose from.
    *
    * @see {@link Period}
@@ -97,9 +88,12 @@ export class GraphComponent implements OnChanges {
    */
   @Input() availablePeriods: Period[] = ['1m', '3m', '6m', '1y', 'YTD', 'All'];
 
-  constructor() {}
+  /**
+   * Chart.js object.
+   */
+  private chartObject: Chart;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.setupGraph();
   }
 
@@ -118,49 +112,13 @@ export class GraphComponent implements OnChanges {
   }
 
   /**
-   * Takes a string in `Period` format and transforms it to the `moment.Moment` representation
-   * of the very minimum datetime for that period.
-   *
-   * @example
-   * parsePeriod('15d') -> moment().substract(15, 'days') // 15 days ago
-   *
-   * @example
-   * parsePeriod('3m') -> moment().substract(3, 'months') // 3 months ago
-   *
-   * @see {@link Period}
-   *
-   * @param period Period to parse
-   * @returns Moment representation of the period
-   */
-  parsePeriod(period: Period): moment.Moment {
-    if (period.toLowerCase() === 'ytd') {
-      return moment().startOf('year');
-    }
-    if (period.toLowerCase() === 'all') {
-      return moment(0);
-    }
-
-    const amount: number = parseInt(period.slice(0, -1));
-    const units: string = period.slice(-1);
-
-    const unitsParser: Record<string, moment.unitOfTime.DurationConstructor> = {
-      d: 'days',
-      w: 'weeks',
-      m: 'months',
-      y: 'years',
-    };
-
-    return moment().subtract(amount, unitsParser[units]);
-  }
-
-  /**
    * Setup the actual graph view, using the `chart.js` library.
    * It applies the given configuration params.
    */
   setupGraph() {
     // only includes entries within the selected period
     const filteredEntries = this.data
-      .filter(entry => moment(entry.date) > this.parsePeriod(this.period))
+      .filter(entry => moment(entry.date) > this.periodsService.parsePeriod(this.period))
       .sort((a, b) => (a.date > b.date ? 1 : -1));
 
     // include medias values
