@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 import { Movement } from 'src/app/models/MovementModel';
 import { GroupsService } from 'src/app/services/groups.service';
@@ -20,7 +20,7 @@ export class MovementsPickerState {
    *
    * Defaults to `false`.
    */
-  isHrefDisabledSubject: boolean = false;
+  private isHrefDisabled$ = new BehaviorSubject<boolean>(false);
 
   /**
    * Updates the steam for the `movementSubject`.
@@ -40,6 +40,24 @@ export class MovementsPickerState {
   getSelectedMovement(): Observable<Movement> {
     return this.movementSubject$.asObservable();
   }
+
+  /**
+   * Updates the state of the isHrefDisabled$ subject.
+   *
+   * @param disable Value to set the isHrefDisabled$ subject to.
+   */
+  updateHrefDisabled(disable: boolean) {
+    this.isHrefDisabled$.next(disable);
+  }
+
+  /**
+   * Retrieves the state for whether if the href should be disabled or not.
+   *
+   * @returns Stream of values
+   */
+  isHrefDisabled(): Observable<boolean> {
+    return this.isHrefDisabled$.asObservable();
+  }
 }
 
 @Component({
@@ -48,7 +66,7 @@ export class MovementsPickerState {
   styleUrls: ['./movements-picker.component.sass'],
   providers: [MovementsPickerState],
 })
-export class MovementsPickerComponent {
+export class MovementsPickerComponent implements OnChanges {
   constructor(private groupsService: GroupsService, private state: MovementsPickerState) {}
 
   /**
@@ -77,7 +95,7 @@ export class MovementsPickerComponent {
    */
   @Input() disableHref: boolean = false;
 
-  ngOnInit() {
+  ngOnChanges() {
     // retrieves groups from server
     this.groupsService.getUserGroups(true).subscribe(groups => {
       this.userGroups = groups;
@@ -89,8 +107,8 @@ export class MovementsPickerComponent {
       this.movementSelected.emit(movement);
     });
 
-    // sets `isHrefDisabledSubject` on this component's state
-    this.state.isHrefDisabledSubject = this.disableHref;
+    // sets `isHrefDisabled$` on this component's state
+    this.state.updateHrefDisabled(this.disableHref);
   }
 
   /**
