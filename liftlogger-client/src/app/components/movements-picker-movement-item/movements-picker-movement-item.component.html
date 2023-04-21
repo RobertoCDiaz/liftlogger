@@ -1,7 +1,5 @@
 <ng-container *ngIf="movement">
-  <ng-container
-    *ngTemplateOutlet="state.isHrefDisabledSubject ? divContainer : hrefContainer"
-  ></ng-container>
+  <ng-container *ngTemplateOutlet="isHrefDisabled ? divContainer : hrefContainer"></ng-container>
 </ng-container>
 
 <ng-template #hrefContainer>
@@ -24,7 +22,8 @@
       class="group-chip"
       [ngClass]="{ primary: movement.primary_group_id === ofGroup.id }"
       *ngFor="let ofGroup of movement.groups"
-      >{{ ofGroup.name }}</span
     >
+      {{ ofGroup.name }}
+    </span>
   </div>
 </ng-template>

@@ -13,11 +13,35 @@ export class MovementsPickerMovementItemComponent {
    */
   @Input() movement: Movement;
 
+  /**
+   * Whether to disable anchor's href or not.
+   */
+  isHrefDisabled: boolean = false;
+
   constructor(public state: MovementsPickerState) {}
 
   ngOnInit() {
-    // puts primary group upfront
-    this.movement?.groups?.sort((a, b) => (this.movement.primary_group_id === b.id ? 1 : 0));
+    this.sortGroups();
+
+    this.state.isHrefDisabled().subscribe(disabled => {
+      this.isHrefDisabled = disabled;
+    });
+  }
+
+  /**
+   * Sort the Movement's Muscle Groups so that the primary one shows up first in the list.
+   */
+  sortGroups() {
+    if (!this.movement || !this.movement.groups) {
+      return;
+    }
+
+    const primaryGroups = this.movement.groups.filter(g => g.id === this.movement.primary_group_id);
+    const nonPrimaryGroups = this.movement.groups.filter(
+      g => g.id !== this.movement.primary_group_id,
+    );
+
+    this.movement.groups = [...primaryGroups, ...nonPrimaryGroups];
   }
 
   /**
