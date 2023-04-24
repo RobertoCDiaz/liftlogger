@@ -63,4 +63,20 @@ export const muscleGroupsFixture: MuscleGroup[] = [
       'The arms consist of two main muscle groups: the biceps and the triceps. The biceps are located on the front of the upper arm, and they are responsible for elbow flexion and supination of the forearm. The triceps are located on the back of the upper arm, and they are responsible for elbow extension. The arms are involved in many upper body movements, such as pushing, pulling, and lifting. Strengthening the arms can improve overall upper body strength and aesthetics, and can also help with many everyday tasks. Exercises like bicep curls, hammer curls, tricep extensions, and push-ups can help strengthen the arm muscles.',
     user_email: 'testing@test.com',
   },
+  {
+    id: 5,
+    name: 'Biceps',
+    description:
+      'The biceps are a muscle group located on the front of the upper arm, and they consist of two heads: the long head and the short head. The biceps are responsible for elbow flexion and forearm supination, which means turning the hand from a palm-down to a palm-up position. The biceps are activated during many pulling movements, such as rows and pull-ups, as well as during isolation exercises like bicep curls. Strengthening the biceps can improve the strength and definition of the arms, and can also contribute to improved grip strength.',
+    user_email: 'testing@test.com',
+    parent_group_id: 4,
+  },
+  {
+    id: 6,
+    name: 'Triceps',
+    description:
+      'The triceps are a muscle group located on the back of the upper arm, and they consist of three heads: the long head, lateral head, and medial head. The triceps are responsible for elbow extension, which means straightening the arm from a bent position. The triceps are activated during many pushing movements, such as push-ups, bench press, and overhead press, as well as during isolation exercises like tricep extensions. Strengthening the triceps can improve the strength and definition of the arms, and can also help with other upper body movements that involve pushing or pressing.',
+    user_email: 'testing@test.com',
+    parent_group_id: 4,
+  },
 ];
