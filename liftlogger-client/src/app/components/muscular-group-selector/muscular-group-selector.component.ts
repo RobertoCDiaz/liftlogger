@@ -48,7 +48,7 @@ export class MuscularGroupSelectorComponent {
 
   constructor(private groupsService: GroupsService, public state: MuscularGroupSelectorState) {}
 
-  ngOnInit() {
+  ngOnChanges() {
     this.groupsService.getUserGroups().subscribe(userGroups => {
       this.state.userGroups = this.groupsService.organizeGroups(userGroups);
     });
