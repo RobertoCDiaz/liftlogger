@@ -30,7 +30,7 @@ export class ItemComponent {
    * Toggles the selection state for the current group.
    */
   toggleChecked(): void {
-    // TODO: Also toggle parent groups
+    // TODO: Also check parent groups when checked
     if (!this.state.isMultiSelectable) {
       this.groupService.unCheckAllGroups(this.state.userGroups);
     }
