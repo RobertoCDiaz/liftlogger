@@ -10,6 +10,7 @@ import { WeightingsService } from 'src/app/services/weightings.service';
 import { of } from 'rxjs';
 import { weightingsFixture } from 'src/app/fixtures/weightings.fixture';
 import { Router } from '@angular/router';
+import { getComponent } from 'src/app/helpers/testing.helper';
 
 describe('AddWeightingComponent', () => {
   let component: AddWeightingComponent;
@@ -75,6 +76,14 @@ describe('AddWeightingComponent', () => {
     }));
   });
 
-  // TODO TEST: gets historical weightings
-  // TODO TEST: displays data in graph?
+  it('should fetch user weightings and set graph data from that', () => {
+    const testWeightings = weightingsFixture;
+    spyOn(service, 'getUserEntries').and.returnValue(of(testWeightings));
+
+    component.ngOnInit();
+
+    const graphComponent: GraphComponent = getComponent(fixture, 'app-graph').componentInstance;
+
+    expect(graphComponent.data).toEqual(component.graphData);
+  });
 });
