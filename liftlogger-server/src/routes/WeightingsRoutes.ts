@@ -3,8 +3,7 @@ import { Weighting } from '@prisma/client';
 import { Body, Controller, Get, Middlewares, Post, Request, Route } from 'tsoa';
 import { WeightingController } from '../controllers/WeightingController';
 import { shouldBeAuthenticated } from '../middlewares/auth';
-import { WeightingCreationParams, WeightingCreationRequestParams } from '../models/WeightingModel';
-import { ModelRequestParams } from '../utils/ModelRequestParams';
+import { WeightingCreationRequestParams } from '../models/WeightingModel';
 import { AuthService } from '../services/AuthService';
 
 @Route('weightings')

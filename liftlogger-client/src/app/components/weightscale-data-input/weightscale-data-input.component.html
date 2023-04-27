@@ -1,6 +1,4 @@
-<div class="weighscale-data-input">
-  <p class="name">
-    <ng-content></ng-content>
-  </p>
-  <input type="text" (change)="onDataChanged()" [(ngModel)]="data" />
+<div class="weighscale-data-input" [formGroup]="formGroup">
+  <p class="name">{{ label }}</p>
+  <input class="data-input" type="text" [formControlName]="formProperty" />
 </div>

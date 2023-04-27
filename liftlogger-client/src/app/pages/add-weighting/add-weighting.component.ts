@@ -1,9 +1,9 @@
-// TODO: Gather data in a more effective way
 import { Component } from '@angular/core';
-import { Weighting } from 'src/app/models/WeightingModel';
+import { Weighting, WeightingCreationParams } from 'src/app/models/WeightingModel';
 import { WeightingsService } from 'src/app/services/weightings.service';
 import { GraphInput } from 'src/app/components/graph/graph.component';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-weighting',
@@ -16,7 +16,15 @@ export class AddWeightingComponent {
   /**
    * Data for the new Weighting entry.
    */
-  data: Record<string, any> = {};
+  weightingForm: FormGroup = new FormGroup<{ [K in keyof WeightingCreationParams]: FormControl }>({
+    weight: new FormControl(undefined, { validators: Validators.required }),
+    fat_percentage: new FormControl(undefined, { validators: Validators.required }),
+    muscle_mass: new FormControl(undefined, { validators: Validators.required }),
+    water_percentage: new FormControl(undefined),
+    protein_percentage: new FormControl(undefined),
+    metabolism: new FormControl(undefined),
+    visceral_fat: new FormControl(undefined),
+  });
 
   /**
    * All the Weightings of the current user.
@@ -42,25 +50,20 @@ export class AddWeightingComponent {
   }
 
   /**
-   * Updates a data value for the new Weighting entry.
-   *
-   * @param value New valuie to assign
-   * @param fieldName Name of the property to change
-   */
-  onDataChanged(value: number, fieldName: string): void {
-    this.data[fieldName] = Number(value);
-  }
-
-  /**
    * When the form is submitted (i.e. the Submit button is clicked), fire up
    * the creation of the new entry. Returns the user back to the dashboard.
    */
   onSubmit(): void {
-    const weighting = this.data as Weighting;
+    if (this.weightingForm.invalid) {
+      alert('Please, fill in all required fields (marked with an *)');
+      return;
+    }
 
-    this.weightingsService.createEntry(weighting).subscribe(result => {
-      alert('New entry added successfully!');
-      this.router.navigate(['dashboard']);
-    });
+    this.weightingsService
+      .createEntry(this.weightingForm.value as WeightingCreationParams)
+      .subscribe(result => {
+        alert('New entry added successfully!');
+        this.router.navigate(['dashboard']);
+      });
   }
 }
