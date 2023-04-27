@@ -1,17 +1,15 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 
+/**
+ * An item for the TemplateMovementList component. It showcases an individual template.
+ */
 @Component({
   selector: 'app-template-movement-item',
   templateUrl: './template-movement-item.component.html',
   styleUrls: ['./template-movement-item.component.sass'],
 })
 export class TemplateMovementItemComponent {
-  @Input() id: number = 0;
-  @Input() name: String = 'Movement Name';
-
-  @Output() deleteClick = new EventEmitter();
-
   onDelete(): void {
-    this.deleteClick.emit(this.id);
+    // TODO: Add implementation for template deletion
   }
 }
