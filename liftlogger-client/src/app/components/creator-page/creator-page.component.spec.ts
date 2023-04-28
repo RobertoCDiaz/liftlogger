@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreatorPageComponent } from './creator-page.component';
+import { CreatorForm, CreatorPageComponent } from './creator-page.component';
 import { getComponent, getComponents } from 'src/app/helpers/testing.helper';
 import { AppModule } from 'src/app/app.module';
 import { PageHeaderComponent } from '../page-header/page-header.component';
@@ -107,19 +107,14 @@ describe('CreatorPageComponent', () => {
     expect(emitted).toBeTrue();
   });
 
-  it("should emit titleChanged with the title input's value when it changes", () => {
+  it("should update title in form with the title input's value when it changes", () => {
     const titleInput = getComponent(fixture, '#titleInput');
     const testTitles: string[] = ['This is a test title', 'Another title   ', 'Last title'];
-
-    let emittedValue: string;
-    component.titleChanged.subscribe(titleValue => {
-      emittedValue = titleValue;
-    });
 
     testTitles.forEach(title => {
       titleInput.triggerEventHandler('valueChanged', title);
 
-      expect(emittedValue).toBe(title);
+      expect(component.pageForm.value.title).toBe(title);
     });
   });
 
@@ -131,15 +126,25 @@ describe('CreatorPageComponent', () => {
       'Last description',
     ];
 
-    let emittedValue: string;
-    component.descriptionChanged.subscribe(descriptionValue => {
-      emittedValue = descriptionValue;
-    });
-
     testDescriptions.forEach(description => {
       descriptionInput.triggerEventHandler('valueChanged', description);
 
-      expect(emittedValue).toBe(description);
+      expect(component.pageForm.value.description).toBe(description);
+    });
+  });
+
+  describe('formChanged EventEmitted', () => {
+    it('should emit the page form when it changes', () => {
+      let emittedValue: CreatorForm | null = null;
+      component.formChanged.subscribe(form => {
+        emittedValue = form;
+      });
+
+      component.pageForm.patchValue({ title: 'testing title' });
+      expect(emittedValue!.value.title).toBe('testing title');
+
+      component.pageForm.patchValue({ description: 'just a description' });
+      expect(emittedValue!.value.description).toBe('just a description');
     });
   });
 });

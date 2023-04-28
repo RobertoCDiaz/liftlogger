@@ -1,5 +1,29 @@
 import { Location } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToForm } from 'src/app/helpers/types.helper';
+
+/**
+ * Defines the shape of the form for a creator page.
+ */
+export type CreatorFormType = {
+  /**
+   * Title of the object to be created.
+   */
+  title: string;
+
+  /**
+   * Description of the object to be created.
+   */
+  description: string;
+};
+
+/**
+ * FormGroup that uses `CreatorFormType` as base to create a form.
+ *
+ * @see {@link CreatorFormType}
+ */
+export type CreatorForm = FormGroup<ToForm<CreatorFormType>>;
 
 /**
  * Serves as a base component for any page that can create a DB entity. It was
@@ -12,6 +36,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./creator-page.component.sass'],
 })
 export class CreatorPageComponent {
+  /**
+   * Internal form to store data from the page inputs.
+   */
+  pageForm: CreatorForm = new FormGroup({
+    title: new FormControl<string | null>(null, { validators: [Validators.required] }),
+    description: new FormControl<string | null>(null, { validators: [Validators.required] }),
+  });
+
   /**
    * Name of the page. This wil be placed as the title in the header bar.
    */
@@ -36,18 +68,17 @@ export class CreatorPageComponent {
   @Output() onCreate = new EventEmitter<void>();
 
   /**
-   * This fires up when the main input is modified.
+   * Informs that the page form has changed and emits it.
    *
-   * `$event: string` object is the value is  for the modified input.
+   * @emits `pageForm` The page form with updated values
    */
-  @Output() titleChanged = new EventEmitter<string>();
+  @Output() formChanged = new EventEmitter<CreatorForm>();
 
-  /**
-   * This fires up when the description input is modified.
-   *
-   * `$event: string` object is the value is  for the modified input.
-   */
-  @Output() descriptionChanged = new EventEmitter<string>();
+  ngOnInit() {
+    this.pageForm.valueChanges.subscribe(_ => {
+      this.formChanged.emit(this.pageForm);
+    });
+  }
 
   constructor(private location: Location) {}
 
@@ -66,20 +97,24 @@ export class CreatorPageComponent {
   }
 
   /**
-   * Emits the `titleChanged` EventEmitter when the main input is modified.
+   * Changes the title in the page form.
    *
-   * @param value Value to be passed in the EventEmitter
+   * @param value New value for the title
    */
   onTitleChanged(value: string): void {
-    this.titleChanged.emit(value);
+    this.pageForm.patchValue({
+      title: value,
+    });
   }
 
   /**
-   * Emits the `descriptionChanged` EventEmitter when the description input is modified.
+   * Changes the description in the page form.
    *
-   * @param value Value to be passed in the EventEmitter
+   * @param value New value for the description
    */
   onDescriptionChanged(value: string): void {
-    this.descriptionChanged.emit(value);
+    this.pageForm.patchValue({
+      description: value,
+    });
   }
 }
