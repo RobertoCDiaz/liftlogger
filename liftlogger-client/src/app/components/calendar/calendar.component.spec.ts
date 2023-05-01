@@ -22,20 +22,17 @@ describe('CalendarComponent', () => {
   });
 
   it('should correctly highlight the specified days', () => {
-    const hightlitedDays: number[] = [1, 5, 9, 16, 22];
+    const hightlitedDays: Set<number> = new Set([1, 5, 9, 16, 22]);
 
     component.highlightedDays = hightlitedDays;
 
     const highlightedElements: HTMLDivElement[] = getElements(fixture, '.day.highlighted');
 
-    expect(highlightedElements).toHaveSize(hightlitedDays.length);
-    highlightedElements.forEach((highlighted, idx) => {
+    expect(highlightedElements).toHaveSize(hightlitedDays.size);
+    highlightedElements.forEach(highlighted => {
       const labelElement = highlighted.querySelector('.day-label');
 
-      expect(labelElement?.textContent?.trim()).toBe(hightlitedDays[idx].toString());
-      expect(hightlitedDays.map(day => day.toString())).toContain(
-        labelElement!.textContent!.trim(),
-      );
+      expect(hightlitedDays).toContain(parseInt(labelElement?.textContent?.trim()!));
     });
   });
 

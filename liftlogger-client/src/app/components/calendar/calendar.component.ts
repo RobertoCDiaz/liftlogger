@@ -20,7 +20,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   /**
    * List of days of the month to be highlighted.
    */
-  @Input() highlightedDays: number[] = [];
+  @Input() highlightedDays: Set<number> = new Set();
 
   /**
    * An array with the same length as days are in the month being displayed.

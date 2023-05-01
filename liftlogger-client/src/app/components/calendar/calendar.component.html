@@ -10,7 +10,7 @@
   <div
     class="day"
     *ngFor="let d of daysInMonth"
-    [ngClass]="{ highlighted: highlightedDays.includes(d) }"
+    [ngClass]="{ highlighted: highlightedDays.has(d) }"
   >
     <p class="day-label">{{ d }}</p>
     <div class="bubble"></div>
