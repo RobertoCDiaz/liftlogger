@@ -1,5 +1,7 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { CreatorForm } from 'src/app/components/creator-page/creator-page.component';
 import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 import { GroupsService } from 'src/app/services/groups.service';
 
@@ -18,19 +20,13 @@ export class CreateMuscleGroupComponent {
   parentGroup: MuscleGroup;
 
   /**
-   * Determines whether the Create button should be enabled or not.
+   * Stores the data to create a new Muscle Group. Its name is stored as
+   * the `title` property, and its description is `description`.
    */
-  isCreationEnabled: boolean = false;
-
-  /**
-   * Name for the new Muscle Group.
-   */
-  private groupName: string;
-
-  /**
-   * Description for the new Muscle Group.
-   */
-  private groupDescription: string;
+  groupForm: CreatorForm = new FormGroup({
+    title: new FormControl<string | null>(null, { validators: Validators.required }),
+    description: new FormControl<string | null>(null, { validators: Validators.required }),
+  });
 
   constructor(private groupsService: GroupsService, private location: Location) {}
 
@@ -41,8 +37,6 @@ export class CreateMuscleGroupComponent {
    */
   onSelectionChanged(selectedGroups: MuscleGroup[]): void {
     this.parentGroup = selectedGroups[0];
-
-    this.checkCreationAbility();
   }
 
   /**
@@ -50,51 +44,26 @@ export class CreateMuscleGroupComponent {
    * it redirects the user one page back in history.
    */
   onCreateClicked() {
-    if (!this.isCreationEnabled) {
+    if (this.groupForm.invalid) {
       alert('You have missing properties');
       return;
     }
 
     this.groupsService
       .createGroup({
-        name: this.groupName,
-        description: this.groupDescription,
+        name: this.groupForm.value.title!,
+        description: this.groupForm.value.description!,
         parent_group_id: this.parentGroup?.id ?? undefined, //defining a parent group is not necessary
       })
       .subscribe(resultGroup => {
-        alert(`[${resultGroup.name}] muscle group was succesfully created!`);
         this.location.back();
       });
   }
 
   /**
-   * Changes the name for the group.
-   *
-   * @param value Value for the group's name.
+   * Updates Muscle Group information.
    */
-  groupNameChanged(value: string): void {
-    this.groupName = value;
-
-    this.checkCreationAbility();
-  }
-
-  /**
-   * Changes the description for the group.
-   *
-   * @param value Value for the group's description.
-   */
-  groupDescriptionChanged(value: string): void {
-    this.groupDescription = value;
-
-    this.checkCreationAbility();
-  }
-
-  /**
-   * Checks if creation should be enabled. If so, changes
-   * the state of the `isCreationEnabled` variable.
-   */
-  checkCreationAbility(): void {
-    // creation is not enabled if no group or description is specified
-    this.isCreationEnabled = !(!this.groupName || !this.groupDescription);
+  handleFormChanged(form: CreatorForm) {
+    this.groupForm = form;
   }
 }
