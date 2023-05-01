@@ -6,7 +6,7 @@ import {
 } from './muscular-group-selector.component';
 import { AppModule } from 'src/app/app.module';
 import { GroupsService } from 'src/app/services/groups.service';
-import { muscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
+import { getMuscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
 import { of } from 'rxjs';
 import { getComponents, getElement } from 'src/app/helpers/testing.helper';
 import { ItemComponent } from './item/item.component';
@@ -55,7 +55,7 @@ describe('MuscularGroupSelectorComponent', () => {
   });
 
   it('should store in state the muscle groups of the user', () => {
-    const testGroups = muscleGroupsFixture;
+    const testGroups = getMuscleGroupsFixture();
     spyOn(groupsService, 'getUserGroups').and.returnValue(of(testGroups));
 
     component.ngOnChanges();
@@ -63,12 +63,12 @@ describe('MuscularGroupSelectorComponent', () => {
     componentState.userGroups.forEach((group, idx) => {
       expect(group.id).toBe(testGroups[idx].id);
       expect(group.name).toBe(testGroups[idx].name);
-      expect(group.movements).toBe(testGroups[idx].movements);
+      expect(group.movements).toEqual(testGroups[idx].movements);
     });
   });
 
   it('should render root user groups from state', () => {
-    const testGroups = muscleGroupsFixture;
+    const testGroups = getMuscleGroupsFixture();
 
     spyOn(groupsService, 'getUserGroups').and.returnValue(of(testGroups));
     component.ngOnChanges();
@@ -119,7 +119,7 @@ describe('MuscularGroupSelectorComponent', () => {
     });
 
     it('should emit selected groups', () => {
-      const testSelectedGroups = [muscleGroupsFixture[0], muscleGroupsFixture[2]];
+      const testSelectedGroups = [getMuscleGroupsFixture()[0], getMuscleGroupsFixture()[2]];
 
       spyOn(groupsService, 'getSelectedGroups').and.returnValue(testSelectedGroups);
 

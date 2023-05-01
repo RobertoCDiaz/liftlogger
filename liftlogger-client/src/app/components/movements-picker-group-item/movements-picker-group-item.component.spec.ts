@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MovementsPickerGroupItemComponent } from './movements-picker-group-item.component';
 import { MovementsPickerState } from '../movements-picker/movements-picker.component';
-import { muscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
+import { getMuscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
 import { getComponents, getElement } from 'src/app/helpers/testing.helper';
 import { MovementsPickerMovementItemComponent } from '../movements-picker-movement-item/movements-picker-movement-item.component';
 import { AppModule } from 'src/app/app.module';
@@ -34,7 +34,7 @@ describe('MovementsPickerGroupItemComponent', () => {
   });
 
   it('should correctly render group information', () => {
-    muscleGroupsFixture.forEach(testGroup => {
+    getMuscleGroupsFixture().forEach(testGroup => {
       component.group = testGroup;
       fixture.detectChanges();
 
@@ -67,7 +67,7 @@ describe('MovementsPickerGroupItemComponent', () => {
 
   describe('.isOpen', () => {
     it('should control movements display', () => {
-      component.group = muscleGroupsFixture[0];
+      component.group = getMuscleGroupsFixture()[0];
       fixture.detectChanges();
 
       const movementsList: HTMLDivElement = getElement(fixture, '.list');
@@ -91,7 +91,7 @@ describe('MovementsPickerGroupItemComponent', () => {
 
   describe('toggleContent()', () => {
     it('should change state of isOpen', () => {
-      component.group = muscleGroupsFixture[0];
+      component.group = getMuscleGroupsFixture()[0];
       fixture.detectChanges();
 
       let currentState = component.isOpen;

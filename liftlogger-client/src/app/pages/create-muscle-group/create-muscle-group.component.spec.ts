@@ -11,7 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment } from 'src/environment/environment';
 import { getComponent } from 'src/app/helpers/testing.helper';
-import { muscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
+import { getMuscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
 import { GroupsService } from 'src/app/services/groups.service';
 import { Location } from '@angular/common';
 import { of } from 'rxjs';
@@ -84,7 +84,7 @@ describe('CreateMuscleGroupComponent', () => {
 
   describe('onSelectionChanged()', () => {
     it('should set parent group as the first selected group', () => {
-      const testGroups = muscleGroupsFixture;
+      const testGroups = getMuscleGroupsFixture();
       const expectedParent = testGroups[0];
 
       component.onSelectionChanged(testGroups);
@@ -112,7 +112,9 @@ describe('CreateMuscleGroupComponent', () => {
     });
 
     it('should call service to create service if everything is ok', () => {
-      const serviceSpy = spyOn(service, 'createGroup').and.returnValue(of(muscleGroupsFixture[0]));
+      const serviceSpy = spyOn(service, 'createGroup').and.returnValue(
+        of(getMuscleGroupsFixture()[0]),
+      );
       spyOn(location, 'back');
 
       component.groupForm = testForm;

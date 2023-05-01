@@ -11,7 +11,7 @@ import { PageHeaderComponent } from 'src/app/components/page-header/page-header.
 import { CreatorInputComponent } from 'src/app/components/creator-input/creator-input.component';
 import { ButtonComponent } from 'src/app/components/button/button.component';
 import { MovementsService } from 'src/app/services/movements.service';
-import { muscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
+import { getMuscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
 import { of } from 'rxjs';
 import { movementsFixture } from 'src/app/fixtures/movements.fixture';
 import { Router } from '@angular/router';
@@ -29,7 +29,7 @@ describe('CreateMovementComponent', () => {
     title: new FormControl(testTitle),
     description: new FormControl(testDescription),
   });
-  const testGroups = muscleGroupsFixture;
+  const testGroups = getMuscleGroupsFixture();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

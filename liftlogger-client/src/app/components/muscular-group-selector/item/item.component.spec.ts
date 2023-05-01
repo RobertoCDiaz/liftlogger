@@ -4,7 +4,7 @@ import { ItemComponent } from './item.component';
 import { MuscularGroupSelectorState } from '../muscular-group-selector.component';
 import { AppModule } from 'src/app/app.module';
 import { getComponent, getComponents, getElement } from 'src/app/helpers/testing.helper';
-import { muscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
+import { getMuscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
 import { GroupsService } from 'src/app/services/groups.service';
 import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 
@@ -40,7 +40,7 @@ describe('ItemComponent', () => {
   });
 
   it('should correctly render group', () => {
-    muscleGroupsFixture.forEach(testGroup => {
+    getMuscleGroupsFixture().forEach(testGroup => {
       component.group = testGroup;
 
       const nameEl: HTMLSpanElement = getElement(fixture, 'span.name');
@@ -50,8 +50,8 @@ describe('ItemComponent', () => {
   });
 
   it('should correctly render subgroups if any', () => {
-    const testGroupWithSubgroups = muscleGroupsFixture[3];
-    testGroupWithSubgroups.groups = muscleGroupsFixture.filter(
+    const testGroupWithSubgroups = { ...getMuscleGroupsFixture()[3] };
+    testGroupWithSubgroups.groups = getMuscleGroupsFixture().filter(
       g => g.parent_group_id === testGroupWithSubgroups.id,
     );
 
@@ -71,7 +71,7 @@ describe('ItemComponent', () => {
   });
 
   it('should appear as checked when group is checked', () => {
-    component.group = muscleGroupsFixture[0];
+    component.group = getMuscleGroupsFixture()[0];
     component.group.checked = true;
 
     const container: HTMLDivElement = getElement(fixture, 'div.group');
@@ -81,7 +81,7 @@ describe('ItemComponent', () => {
   });
 
   it('should appear as checked when group is checked', () => {
-    component.group = muscleGroupsFixture[0];
+    component.group = getMuscleGroupsFixture()[0];
     component.group.checked = false;
 
     const container: HTMLDivElement = getElement(fixture, 'div.group');
@@ -92,7 +92,7 @@ describe('ItemComponent', () => {
 
   describe('Checkbox', () => {
     beforeEach(() => {
-      component.group = muscleGroupsFixture[0];
+      component.group = getMuscleGroupsFixture()[0];
     });
 
     it('should trigger toggleChecked() when clicked', () => {
@@ -123,7 +123,7 @@ describe('ItemComponent', () => {
   });
 
   it('should trigger setPrimary method when name is double clicked', () => {
-    component.group = muscleGroupsFixture[0];
+    component.group = getMuscleGroupsFixture()[0];
 
     const nameEl = getComponent(fixture, 'span.name');
     const spy = spyOn(component, 'setPrimary');
@@ -135,7 +135,7 @@ describe('ItemComponent', () => {
 
   describe('setPrimary()', () => {
     beforeEach(() => {
-      component.group = muscleGroupsFixture[0];
+      component.group = getMuscleGroupsFixture()[0];
       component.group.checked = false;
       component.group.isPrimary = false;
     });
@@ -155,7 +155,7 @@ describe('ItemComponent', () => {
 
   describe('toggleChecked()', () => {
     beforeEach(() => {
-      component.group = muscleGroupsFixture[0];
+      component.group = getMuscleGroupsFixture()[0];
     });
 
     it('should select a group when it is not checked', () => {
@@ -221,7 +221,7 @@ describe('ItemComponent', () => {
   // toggle groups with subgroups
   describe('Expand Button', () => {
     beforeEach(() => {
-      component.group = muscleGroupsFixture[3];
+      component.group = getMuscleGroupsFixture()[3];
     });
 
     it('should trigger toggleExpanded()', () => {
@@ -236,7 +236,7 @@ describe('ItemComponent', () => {
 
   describe('toggleExpanded', () => {
     beforeEach(() => {
-      component.group = muscleGroupsFixture[3];
+      component.group = getMuscleGroupsFixture()[3];
     });
 
     it('should expand component to show subgroups', () => {

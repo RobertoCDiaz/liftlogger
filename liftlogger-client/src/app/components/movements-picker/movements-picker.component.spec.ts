@@ -6,7 +6,7 @@ import { movementsFixture } from 'src/app/fixtures/movements.fixture';
 import { AppModule } from 'src/app/app.module';
 import { GroupsService } from 'src/app/services/groups.service';
 import { of } from 'rxjs';
-import { muscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
+import { getMuscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
 import { getComponents } from 'src/app/helpers/testing.helper';
 import { MovementsPickerGroupItemComponent } from '../movements-picker-group-item/movements-picker-group-item.component';
 
@@ -37,7 +37,7 @@ describe('MovementsPickerComponent', () => {
   });
 
   it('should correctly render groups', () => {
-    const testGroups = muscleGroupsFixture;
+    const testGroups = getMuscleGroupsFixture();
 
     const spy = spyOn(groupsService, 'getUserGroups')
       .withArgs(true)
@@ -90,7 +90,7 @@ describe('MovementsPickerComponent', () => {
 
   describe('handleQueryChange', () => {
     it('should call the filtering method and set filtered groups to its result', () => {
-      const filteredGroups = muscleGroupsFixture.slice(1, 2);
+      const filteredGroups = getMuscleGroupsFixture().slice(1, 2);
       const spy = spyOn(groupsService, 'searchMovementsInGroups').and.returnValue(filteredGroups);
 
       component.handleQueryChange('Manager');
