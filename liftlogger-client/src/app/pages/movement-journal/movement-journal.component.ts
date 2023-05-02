@@ -77,8 +77,8 @@ export class MovementJournalComponent {
    * @param monthlyJounal Month to extract the days of
    * @returns List of days
    */
-  getDayNumbers(monthlyJounal: MovementMonthlyJournal): number[] {
-    return monthlyJounal.entries.map(e => moment(e.date).date());
+  getDayNumbers(monthlyJounal: MovementMonthlyJournal): Set<number> {
+    return new Set(monthlyJounal.entries.map(e => moment(e.date).date()));
   }
 
   /**
