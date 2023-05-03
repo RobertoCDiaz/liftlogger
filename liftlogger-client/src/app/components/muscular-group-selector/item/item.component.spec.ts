@@ -222,6 +222,7 @@ describe('ItemComponent', () => {
   describe('Expand Button', () => {
     beforeEach(() => {
       component.group = getMuscleGroupsFixture()[3];
+      component.group.groups = [getMuscleGroupsFixture()[4], getMuscleGroupsFixture()[5]];
     });
 
     it('should trigger toggleExpanded()', () => {
@@ -237,6 +238,7 @@ describe('ItemComponent', () => {
   describe('toggleExpanded', () => {
     beforeEach(() => {
       component.group = getMuscleGroupsFixture()[3];
+      component.group.groups = [getMuscleGroupsFixture()[4], getMuscleGroupsFixture()[5]];
     });
 
     it('should expand component to show subgroups', () => {
