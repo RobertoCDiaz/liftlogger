@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 import { Movement } from 'src/app/models/MovementModel';
@@ -66,7 +66,7 @@ export class MovementsPickerState {
   styleUrls: ['./movements-picker.component.sass'],
   providers: [MovementsPickerState],
 })
-export class MovementsPickerComponent implements OnChanges {
+export class MovementsPickerComponent implements OnInit {
   constructor(private groupsService: GroupsService, private state: MovementsPickerState) {}
 
   /**
@@ -95,7 +95,7 @@ export class MovementsPickerComponent implements OnChanges {
    */
   @Input() disableHref: boolean = false;
 
-  ngOnChanges() {
+  ngOnInit() {
     // retrieves groups from server
     this.groupsService.getUserGroups(true).subscribe(groups => {
       this.userGroups = groups;

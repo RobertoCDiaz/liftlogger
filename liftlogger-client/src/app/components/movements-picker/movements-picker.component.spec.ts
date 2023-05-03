@@ -43,7 +43,7 @@ describe('MovementsPickerComponent', () => {
       .withArgs(true)
       .and.returnValue(of(testGroups));
 
-    component.ngOnChanges();
+    component.ngOnInit();
     expect(spy).toHaveBeenCalled();
 
     const groupsElements: MovementsPickerGroupItemComponent[] = getComponents(
