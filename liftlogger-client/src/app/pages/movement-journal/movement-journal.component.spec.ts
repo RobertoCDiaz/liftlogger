@@ -9,7 +9,7 @@ import { PageHeaderComponent } from 'src/app/components/page-header/page-header.
 import { MovementsService } from 'src/app/services/movements.service';
 import { MovementJournalsService } from 'src/app/services/movement-journals.service';
 import { movementsFixture } from 'src/app/fixtures/movements.fixture';
-import { entriesFixture } from 'src/app/fixtures/movements-journals.fixture';
+import { getEntriesFixture } from 'src/app/fixtures/movements-journals.fixture';
 import { of } from 'rxjs';
 import { MovementMonthlyJournal } from '../../models/MovementJournalEntry';
 
@@ -84,7 +84,7 @@ describe('MovementJournalComponent', () => {
     spyOn(movementsService, 'getMovement').and.returnValue(of(testMovement));
 
     const getMovementJournalSpy = spyOn(movementsService, 'getMovementJournal').and.returnValue(
-      of(entriesFixture),
+      of(getEntriesFixture()),
     );
 
     component.ngOnInit();
@@ -103,7 +103,7 @@ describe('MovementJournalComponent', () => {
 
     spyOn(movementsService, 'getMovement').and.returnValue(of(testMovement));
 
-    spyOn(movementsService, 'getMovementJournal').and.returnValue(of(entriesFixture));
+    spyOn(movementsService, 'getMovementJournal').and.returnValue(of(getEntriesFixture()));
 
     const serviceSpy = spyOn(journalsService, 'getMonthyJournals');
 
@@ -116,7 +116,7 @@ describe('MovementJournalComponent', () => {
     it('should get the dates with a workout done', () => {
       const testMonthlyJournal: MovementMonthlyJournal = {
         startOfMonth: new Date('2022-03-01'),
-        entries: entriesFixture,
+        entries: getEntriesFixture(),
       };
 
       const result = component.getDayNumbers(testMonthlyJournal);
@@ -130,7 +130,7 @@ describe('MovementJournalComponent', () => {
       const spy = spyOn(journalsService, 'getMonthlyJournalStringName');
       const testMonthlyJournal: MovementMonthlyJournal = {
         startOfMonth: new Date('2022-03-01'),
-        entries: entriesFixture,
+        entries: getEntriesFixture(),
       };
 
       component.getMonthFormat(testMonthlyJournal);

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MovementJournalEntryComponent } from './movement-journal-entry.component';
-import { entriesFixture } from 'src/app/fixtures/movements-journals.fixture';
+import { getEntriesFixture } from 'src/app/fixtures/movements-journals.fixture';
 import { getElement, getElements } from 'src/app/helpers/testing.helper';
 import * as moment from 'moment';
 
@@ -32,7 +32,7 @@ describe('MovementJournalEntryComponent', () => {
   });
 
   it('should render details and sets containers when an entry is set', () => {
-    component.entry = entriesFixture[0];
+    component.entry = getEntriesFixture()[0];
 
     const detailsContainer = getElement(fixture, '.details-container');
     const setsContainer = getElement(fixture, '.sets-container');
@@ -42,7 +42,7 @@ describe('MovementJournalEntryComponent', () => {
   });
 
   it('should correctly populate component with entry information', () => {
-    entriesFixture.forEach(entry => {
+    getEntriesFixture().forEach(entry => {
       component.entry = entry;
       component.ngOnChanges();
       fixture.detectChanges();

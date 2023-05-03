@@ -1,6 +1,10 @@
 import { MovementJournalEntry } from '../models/MovementJournalEntry';
 
-export const entriesFixture: MovementJournalEntry[] = [
+export function getEntriesFixture(): MovementJournalEntry[] {
+  return JSON.parse(JSON.stringify(entriesFixture));
+}
+
+const entriesFixture: MovementJournalEntry[] = [
   {
     // most recent
     date: new Date('2022-03-22'),

@@ -13,7 +13,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { MovementsService } from 'src/app/services/movements.service';
 import { of } from 'rxjs';
 import { movementsFixture } from 'src/app/fixtures/movements.fixture';
-import { entriesFixture } from 'src/app/fixtures/movements-journals.fixture';
+import { getEntriesFixture } from 'src/app/fixtures/movements-journals.fixture';
 import * as moment from 'moment';
 
 describe('MovementDetailsComponent', () => {
@@ -83,12 +83,6 @@ describe('MovementDetailsComponent', () => {
     expect(getMovementsSpy).toHaveBeenCalledWith(testId);
   });
 
-  // TEST: should redirect to /movements if fetched movement doesnt exist
-  // it('should redirect to /movements if fetched movement doesnt exist', () => {
-  //   spyOnProperty(activatedRoute, 'paramMap').and.returnValue(of(convertToParamMap({ id: 123 })));
-  //   const getMovementsSpy = spyOn(movementsService, 'getMovement').and.returnValue(of(null));
-  // });
-
   it('should get movement journal if fetched movement exists', () => {
     const testId = 5;
     const serviceSpy = spyOn(movementsService, 'getMovementJournal').and.returnValue(of([]));
@@ -106,31 +100,31 @@ describe('MovementDetailsComponent', () => {
 
   describe('setupJournalInformation()', () => {
     it('should correctly set the lastSession', () => {
-      const expected = entriesFixture[0];
+      const expected = getEntriesFixture()[0];
 
-      component.setupJournalInformation(entriesFixture);
+      component.setupJournalInformation(getEntriesFixture());
 
       expect(component.lastSession).toEqual(expected);
     });
 
     it('should correctly set the bestSession', () => {
-      const expected = entriesFixture[1];
+      const expected = getEntriesFixture()[1];
 
-      component.setupJournalInformation(entriesFixture);
+      component.setupJournalInformation(getEntriesFixture());
 
       expect(component.bestSession).toEqual(expected);
     });
     it('should correctly set the prSet session', () => {
-      const expected = entriesFixture[2];
+      const expected = getEntriesFixture()[2];
 
-      component.setupJournalInformation(entriesFixture);
+      component.setupJournalInformation(getEntriesFixture());
 
       expect(component.prSet).toEqual(expected);
     });
     it('should correctly set the last trained date (in DD/MM/YYYY format)', () => {
-      const expected = moment(entriesFixture[0].date).format('DD/MM/YYYY');
+      const expected = moment(getEntriesFixture()[0].date).format('DD/MM/YYYY');
 
-      component.setupJournalInformation(entriesFixture);
+      component.setupJournalInformation(getEntriesFixture());
 
       expect(component.lastTrainedDate).toEqual(expected);
     });
