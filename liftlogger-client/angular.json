@@ -86,7 +86,13 @@
             "inlineStyleLanguage": "sass",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.sass"],
-            "scripts": []
+            "scripts": [],
+            "fileReplacements": [
+              {
+                "replace": "src/environment/environment.ts",
+                "with": "src/environment/test.environment.ts"
+              }
+            ]
           }
         }
       }
