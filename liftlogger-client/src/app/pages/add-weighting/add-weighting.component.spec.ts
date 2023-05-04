@@ -8,7 +8,7 @@ import { GraphComponent } from 'src/app/components/graph/graph.component';
 import { AppModule } from 'src/app/app.module';
 import { WeightingsService } from 'src/app/services/weightings.service';
 import { of } from 'rxjs';
-import { weightingsFixture } from 'src/app/fixtures/weightings.fixture';
+import { getWeightingsFixture } from 'src/app/fixtures/weightings.fixture';
 import { Router } from '@angular/router';
 import { getComponent } from 'src/app/helpers/testing.helper';
 
@@ -57,7 +57,7 @@ describe('AddWeightingComponent', () => {
     });
 
     it('should call service to create a new entry', fakeAsync(() => {
-      const testWeighting = weightingsFixture[0];
+      const testWeighting = getWeightingsFixture()[0];
       const createEntrySpy = spyOn(service, 'createEntry').and.returnValue(of(testWeighting));
       const routerSpy = spyOn(router, 'navigate');
       const alertSpy = spyOn(window, 'alert');
@@ -77,7 +77,7 @@ describe('AddWeightingComponent', () => {
   });
 
   it('should fetch user weightings and set graph data from that', () => {
-    const testWeightings = weightingsFixture;
+    const testWeightings = getWeightingsFixture();
     spyOn(service, 'getUserEntries').and.returnValue(of(testWeightings));
 
     component.ngOnInit();

@@ -1,6 +1,10 @@
 import { Weighting } from '../models/WeightingModel';
 
-export const weightingsFixture: Weighting[] = [
+export function getWeightingsFixture(): Weighting[] {
+  return JSON.parse(JSON.stringify(weightingsFixture));
+}
+
+const weightingsFixture: Weighting[] = [
   {
     id: 1,
     datetime: new Date('2023-02-27T01:32:01.258Z'),
