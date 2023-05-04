@@ -8,7 +8,7 @@ import { ActivatedRoute, RouterModule, convertToParamMap } from '@angular/router
 import { PageHeaderComponent } from 'src/app/components/page-header/page-header.component';
 import { MovementsService } from 'src/app/services/movements.service';
 import { MovementJournalsService } from 'src/app/services/movement-journals.service';
-import { movementsFixture } from 'src/app/fixtures/movements.fixture';
+import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
 import { getEntriesFixture } from 'src/app/fixtures/movements-journals.fixture';
 import { of } from 'rxjs';
 import { MovementMonthlyJournal } from '../../models/MovementJournalEntry';
@@ -22,7 +22,7 @@ describe('MovementJournalComponent', () => {
   let route: ActivatedRoute;
 
   const testId: number = 7;
-  const testMovement = movementsFixture[0];
+  const testMovement = getMovementsFixture()[0];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -64,7 +64,7 @@ describe('MovementJournalComponent', () => {
     );
 
     const getMovementSpy = spyOn(movementsService, 'getMovement').and.returnValue(
-      of(movementsFixture[0]),
+      of(getMovementsFixture()[0]),
     );
 
     component.ngOnInit();

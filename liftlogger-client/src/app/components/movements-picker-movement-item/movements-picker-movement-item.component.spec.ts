@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MovementsPickerMovementItemComponent } from './movements-picker-movement-item.component';
 import { MovementsPickerState } from '../movements-picker/movements-picker.component';
 import { getElement, getElements } from 'src/app/helpers/testing.helper';
-import { movementsFixture } from 'src/app/fixtures/movements.fixture';
+import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
 import { Movement } from 'src/app/models/MovementModel';
 
 describe('MovementsPickerMovementItemComponent', () => {
@@ -36,7 +36,7 @@ describe('MovementsPickerMovementItemComponent', () => {
 
   describe('isHrefDisabled', () => {
     beforeEach(() => {
-      component.movement = movementsFixture[0];
+      component.movement = getMovementsFixture()[0];
       fixture.detectChanges();
     });
 
@@ -75,7 +75,7 @@ describe('MovementsPickerMovementItemComponent', () => {
   });
 
   describe('Group Chips', () => {
-    const movement: Movement = movementsFixture[0];
+    const movement: Movement = getMovementsFixture()[0];
     beforeEach(() => {
       component.movement = movement;
       fixture.detectChanges();
@@ -101,7 +101,7 @@ describe('MovementsPickerMovementItemComponent', () => {
 
   describe('handleMovementSelected()', () => {
     it("should pass to the injector's state the current movement when clicked", () => {
-      const movement = movementsFixture[0];
+      const movement = getMovementsFixture()[0];
       component.movement = movement;
       fixture.detectChanges();
 
@@ -115,7 +115,7 @@ describe('MovementsPickerMovementItemComponent', () => {
     });
 
     it('should be triggered when component is clicked', () => {
-      const movement = movementsFixture[0];
+      const movement = getMovementsFixture()[0];
       component.movement = movement;
       component.isHrefDisabled = true;
 

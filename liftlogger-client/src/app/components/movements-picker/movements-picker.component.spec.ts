@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MovementsPickerComponent, MovementsPickerState } from './movements-picker.component';
 import { Movement } from 'src/app/models/MovementModel';
-import { movementsFixture } from 'src/app/fixtures/movements.fixture';
+import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
 import { AppModule } from 'src/app/app.module';
 import { GroupsService } from 'src/app/services/groups.service';
 import { of } from 'rxjs';
@@ -64,11 +64,13 @@ describe('MovementsPickerComponent', () => {
         lastEmitted = movement;
       });
 
-      movementsFixture.slice(0, 5).forEach(mov => {
-        state.setMovement(mov);
+      getMovementsFixture()
+        .slice(0, 5)
+        .forEach(mov => {
+          state.setMovement(mov);
 
-        expect(lastEmitted).toBe(mov);
-      });
+          expect(lastEmitted).toBe(mov);
+        });
     });
 
     it('should store the state of isHrefDisabled', () => {

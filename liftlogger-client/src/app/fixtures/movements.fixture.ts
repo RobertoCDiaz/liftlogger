@@ -1,6 +1,10 @@
 import { Movement } from '../models/MovementModel';
 
-export const movementsFixture: Movement[] = [
+export function getMovementsFixture(): Movement[] {
+  return JSON.parse(JSON.stringify(movementsFixture));
+}
+
+const movementsFixture: Movement[] = [
   {
     id: 1,
     name: 'District Metrics Manager',

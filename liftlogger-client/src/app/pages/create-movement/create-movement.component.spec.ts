@@ -13,7 +13,7 @@ import { ButtonComponent } from 'src/app/components/button/button.component';
 import { MovementsService } from 'src/app/services/movements.service';
 import { getMuscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
 import { of } from 'rxjs';
-import { movementsFixture } from 'src/app/fixtures/movements.fixture';
+import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
 import { Router } from '@angular/router';
 import { getComponent } from 'src/app/helpers/testing.helper';
 
@@ -78,7 +78,9 @@ describe('CreateMovementComponent', () => {
 
     it('should call service to create a new movement if everything is ok', () => {
       const alertSpy = spyOn(window, 'alert');
-      const serviceSpy = spyOn(service, 'createMovement').and.returnValue(of(movementsFixture[0]));
+      const serviceSpy = spyOn(service, 'createMovement').and.returnValue(
+        of(getMovementsFixture()[0]),
+      );
       spyOn(router, 'navigate');
 
       spyOn(component, 'shouldEnableCreation').and.returnValue(true);

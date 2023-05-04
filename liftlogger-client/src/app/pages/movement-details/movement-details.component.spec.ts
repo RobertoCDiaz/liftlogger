@@ -12,7 +12,7 @@ import { MovementJournalEntryComponent } from 'src/app/components/movement-journ
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { MovementsService } from 'src/app/services/movements.service';
 import { of } from 'rxjs';
-import { movementsFixture } from 'src/app/fixtures/movements.fixture';
+import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
 import { getEntriesFixture } from 'src/app/fixtures/movements-journals.fixture';
 import * as moment from 'moment';
 
@@ -72,7 +72,7 @@ describe('MovementDetailsComponent', () => {
   it('should try to fetch movement from the service', () => {
     const testId = 3;
     const getMovementsSpy = spyOn(movementsService, 'getMovement').and.returnValue(
-      of(movementsFixture[0]),
+      of(getMovementsFixture()[0]),
     );
     spyOnProperty(activatedRoute, 'paramMap').and.returnValue(
       of(convertToParamMap({ id: testId })),
@@ -90,7 +90,7 @@ describe('MovementDetailsComponent', () => {
     spyOnProperty(activatedRoute, 'paramMap').and.returnValue(
       of(convertToParamMap({ id: testId })),
     );
-    spyOn(movementsService, 'getMovement').and.returnValue(of(movementsFixture[0]));
+    spyOn(movementsService, 'getMovement').and.returnValue(of(getMovementsFixture()[0]));
 
     component.ngOnInit();
 
