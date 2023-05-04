@@ -39,7 +39,7 @@ export class MovementsService {
     id: number,
     recentsFirst: boolean = false,
   ): Observable<MovementJournalEntry[]> {
-    return this.http.get(`movements/${id}/journal?recentsFirst=${recentsFirst}`);
+    return this.http.get(`movements/${id}/journal${recentsFirst ? '?recentsFirst=true' : ''}`);
   }
 
   /**
@@ -53,7 +53,7 @@ export class MovementsService {
     return this.http.post<MovementCreationRequestParams, Movement>('movements', {
       movement,
       muscleGroups: groups.map(group => ({
-        group_id: group.id!!,
+        group_id: group.id,
         is_primary: group.isPrimary ?? false,
       })),
     });
