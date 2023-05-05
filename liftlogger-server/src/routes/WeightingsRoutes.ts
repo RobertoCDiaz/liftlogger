@@ -5,6 +5,7 @@ import { WeightingController } from '../controllers/WeightingController';
 import { shouldBeAuthenticated } from '../middlewares/auth';
 import { WeightingCreationRequestParams } from '../models/WeightingModel';
 import { AuthService } from '../services/AuthService';
+import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('weightings')
 export class WeightingRoutes extends Controller {
@@ -25,7 +26,7 @@ export class WeightingRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return WeightingController.getEntries(email);
+    return new WeightingController(PrismaUtils.getPrismaInstance()).getEntries(email);
   }
 
   /**
@@ -47,7 +48,7 @@ export class WeightingRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    const newEntry = await WeightingController.createEntry({
+    const newEntry = await new WeightingController(PrismaUtils.getPrismaInstance()).createEntry({
       ...weightingData,
       user_email: email,
       datetime: weightingData.datetime ?? new Date(),

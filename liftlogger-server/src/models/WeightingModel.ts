@@ -10,10 +10,10 @@ export type WeightingCreationParams = Omit<
   Weighting,
   'id' | 'water_percentage' | 'protein_percentage' | 'metabolism' | 'visceral_fat' | 'ignored'
 > & {
-  water_percentage?: number;
-  protein_percentage?: number;
-  metabolism?: number;
-  visceral_fat?: number;
+  water_percentage?: number | null;
+  protein_percentage?: number | null;
+  metabolism?: number | null;
+  visceral_fat?: number | null;
   ignored?: boolean;
 };
 

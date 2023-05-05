@@ -9,6 +9,7 @@ import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
 import MovementNotesController from './MovementNotesController';
 import MovementsController from './MovementsController';
 import TemplateController from './TemplateController';
+import { weightingFixtures } from '../fixtures/WeightingFixtures';
 
 export default class SeedingsController {
   constructor(private prisma: PrismaClient) {}
@@ -58,6 +59,8 @@ export default class SeedingsController {
             },
           }),
         ),
+        // insert weightings
+        this.prisma.weighting.createMany({ data: weightingFixtures }),
         // insert test sessions and sets
         this.prisma.liftingSession.createMany({ data: liftingSessionsFixture }),
         this.prisma.liftingSet.createMany({ data: liftingSetsFixture }),
