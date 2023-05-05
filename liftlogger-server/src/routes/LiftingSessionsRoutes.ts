@@ -1,4 +1,4 @@
-import { LiftingSession, PrismaClient } from '@prisma/client';
+import { LiftingSession } from '@prisma/client';
 import * as express from 'express';
 import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
 import LiftingSessionController from '../controllers/LiftingSessionsController';
@@ -8,6 +8,7 @@ import {
   LiftingSessionWithSetsCreationRequestParams,
 } from '../models/LiftingSessionModel';
 import { AuthService } from '../services/AuthService';
+import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('sessions')
 export class LiftingSessionsRoutes extends Controller {
@@ -33,7 +34,7 @@ export class LiftingSessionsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return await new LiftingSessionController(new PrismaClient()).getLiftingSession(
+    return await new LiftingSessionController(PrismaUtils.getPrismaInstance()).getLiftingSession(
       id,
       email,
       includeSets,
@@ -60,10 +61,9 @@ export class LiftingSessionsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return await new LiftingSessionController(new PrismaClient()).getLiftingSessionsFromUser(
-      email,
-      includeSets,
-    );
+    return await new LiftingSessionController(
+      PrismaUtils.getPrismaInstance(),
+    ).getLiftingSessionsFromUser(email, includeSets);
   }
 
   /**
@@ -91,9 +91,8 @@ export class LiftingSessionsRoutes extends Controller {
       user_email: email,
     } satisfies LiftingSessionCreationParams;
 
-    return await new LiftingSessionController(new PrismaClient()).createSessionWithSets(
-      session,
-      body.sets,
-    );
+    return await new LiftingSessionController(
+      PrismaUtils.getPrismaInstance(),
+    ).createSessionWithSets(session, body.sets);
   }
 }

@@ -1,11 +1,12 @@
 import * as express from 'express';
-import { MuscleGroup, PrismaClient } from '@prisma/client';
+import { MuscleGroup } from '@prisma/client';
 import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
 import MuscleGroupController from '../controllers/MuscleGroupsController';
 import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
 import { AuthService } from '../services/AuthService';
 import { ModelRequestParams } from '../utils/ModelRequestParams';
 import { shouldBeAuthenticated } from '../middlewares/auth';
+import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('groups')
 export class GroupsRoutes extends Controller {
@@ -27,7 +28,7 @@ export class GroupsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return await new MuscleGroupController(new PrismaClient()).getMuscleGroupsFromUser(
+    return await new MuscleGroupController(PrismaUtils.getPrismaInstance()).getMuscleGroupsFromUser(
       email,
       withMovements,
     );
@@ -51,7 +52,10 @@ export class GroupsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return await new MuscleGroupController(new PrismaClient()).getMuscleGroup(id, email);
+    return await new MuscleGroupController(PrismaUtils.getPrismaInstance()).getMuscleGroup(
+      id,
+      email,
+    );
   }
 
   /**
@@ -72,7 +76,7 @@ export class GroupsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return await new MuscleGroupController(new PrismaClient()).createGroup({
+    return await new MuscleGroupController(PrismaUtils.getPrismaInstance()).createGroup({
       ...group,
       user_email: email,
     });

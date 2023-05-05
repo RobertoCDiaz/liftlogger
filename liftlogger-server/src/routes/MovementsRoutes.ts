@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { Movement, MovementNote, PrismaClient } from '@prisma/client';
+import { Movement, MovementNote } from '@prisma/client';
 import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
 import MovementsController from '../controllers/MovementsController';
 import { MovementCreationParams, MovementCreationRequestParams } from '../models/MovementModel';
@@ -7,6 +7,7 @@ import { AuthService } from '../services/AuthService';
 import { shouldBeAuthenticated } from '../middlewares/auth';
 import MovementNotesController from '../controllers/MovementNotesController';
 import { MovementJournalEntry } from '../models/MovementJournal';
+import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('movements')
 export class MovementRoutes extends Controller {
@@ -29,7 +30,7 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return new MovementsController(new PrismaClient()).getMovement(id, email);
+    return new MovementsController(PrismaUtils.getPrismaInstance()).getMovement(id, email);
   }
 
   /**
@@ -49,7 +50,7 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return new MovementsController(new PrismaClient()).getMovementsFromUser(email);
+    return new MovementsController(PrismaUtils.getPrismaInstance()).getMovementsFromUser(email);
   }
 
   /**
@@ -76,7 +77,7 @@ export class MovementRoutes extends Controller {
       user_email: userInfo.email,
     } satisfies MovementCreationParams;
 
-    return new MovementsController(new PrismaClient()).createMovement(
+    return new MovementsController(PrismaUtils.getPrismaInstance()).createMovement(
       movementCreationData,
       body.muscleGroups,
     );
@@ -101,7 +102,10 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    const movement = new MovementsController(new PrismaClient()).getMovement(id, email);
+    const movement = new MovementsController(PrismaUtils.getPrismaInstance()).getMovement(
+      id,
+      email,
+    );
 
     if (!movement) {
       this.setStatus(404);
@@ -134,6 +138,10 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return new MovementsController(new PrismaClient()).getMovementJournal(id, email, recentsFirst);
+    return new MovementsController(PrismaUtils.getPrismaInstance()).getMovementJournal(
+      id,
+      email,
+      recentsFirst,
+    );
   }
 }
