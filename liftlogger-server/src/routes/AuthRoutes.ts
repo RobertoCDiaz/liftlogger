@@ -2,6 +2,7 @@ import { Body, Controller, Middlewares, Post, Route } from 'tsoa';
 import UserController from '../controllers/UsersController';
 import { shouldBeAuthenticated } from '../middlewares/auth';
 import { UserCreationParams } from '../models/UserModel';
+import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('auth')
 export class AuthRoutes extends Controller {
@@ -16,14 +17,15 @@ export class AuthRoutes extends Controller {
   @Post('createUser')
   @Middlewares([shouldBeAuthenticated])
   public async createUser(@Body() user: UserCreationParams): Promise<boolean> {
-    const userExists = (await UserController.get(user.email)) !== null;
+    const userExists =
+      (await new UserController(PrismaUtils.getPrismaInstance()).get(user.email)) !== null;
 
     if (userExists) {
       console.log('🟡 User was already in DB');
       return false;
     }
 
-    await UserController.create(user);
+    await new UserController(PrismaUtils.getPrismaInstance()).create(user);
 
     return true;
   }
