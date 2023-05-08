@@ -9,6 +9,8 @@ import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('weightings')
 export class WeightingRoutes extends Controller {
+  weightingController = new WeightingController(PrismaUtils.getPrismaInstance());
+
   /**
    * Gets all the weightings from DB.
    *
@@ -26,7 +28,7 @@ export class WeightingRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return new WeightingController(PrismaUtils.getPrismaInstance()).getEntries(email);
+    return await this.weightingController.getEntries(email);
   }
 
   /**
@@ -48,7 +50,7 @@ export class WeightingRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    const newEntry = await new WeightingController(PrismaUtils.getPrismaInstance()).createEntry({
+    const newEntry = await this.weightingController.createEntry({
       ...weightingData,
       user_email: email,
       datetime: weightingData.datetime ?? new Date(),

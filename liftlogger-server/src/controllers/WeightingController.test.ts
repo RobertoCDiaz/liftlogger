@@ -34,7 +34,6 @@ describe('WeightingController', () => {
 
         const result = await controller.createEntry(entry);
 
-        console.log(`created:`, JSON.stringify(result, null, 4));
         expect(result.weight).toBe(entry.weight);
 
         await prismaInstance.weighting.delete({ where: { id: result.id } });
