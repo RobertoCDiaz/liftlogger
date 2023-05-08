@@ -19,7 +19,8 @@
     "start:dev": "concurrently \"nodemon\" \"nodemon -x tsoa routes\"",
     "format": "prettier --write .",
     "lint": "eslint --fix . --ext .ts",
-    "test": "jest"
+    "test": "jest",
+    "test-watch": "jest --watchAll"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",
