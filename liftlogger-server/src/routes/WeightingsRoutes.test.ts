@@ -6,11 +6,14 @@ import { weightingFixtures } from '../fixtures/WeightingFixtures';
 import { authRequestMock, noAuthRequestMock } from '../mocks/request.mock';
 import { userResponseMock } from '../mocks/userinfo.mock';
 import { WeightingCreationRequestParams } from '../models/WeightingModel';
+import { usersFixture } from '../fixtures/UserFixtures';
 
 describe('WeightingRoutes', () => {
   let routesController: WeightingRoutes;
 
   let weightingController: WeightingController;
+
+  const testUser = usersFixture[0];
 
   beforeEach(() => {
     routesController = new WeightingRoutes();
@@ -20,7 +23,7 @@ describe('WeightingRoutes', () => {
 
   describe('getWeightings()', () => {
     it('should call the controller to get user weightings and return its response', async () => {
-      jest.spyOn(AuthService, 'getUserInfo').mockResolvedValue(userResponseMock);
+      jest.spyOn(AuthService, 'getUserInfo').mockResolvedValue(userResponseMock(testUser));
       jest.spyOn(weightingController, 'getEntries').mockResolvedValue(weightingFixtures);
 
       const result = await routesController.getWeightings(authRequestMock);
@@ -46,7 +49,7 @@ describe('WeightingRoutes', () => {
     });
 
     it('should try to create a new entry', async () => {
-      jest.spyOn(AuthService, 'getUserInfo').mockResolvedValue(userResponseMock);
+      jest.spyOn(AuthService, 'getUserInfo').mockResolvedValue(userResponseMock(testUser));
       const createEntrySpy = jest
         .spyOn(weightingController, 'createEntry')
         .mockResolvedValue(testResult);
