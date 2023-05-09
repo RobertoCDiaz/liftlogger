@@ -11,6 +11,14 @@ import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('movements')
 export class MovementRoutes extends Controller {
+  movementsController: MovementsController = new MovementsController(
+    PrismaUtils.getPrismaInstance(),
+  );
+
+  notesController: MovementNotesController = new MovementNotesController(
+    PrismaUtils.getPrismaInstance(),
+  );
+
   /**
    * Gets a specific movement, only if the current user owns it.
    *
@@ -30,7 +38,7 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return new MovementsController(PrismaUtils.getPrismaInstance()).getMovement(id, email);
+    return this.movementsController.getMovement(id, email);
   }
 
   /**
@@ -50,7 +58,7 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return new MovementsController(PrismaUtils.getPrismaInstance()).getMovementsFromUser(email);
+    return this.movementsController.getMovementsFromUser(email);
   }
 
   /**
@@ -77,10 +85,7 @@ export class MovementRoutes extends Controller {
       user_email: userInfo.email,
     } satisfies MovementCreationParams;
 
-    return new MovementsController(PrismaUtils.getPrismaInstance()).createMovement(
-      movementCreationData,
-      body.muscleGroups,
-    );
+    return this.movementsController.createMovement(movementCreationData, body.muscleGroups);
   }
 
   /**
@@ -102,17 +107,14 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    const movement = new MovementsController(PrismaUtils.getPrismaInstance()).getMovement(
-      id,
-      email,
-    );
+    const movement = await this.movementsController.getMovement(id, email);
 
     if (!movement) {
       this.setStatus(404);
       return;
     }
 
-    return await MovementNotesController.getMovementNotes(id);
+    return await this.notesController.getMovementNotes(movement.id);
   }
 
   /**
@@ -138,10 +140,6 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return new MovementsController(PrismaUtils.getPrismaInstance()).getMovementJournal(
-      id,
-      email,
-      recentsFirst,
-    );
+    return this.movementsController.getMovementJournal(id, email, recentsFirst);
   }
 }

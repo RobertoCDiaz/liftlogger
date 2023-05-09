@@ -10,6 +10,7 @@ import MovementNotesController from './MovementNotesController';
 import MovementsController from './MovementsController';
 import TemplateController from './TemplateController';
 import { weightingFixtures } from '../fixtures/WeightingFixtures';
+import { getNotesFixture } from '../fixtures/MovementNotesFixture';
 
 export default class SeedingsController {
   constructor(private prisma: PrismaClient) {}
@@ -64,6 +65,8 @@ export default class SeedingsController {
         // insert test sessions and sets
         this.prisma.liftingSession.createMany({ data: liftingSessionsFixture }),
         this.prisma.liftingSet.createMany({ data: liftingSetsFixture }),
+        // insert movement notes
+        this.prisma.movementNote.createMany({ data: getNotesFixture() }),
       ])
       .then(() => {
         console.log('testing data was successfully seeded');
@@ -103,8 +106,8 @@ export default class SeedingsController {
     const movementsIds = faker.helpers.arrayElements(movements?.map(movement => movement.id));
 
     // movementNotes
-    new Array(50).fill(0).forEach(mn => {
-      MovementNotesController.createNoteForMovement(
+    new Array(50).fill(0).forEach(async mn => {
+      await new MovementNotesController(this.prisma).createNoteForMovement(
         {
           date: faker.date.recent(60),
           notes: faker.lorem.words(30),
