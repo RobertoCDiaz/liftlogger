@@ -1,9 +1,9 @@
 import { MuscleGroup, PrismaClient } from '@prisma/client';
 import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
 
-const prisma = new PrismaClient();
-
 export default class MuscleGroupController {
+  constructor(private prisma: PrismaClient) {}
+
   /**
    * Gets all the groups stored in DB from the provided user.
    *
@@ -11,8 +11,11 @@ export default class MuscleGroupController {
    * @param withMovements Whether the groups should be fetched along their movements or not. Defaults to `false`.
    * @returns List of groups.
    */
-  static async getAll(userEmail: string, withMovements: boolean = false): Promise<MuscleGroup[]> {
-    return await prisma.muscleGroup.findMany({
+  async getMuscleGroupsFromUser(
+    userEmail: string,
+    withMovements: boolean = false,
+  ): Promise<MuscleGroup[]> {
+    return await this.prisma.muscleGroup.findMany({
       where: {
         user_email: userEmail,
       },
@@ -33,8 +36,8 @@ export default class MuscleGroupController {
    * @param userEmail Owner's email.
    * @returns The MuscleGroup that matches the provided ID. Null if not found.
    */
-  static async get(id: number, userEmail: string): Promise<MuscleGroup | null> {
-    return await prisma.muscleGroup.findFirst({
+  async getMuscleGroup(id: number, userEmail: string): Promise<MuscleGroup | null> {
+    return await this.prisma.muscleGroup.findFirstOrThrow({
       where: {
         id: id,
         user_email: userEmail,
@@ -48,8 +51,8 @@ export default class MuscleGroupController {
    * @param group Data for the group to be created.
    * @returns Created group.
    */
-  static async createGroup(group: MuscleGroupCreationParams): Promise<MuscleGroup> {
-    return await prisma.muscleGroup.create({
+  async createGroup(group: MuscleGroupCreationParams): Promise<MuscleGroup> {
+    return await this.prisma.muscleGroup.create({
       data: group,
     });
   }

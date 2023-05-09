@@ -1,16 +1,17 @@
 import { User, PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { UserCreationParams } from '../models/UserModel';
 
 export default class UserController {
+  constructor(private prisma: PrismaClient) {}
+
   /**
    * Fetches a single user from DB.
    *
    * @param email User email.
    * @returns An User object if their email was found in DB.
    */
-  static async get(email: string): Promise<User | null> {
-    const user = await prisma.user.findUnique({
+  async get(email: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
       where: { email: email },
     });
     return user;
@@ -22,8 +23,8 @@ export default class UserController {
    * @param user User to be inserted.
    * @returns Newly created user row.
    */
-  static async create(user: User) {
-    return await prisma.user.create({
+  async create(user: UserCreationParams): Promise<User> {
+    return await this.prisma.user.create({
       data: user,
     });
   }

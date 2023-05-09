@@ -50,8 +50,8 @@ export class GroupsService {
 
       group.movements = group.movements.filter(movement => {
         return (
-          movement.name.toLowerCase().includes(searchQuery) ||
-          movement.description.toLowerCase().includes(searchQuery)
+          movement.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          movement.description.toLowerCase().includes(searchQuery.toLowerCase())
         );
       });
 
@@ -66,34 +66,25 @@ export class GroupsService {
    * @returns An array of root-level Group objects with their nested sub-groups added to the 'groups' property of each Group, forming a hierarchical structure.
    */
   organizeGroups(groups: MuscleGroup[]): MuscleGroup[] {
-    const groupsById: Record<number, MuscleGroup> = {};
+    const result: MuscleGroup[] = [];
+    const groupsCopy: MuscleGroup[] = JSON.parse(JSON.stringify(groups));
 
-    // Create a lookup table to easily find a group by its ID
-    groups.forEach(group => {
-      if (!group.id) return;
-
-      groupsById[group.id] = group;
-    });
-
-    const rootGroups: MuscleGroup[] = [];
-    groups.forEach(group => {
+    groupsCopy.forEach(group => {
       if (!group.parent_group_id) {
-        // If a group has no parent, it is a root group
-        rootGroups.push({ ...group, checked: false, isPrimary: false });
+        result.push(group);
         return;
       }
 
-      // If a group has a parent, find the parent group by ID
-      const parent = groupsById[group.parent_group_id];
+      const parent = result.filter(resultGroup => resultGroup.id === group.parent_group_id)[0];
 
-      // Create an empty array of sub-groups for the parent if it doesn't exist
-      parent.groups = parent.groups ?? [];
+      if (!parent.groups) {
+        parent.groups = [];
+      }
 
-      // Add the current group as a sub-group of its parent
       parent.groups.push(group);
     });
 
-    return rootGroups;
+    return result;
   }
 
   /**

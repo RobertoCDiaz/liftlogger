@@ -1,16 +1,4 @@
-<!-- <div class="template"> -->
 <div class="items">
-  <app-template-movement-item
-    *ngFor="let mov of movements; index as i"
-    (deleteClick)="deleteMovement($event)"
-    [id]="i"
-    [name]="mov"
-  />
-  <!-- <app-template-movement-item />
-    <app-template-movement-item />
-    <app-template-movement-item />
-    <app-template-movement-item />
-    <app-template-movement-item /> -->
+  <app-template-movement-item *ngFor="let mov of movements; index as i" />
 </div>
 <app-button (click)="addMovement()" icon="add" type="no-border"> Add movements </app-button>
-<!-- </div> -->

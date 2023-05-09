@@ -3,9 +3,9 @@ import { MovementCreationParams } from '../models/MovementModel';
 import { MuscleGroupForMovementModel } from '../models/MuscleGroupModel';
 import { MovementJournalEntry } from '../models/MovementJournal';
 
-const prisma = new PrismaClient();
-
 export default class MovementsController {
+  constructor(private prisma: PrismaClient) {}
+
   /**
    * Fetches a movement from DB. It makes sure that the movement belongs to the
    * provided user email.
@@ -14,11 +14,8 @@ export default class MovementsController {
    * @param userEmail Owner's email.
    * @returns The fetched movement, or nothing if no match was found.
    */
-  static async getMovement(
-    movementId: number,
-    userEmail: string,
-  ): Promise<Movement | null | undefined> {
-    const movements = await prisma.movement.findFirst({
+  async getMovement(movementId: number, userEmail: string): Promise<Movement> {
+    const movements = await this.prisma.movement.findFirstOrThrow({
       where: {
         id: movementId,
         user_email: userEmail,
@@ -35,8 +32,8 @@ export default class MovementsController {
    * @param userEmail Email of the user whose movements are to be fetched.
    * @returns
    */
-  static async getMovementsFromUser(userEmail: string): Promise<Movement[] | null | undefined> {
-    const movements = await prisma.movement.findMany({
+  async getMovementsFromUser(userEmail: string): Promise<Movement[]> {
+    const movements = await this.prisma.movement.findMany({
       where: {
         user_email: userEmail,
       },
@@ -52,11 +49,11 @@ export default class MovementsController {
    * @param muscleGroups A list of MuscleGroups ids the new movement belong to, and whether they primary groups or not.
    * @returns Newly created movement
    */
-  static async createMovement(
+  async createMovement(
     movement: MovementCreationParams,
     muscleGroups: MuscleGroupForMovementModel[],
   ): Promise<Movement> {
-    const newMovement = await prisma.movement.create({
+    const newMovement = await this.prisma.movement.create({
       data: {
         ...movement,
         groups: {
@@ -80,12 +77,12 @@ export default class MovementsController {
    * @param recentsFirst Whether the list should be ordered from more recent to older entries or not. Defaults to false.
    * @returns The list of LiftingSessions
    */
-  static async getMovementJournal(
+  async getMovementJournal(
     movementId: number,
     email: string,
     recentsFirst: boolean = false,
-  ): Promise<MovementJournalEntry[] | null | undefined> {
-    const sessions = await prisma.liftingSession.findMany({
+  ): Promise<MovementJournalEntry[]> {
+    const sessions = await this.prisma.liftingSession.findMany({
       where: {
         user_email: email,
         sets: {

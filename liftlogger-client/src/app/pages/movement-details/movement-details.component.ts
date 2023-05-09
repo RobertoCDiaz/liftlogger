@@ -96,7 +96,7 @@ export class MovementDetailsComponent {
    *
    * @param journal List of journal entries
    */
-  private setupJournalInformation(journal: MovementJournalEntry[]) {
+  setupJournalInformation(journal: MovementJournalEntry[]) {
     if (journal.length === 0) {
       return;
     }

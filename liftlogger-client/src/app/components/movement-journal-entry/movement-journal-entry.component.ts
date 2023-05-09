@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 import { MovementJournalEntry } from 'src/app/models/MovementJournalEntry';
 
@@ -18,7 +18,7 @@ export class MovementJournalEntryComponent implements OnChanges {
    */
   entryDateString: string;
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (!this.entry) {
       return;
     }

@@ -29,10 +29,12 @@ cp .env-template .env
 > NOTE: You must create an Auth0 application and put your credentials in the `.env` file under the `# AUTH0 CONFIG` section.
 
 ```bash
-# Configure this env variables
-AUTH0_DOMAIN= # auth0 app domain
-AUTH0_CLIENT_ID= # auth0 app client id
-AUTH0_AUDIENCE= # auth0unique identifier for the api
+# auth0 app domain
+AUTH0_DOMAIN=
+# auth0 app client id
+AUTH0_CLIENT_ID=
+# auth0 unique identifier for the api
+AUTH0_AUDIENCE=
 ```
 
 ## Run the project
@@ -44,3 +46,11 @@ docker compose up
 ```
 
 > This will create the Docker images and automatically start the containers. You can add the `-d` flag at the end of the composing command to detach from the console process.
+
+## Run tests
+
+Each project has its own test suites. To execute the test for a project, go to either `liftlogger-client` or `liftlogger-server`, and in their root directory, run the following command:
+
+```
+npm run test
+```

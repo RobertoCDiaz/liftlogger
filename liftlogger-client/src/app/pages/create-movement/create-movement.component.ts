@@ -3,7 +3,12 @@ import { Router } from '@angular/router';
 import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 import { MovementCreationParams } from 'src/app/models/MovementModel';
 import { MovementsService } from 'src/app/services/movements.service';
+import { CreatorForm } from 'src/app/components/creator-page/creator-page.component';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+/**
+ * Page that displays the creation form to insert a new Movement into the user's library.
+ */
 @Component({
   selector: 'app-create-movement',
   templateUrl: './create-movement.component.html',
@@ -11,19 +16,12 @@ import { MovementsService } from 'src/app/services/movements.service';
 })
 export class CreateMovementComponent {
   /**
-   * Determines whether if the creation button is enabled or not.
+   * FormGroup that will store the new Movement's information
    */
-  isCreationEnabled: boolean = false;
-
-  /**
-   * Stores the new Movement's name.
-   */
-  movementName: string;
-
-  /**
-   * Stores the new Movement's description.
-   */
-  movementDescription: string;
+  movementForm: CreatorForm = new FormGroup({
+    title: new FormControl<string | null>(null, { validators: [Validators.required] }),
+    description: new FormControl<string | null>(null, { validators: [Validators.required] }),
+  });
 
   /**
    * Holds what MuscleGroups are selected for this new Movement.
@@ -36,24 +34,14 @@ export class CreateMovementComponent {
    * Calls for the creation of this new Movement.
    */
   createMovement() {
-    if (
-      !this.movementName ||
-      !this.movementDescription ||
-      this.movementName === '' ||
-      this.movementDescription === ''
-    ) {
+    if (!this.shouldEnableCreation()) {
       alert('You have missing information');
       return;
     }
 
-    if (this.selectedGroups.length === 0) {
-      alert('Select at least one muscle group');
-      return;
-    }
-
     const movement: MovementCreationParams = {
-      name: this.movementName,
-      description: this.movementDescription,
+      name: this.movementForm.value.title!,
+      description: this.movementForm.value.description!,
     };
 
     this.movementsService.createMovement(movement, this.selectedGroups).subscribe(mov => {
@@ -64,43 +52,25 @@ export class CreateMovementComponent {
   /**
    * Checks whether creation should be enabled or not, and updates the `isCreationEnabled` variable.
    */
-  updateCreationEnabled() {
-    if (!this.movementName || !this.movementDescription) {
-      this.isCreationEnabled = false;
-      return;
-    }
-
-    if (this.movementName === '' || this.movementDescription === '') {
-      this.isCreationEnabled = false;
-      return;
+  shouldEnableCreation(): boolean {
+    if (this.movementForm.invalid) {
+      return false;
     }
 
     if (this.selectedGroups.length === 0) {
-      this.isCreationEnabled = false;
-      return;
+      return false;
     }
 
-    this.isCreationEnabled = true;
+    return true;
   }
 
   /**
-   * Sets the `movementName` variable to assign later as the Movement's name.
+   * Updates the Movement's information.
    *
-   * @param value New name value
+   * @param form Form used to update the new Movement's values
    */
-  setMovementName(value: string) {
-    this.movementName = value;
-    this.updateCreationEnabled();
-  }
-
-  /**
-   * Sets the `movementDescription` variable to assign later as the Movement's description.
-   *
-   * @param value New name description
-   */
-  setMovementDescription(value: string) {
-    this.movementDescription = value;
-    this.updateCreationEnabled();
+  handleFormChanged(form: CreatorForm) {
+    this.movementForm = form;
   }
 
   /**
@@ -110,6 +80,5 @@ export class CreateMovementComponent {
    */
   handleGroupSelectionChanged(selectedGroups: MuscleGroup[]) {
     this.selectedGroups = selectedGroups;
-    this.updateCreationEnabled();
   }
 }

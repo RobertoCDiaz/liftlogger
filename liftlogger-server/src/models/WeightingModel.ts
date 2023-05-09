@@ -1,6 +1,5 @@
 import { Weighting } from '@prisma/client';
 import { ModelRequestParams } from '../utils/ModelRequestParams';
-import { Prettify } from '../utils/Prettify';
 
 /**
  * Data required to create a new Weighting entry. It omits the `id` property as it is still not assigned.
@@ -11,11 +10,10 @@ export type WeightingCreationParams = Omit<
   Weighting,
   'id' | 'water_percentage' | 'protein_percentage' | 'metabolism' | 'visceral_fat' | 'ignored'
 > & {
-  id?: number;
-  water_percentage?: number;
-  protein_percentage?: number;
-  metabolism?: number;
-  visceral_fat?: number;
+  water_percentage?: number | null;
+  protein_percentage?: number | null;
+  metabolism?: number | null;
+  visceral_fat?: number | null;
   ignored?: boolean;
 };
 

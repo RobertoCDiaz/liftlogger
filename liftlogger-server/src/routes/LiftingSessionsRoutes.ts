@@ -1,6 +1,6 @@
 import { LiftingSession } from '@prisma/client';
 import * as express from 'express';
-import { Body, Controller, Get, Middlewares, Path, Post, Request, Route } from 'tsoa';
+import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
 import LiftingSessionController from '../controllers/LiftingSessionsController';
 import { shouldBeAuthenticated } from '../middlewares/auth';
 import {
@@ -8,6 +8,7 @@ import {
   LiftingSessionWithSetsCreationRequestParams,
 } from '../models/LiftingSessionModel';
 import { AuthService } from '../services/AuthService';
+import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('sessions')
 export class LiftingSessionsRoutes extends Controller {
@@ -16,6 +17,7 @@ export class LiftingSessionsRoutes extends Controller {
    * that are part of it.
    *
    * @param id Liftin Session identifier
+   * @param includeSets Whether to include sets in the response or not. Default to `true`
    * @param req Request object
    * @returns The requested Lifting Session, or nothing if no match was found.
    */
@@ -23,6 +25,7 @@ export class LiftingSessionsRoutes extends Controller {
   @Middlewares([shouldBeAuthenticated])
   async getSession(
     @Path() id: number,
+    @Query() includeSets: boolean = true,
     @Request() req: express.Request,
   ): Promise<LiftingSession | null | undefined> {
     if (!req.auth) {
@@ -31,26 +34,36 @@ export class LiftingSessionsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return await LiftingSessionController.get(id, email);
+    return await new LiftingSessionController(PrismaUtils.getPrismaInstance()).getLiftingSession(
+      id,
+      email,
+      includeSets,
+    );
   }
 
   /**
    * Request to fetch all the Lifting Sessions of the logged user, along with
    * the Lifting Sets that conform them.
    *
+   * @param includeSets Whether to include sets in the response or not. Default to `true`
    * @param req Request object
    * @returns The list of the current's user Lifting Sessions
    */
   @Get('')
   @Middlewares([shouldBeAuthenticated])
-  async getSessions(@Request() req: express.Request): Promise<LiftingSession[] | null | undefined> {
+  async getSessions(
+    @Query() includeSets: boolean = true,
+    @Request() req: express.Request,
+  ): Promise<LiftingSession[] | null | undefined> {
     if (!req.auth) {
       return;
     }
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return await LiftingSessionController.getAll(email);
+    return await new LiftingSessionController(
+      PrismaUtils.getPrismaInstance(),
+    ).getLiftingSessionsFromUser(email, includeSets);
   }
 
   /**
@@ -78,6 +91,8 @@ export class LiftingSessionsRoutes extends Controller {
       user_email: email,
     } satisfies LiftingSessionCreationParams;
 
-    return await LiftingSessionController.createSessionWithSets(session, body.sets);
+    return await new LiftingSessionController(
+      PrismaUtils.getPrismaInstance(),
+    ).createSessionWithSets(session, body.sets);
   }
 }

@@ -6,12 +6,12 @@
 <div class="menu">
   <a
     *ngFor="let item of items"
-    class="item"
+    class="item dynamic"
     [ngClass]="{ selected: urlMatches(item.url) }"
     href="{{ item.url }}"
   >
     <span class="material-icons">{{ item.icon }}</span>
-    <span>{{ item.name }}</span>
+    <span class="item-label">{{ item.name }}</span>
   </a>
 
   <mat-divider></mat-divider>
@@ -20,7 +20,7 @@
     <span class="material-icons">settings</span>
     <span>Settings</span>
   </a>
-  <a class="item danger" (click)="handleLogout()">
+  <a id="logoutItem" class="item danger" (click)="handleLogout()">
     <span class="material-icons">logout</span>
     <span>Logout</span>
   </a>

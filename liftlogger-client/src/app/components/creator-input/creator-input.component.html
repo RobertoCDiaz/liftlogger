@@ -1,4 +1,5 @@
 <input
+  id="inputElement"
   *ngIf="!isTextArea"
   [ngClass]="{ title: isTitle }"
   type="text"
@@ -8,6 +9,7 @@
 />
 
 <textarea
+  id="inputElement"
   *ngIf="isTextArea"
   [ngClass]="{ title: isTitle }"
   type="text"

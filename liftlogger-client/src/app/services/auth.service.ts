@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService as OAuthService, User } from '@auth0/auth0-angular';
-import { from, map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environment/environment';
 import { HttpService } from './http.service';
 
+/**
+ * A wrapper around Auth0's AuthService.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -77,7 +80,7 @@ export class AuthService {
    * backend endpoint, but to make sure they are stored once they login, we need to make the request
    * every time a user logs in.
    */
-  private tryToCreateUser() {
+  tryToCreateUser() {
     this.oAuthService.user$.subscribe(user => {
       if (!user) {
         return;

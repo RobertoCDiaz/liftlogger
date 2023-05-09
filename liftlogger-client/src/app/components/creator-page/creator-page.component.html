@@ -1,13 +1,15 @@
-<app-page-header>{{ title }}</app-page-header>
+<app-page-header [pageTitle]="title"></app-page-header>
 
 <div class="content">
   <div class="header">
     <app-creator-input
+      id="titleInput"
       placeholder="{{ inputTitle }}..."
       (valueChanged)="onTitleChanged($event)"
       [isTitle]="true"
     />
     <app-creator-input
+      id="descriptionInput"
       placeholder="Description..."
       (valueChanged)="onDescriptionChanged($event)"
       [isTextArea]="true"
@@ -19,6 +21,7 @@
   <div class="footer">
     <app-button type="no-border" (onClicked)="onCancelClicked()"> Cancel </app-button>
     <app-button
+      id="createButton"
       type="primary"
       class="action"
       (onClicked)="onCreateClicked()"

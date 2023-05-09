@@ -1,9 +1,8 @@
 <app-creator-page
   title="New Muscle Group"
   (onCreate)="onCreateClicked()"
-  [createEnabled]="isCreationEnabled"
-  (titleChanged)="groupNameChanged($event)"
-  (descriptionChanged)="groupDescriptionChanged($event)"
+  [createEnabled]="!groupForm.invalid"
+  (formChanged)="handleFormChanged($event)"
   inputTitle="Group name"
 >
   <app-muscular-group-selector

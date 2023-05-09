@@ -7,9 +7,18 @@ import { AuthService } from '../services/AuthService';
 import { shouldBeAuthenticated } from '../middlewares/auth';
 import MovementNotesController from '../controllers/MovementNotesController';
 import { MovementJournalEntry } from '../models/MovementJournal';
+import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('movements')
 export class MovementRoutes extends Controller {
+  movementsController: MovementsController = new MovementsController(
+    PrismaUtils.getPrismaInstance(),
+  );
+
+  notesController: MovementNotesController = new MovementNotesController(
+    PrismaUtils.getPrismaInstance(),
+  );
+
   /**
    * Gets a specific movement, only if the current user owns it.
    *
@@ -29,7 +38,7 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return MovementsController.getMovement(id, email);
+    return this.movementsController.getMovement(id, email);
   }
 
   /**
@@ -49,7 +58,7 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return MovementsController.getMovementsFromUser(email);
+    return this.movementsController.getMovementsFromUser(email);
   }
 
   /**
@@ -76,7 +85,7 @@ export class MovementRoutes extends Controller {
       user_email: userInfo.email,
     } satisfies MovementCreationParams;
 
-    return MovementsController.createMovement(movementCreationData, body.muscleGroups);
+    return this.movementsController.createMovement(movementCreationData, body.muscleGroups);
   }
 
   /**
@@ -98,14 +107,14 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    const movement = MovementsController.getMovement(id, email);
+    const movement = await this.movementsController.getMovement(id, email);
 
     if (!movement) {
       this.setStatus(404);
       return;
     }
 
-    return await MovementNotesController.getMovementNotes(id);
+    return await this.notesController.getMovementNotes(movement.id);
   }
 
   /**
@@ -131,6 +140,6 @@ export class MovementRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return MovementsController.getMovementJournal(id, email, recentsFirst);
+    return this.movementsController.getMovementJournal(id, email, recentsFirst);
   }
 }

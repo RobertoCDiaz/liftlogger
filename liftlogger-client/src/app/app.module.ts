@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -25,7 +25,6 @@ import { CreatorPageComponent } from './components/creator-page/creator-page.com
 import { MuscularGroupSelectorComponent } from './components/muscular-group-selector/muscular-group-selector.component';
 import { ItemComponent } from './components/muscular-group-selector/item/item.component';
 import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-muscle-group.component';
-import { MainLoginButtonComponent } from './components/main-login-button/main-login-button.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { MainSidenavComponent } from './components/main-sidenav/main-sidenav.component';
 import { AppBarComponent } from './components/app-bar/app-bar.component';
@@ -62,7 +61,6 @@ import { environment } from 'src/environment/environment';
     MuscularGroupSelectorComponent,
     ItemComponent,
     CreateMuscleGroupComponent,
-    MainLoginButtonComponent,
     LandingComponent,
     MainSidenavComponent,
     AppBarComponent,
@@ -88,6 +86,7 @@ import { environment } from 'src/environment/environment';
     MatSidenavModule,
     MatDividerModule,
     NgxSkeletonLoaderModule,
+    ReactiveFormsModule,
     AuthModule.forRoot({
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,

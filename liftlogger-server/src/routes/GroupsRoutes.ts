@@ -6,9 +6,14 @@ import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
 import { AuthService } from '../services/AuthService';
 import { ModelRequestParams } from '../utils/ModelRequestParams';
 import { shouldBeAuthenticated } from '../middlewares/auth';
+import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('groups')
 export class GroupsRoutes extends Controller {
+  muscleGroupController: MuscleGroupController = new MuscleGroupController(
+    PrismaUtils.getPrismaInstance(),
+  );
+
   /**
    * Fetches the MuscleGroups DB table for all its content.
    *
@@ -27,7 +32,7 @@ export class GroupsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return MuscleGroupController.getAll(email, withMovements);
+    return await this.muscleGroupController.getMuscleGroupsFromUser(email, withMovements);
   }
 
   /**
@@ -48,7 +53,7 @@ export class GroupsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return MuscleGroupController.get(id, email);
+    return await this.muscleGroupController.getMuscleGroup(id, email);
   }
 
   /**
@@ -69,6 +74,9 @@ export class GroupsRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return await MuscleGroupController.createGroup({ ...group, user_email: email });
+    return await this.muscleGroupController.createGroup({
+      ...group,
+      user_email: email,
+    });
   }
 }

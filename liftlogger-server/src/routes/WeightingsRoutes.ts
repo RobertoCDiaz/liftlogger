@@ -3,12 +3,14 @@ import { Weighting } from '@prisma/client';
 import { Body, Controller, Get, Middlewares, Post, Request, Route } from 'tsoa';
 import { WeightingController } from '../controllers/WeightingController';
 import { shouldBeAuthenticated } from '../middlewares/auth';
-import { WeightingCreationParams, WeightingCreationRequestParams } from '../models/WeightingModel';
-import { ModelRequestParams } from '../utils/ModelRequestParams';
+import { WeightingCreationRequestParams } from '../models/WeightingModel';
 import { AuthService } from '../services/AuthService';
+import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('weightings')
 export class WeightingRoutes extends Controller {
+  weightingController = new WeightingController(PrismaUtils.getPrismaInstance());
+
   /**
    * Gets all the weightings from DB.
    *
@@ -26,7 +28,7 @@ export class WeightingRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    return WeightingController.getEntries(email);
+    return await this.weightingController.getEntries(email);
   }
 
   /**
@@ -48,7 +50,7 @@ export class WeightingRoutes extends Controller {
 
     const { email } = await AuthService.getUserInfo(req.auth.token);
 
-    const newEntry = await WeightingController.createEntry({
+    const newEntry = await this.weightingController.createEntry({
       ...weightingData,
       user_email: email,
       datetime: weightingData.datetime ?? new Date(),

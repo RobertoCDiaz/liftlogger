@@ -2,21 +2,21 @@
   <div class="details-container">
     <div class="item">
       <span class="material-symbols-outlined">event</span>
-      <span>{{ entryDateString }}</span>
+      <span id="entry-date">{{ entryDateString }}</span>
     </div>
     <div class="item">
       <span class="material-icons">electric_bolt</span>
-      <span>{{ entry.value.toFixed(2) }}</span>
+      <span id="entry-value">{{ entry.value.toFixed(2) }}</span>
     </div>
   </div>
 
   <div class="sets-container">
     <div *ngFor="let set of entry.session.sets" class="set">
-      <div class="data">
+      <div class="data reps">
         <span class="amount">{{ set.reps }}</span>
         <span class="unit">reps</span>
       </div>
-      <div class="data">
+      <div class="data weight">
         <span class="amount">{{ set.weight }}</span>
         <span class="unit">kg</span>
       </div>

@@ -2,27 +2,29 @@ import { LiftingSession, PrismaClient } from '@prisma/client';
 import { LiftingSessionCreationParams } from '../models/LiftingSessionModel';
 import { LiftingSetCreationParams } from '../models/LiftingSetModel';
 
-const prisma = new PrismaClient();
-
 export default class LiftingSessionController {
+  constructor(private prisma: PrismaClient) {}
+
   /**
    * Fetches a single Lifting Session from DB.
    *
    * @param sessionId Session to fetch
    * @param userEmail Owner's email
+   * @param includeSets Whether it should include all the LiftingSets from this LiftingSession. Defaults to `false`.
    * @returns The fetched session, or nothing if not found
    */
-  static async get(
+  async getLiftingSession(
     sessionId: number,
     userEmail: string,
-  ): Promise<LiftingSession | null | undefined> {
-    return await prisma.liftingSession.findFirst({
+    includeSets = false,
+  ): Promise<LiftingSession> {
+    return await this.prisma.liftingSession.findFirstOrThrow({
       where: {
         id: sessionId,
         user_email: userEmail,
       },
       include: {
-        sets: true,
+        sets: includeSets,
       },
     });
   }
@@ -31,15 +33,19 @@ export default class LiftingSessionController {
    * Gets all the Lifting Sessions from a user.
    *
    * @param userEmail Email of the user whose sessions are to be fetched
+   * @param includeSets Whether it should include all the LiftingSets from the LiftingSessions. Defaults to `false`.
    * @returns List of the user's sessions
    */
-  static async getAll(userEmail: string): Promise<LiftingSession[] | null | undefined> {
-    return await prisma.liftingSession.findMany({
+  async getLiftingSessionsFromUser(
+    userEmail: string,
+    includeSets: boolean = false,
+  ): Promise<LiftingSession[]> {
+    return await this.prisma.liftingSession.findMany({
       where: {
         user_email: userEmail,
       },
       include: {
-        sets: true,
+        sets: includeSets,
       },
     });
   }
@@ -51,11 +57,11 @@ export default class LiftingSessionController {
    * @param sets List of sets that were made in the session
    * @returns The created data, directly from DB
    */
-  static async createSessionWithSets(
+  async createSessionWithSets(
     session: LiftingSessionCreationParams,
     sets: LiftingSetCreationParams[],
-  ): Promise<LiftingSession | null | undefined> {
-    return await prisma.liftingSession.create({
+  ): Promise<LiftingSession> {
+    return await this.prisma.liftingSession.create({
       data: {
         ...session,
         sets: {

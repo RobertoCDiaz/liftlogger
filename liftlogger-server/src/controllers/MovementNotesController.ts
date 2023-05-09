@@ -1,9 +1,9 @@
 import { MovementNote, PrismaClient } from '@prisma/client';
 import { MovementNoteCreationParams } from '../models/MovementNoteModel';
 
-const prisma = new PrismaClient();
-
 export default class MovementNotesController {
+  constructor(private prisma: PrismaClient) {}
+
   /**
    * Inserts a new MovementNote into DB.
    *
@@ -11,11 +11,11 @@ export default class MovementNotesController {
    * @param movementId Identifier for the movement in which a note is to be created
    * @returns New MovementNote entry
    */
-  static async createNoteForMovement(
+  async createNoteForMovement(
     note: MovementNoteCreationParams,
     movementId: number,
   ): Promise<MovementNote | null | undefined> {
-    return await prisma.movementNote.create({
+    return await this.prisma.movementNote.create({
       data: {
         ...note,
         movement_id: movementId,
@@ -29,8 +29,8 @@ export default class MovementNotesController {
    * @param movementId Movement identifier whose notes are to be listed
    * @returns List of MovementNotes
    */
-  static async getMovementNotes(movementId: number): Promise<MovementNote[] | null | undefined> {
-    return await prisma.movementNote.findMany({
+  async getMovementNotes(movementId: number): Promise<MovementNote[] | null | undefined> {
+    return await this.prisma.movementNote.findMany({
       where: {
         movement_id: movementId,
       },
