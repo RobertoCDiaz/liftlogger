@@ -29,8 +29,6 @@ export async function authenticationMiddleware(req: Request, res: Response, next
     const { email } = await AuthService.getUserInfo(req.auth?.token);
 
     req.user_email = email;
-    console.log('email', email);
-    console.log('req.user_email', req.user_email);
 
     next();
   });
