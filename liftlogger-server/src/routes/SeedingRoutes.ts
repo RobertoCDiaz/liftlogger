@@ -1,7 +1,6 @@
 import * as express from 'express';
 import { Get, Middlewares, Post, Request, Route } from 'tsoa';
-import { shouldBeAuthenticated } from '../middlewares/auth';
-import { AuthService } from '../services/AuthService';
+import { authenticationMiddleware } from '../middlewares/auth';
 import SeedingsController from '../controllers/SeedingsController';
 import PrismaUtils from '../utils/PrismaUtils';
 
@@ -26,15 +25,9 @@ export class SeedingRoutes {
    * @param req Request object
    */
   @Post('default')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async seedDefaultData(@Request() req: express.Request) {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
-    seedingController.defaultUserSeeding(email);
+    seedingController.defaultUserSeeding(req.user_email);
   }
 
   /**
@@ -43,15 +36,9 @@ export class SeedingRoutes {
    * @param req Request object
    */
   @Post('fake')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async seedFakeData(@Request() req: express.Request) {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
-    seedingController.seedFakeData(email);
+    seedingController.seedFakeData(req.user_email);
   }
 
   /**

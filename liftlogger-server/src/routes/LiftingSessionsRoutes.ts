@@ -2,12 +2,11 @@ import { LiftingSession } from '@prisma/client';
 import * as express from 'express';
 import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
 import LiftingSessionController from '../controllers/LiftingSessionsController';
-import { shouldBeAuthenticated } from '../middlewares/auth';
+import { authenticationMiddleware } from '../middlewares/auth';
 import {
   LiftingSessionCreationParams,
   LiftingSessionWithSetsCreationRequestParams,
 } from '../models/LiftingSessionModel';
-import { AuthService } from '../services/AuthService';
 import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('sessions')
@@ -22,21 +21,15 @@ export class LiftingSessionsRoutes extends Controller {
    * @returns The requested Lifting Session, or nothing if no match was found.
    */
   @Get('{id}')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   async getSession(
     @Path() id: number,
     @Query() includeSets: boolean = true,
     @Request() req: express.Request,
   ): Promise<LiftingSession | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
     return await new LiftingSessionController(PrismaUtils.getPrismaInstance()).getLiftingSession(
       id,
-      email,
+      req.user_email,
       includeSets,
     );
   }
@@ -50,20 +43,14 @@ export class LiftingSessionsRoutes extends Controller {
    * @returns The list of the current's user Lifting Sessions
    */
   @Get('')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   async getSessions(
     @Query() includeSets: boolean = true,
     @Request() req: express.Request,
   ): Promise<LiftingSession[] | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
     return await new LiftingSessionController(
       PrismaUtils.getPrismaInstance(),
-    ).getLiftingSessionsFromUser(email, includeSets);
+    ).getLiftingSessionsFromUser(req.user_email, includeSets);
   }
 
   /**
@@ -75,20 +62,14 @@ export class LiftingSessionsRoutes extends Controller {
    * @returns If successful, the created Lifting Session.
    */
   @Post('')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   async createSession(
     @Body() body: LiftingSessionWithSetsCreationRequestParams,
     @Request() req: express.Request,
   ): Promise<LiftingSession | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
     const session = {
       ...body.session,
-      user_email: email,
+      user_email: req.user_email,
     } satisfies LiftingSessionCreationParams;
 
     return await new LiftingSessionController(

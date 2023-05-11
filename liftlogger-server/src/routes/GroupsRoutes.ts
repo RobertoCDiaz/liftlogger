@@ -3,9 +3,8 @@ import { MuscleGroup } from '@prisma/client';
 import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
 import MuscleGroupController from '../controllers/MuscleGroupsController';
 import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
-import { AuthService } from '../services/AuthService';
 import { ModelRequestParams } from '../utils/ModelRequestParams';
-import { shouldBeAuthenticated } from '../middlewares/auth';
+import { authenticationMiddleware } from '../middlewares/auth';
 import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('groups')
@@ -21,18 +20,12 @@ export class GroupsRoutes extends Controller {
    * @returns All the Muscle Groups stored in DB.
    */
   @Get('')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async getGroups(
     @Query() withMovements: boolean = false,
     @Request() req: express.Request,
   ): Promise<MuscleGroup[] | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
-    return await this.muscleGroupController.getMuscleGroupsFromUser(email, withMovements);
+    return await this.muscleGroupController.getMuscleGroupsFromUser(req.user_email, withMovements);
   }
 
   /**
@@ -42,18 +35,12 @@ export class GroupsRoutes extends Controller {
    * @returns A group with the fetched `id`. `null` if not found.
    */
   @Get('{id}')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async getGroup(
     @Path() id: number,
     @Request() req: express.Request,
   ): Promise<MuscleGroup | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
-    return await this.muscleGroupController.getMuscleGroup(id, email);
+    return await this.muscleGroupController.getMuscleGroup(id, req.user_email);
   }
 
   /**
@@ -63,20 +50,14 @@ export class GroupsRoutes extends Controller {
    * @returns DB row for the created group.
    */
   @Post()
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async createGroup(
     @Body() group: ModelRequestParams<MuscleGroupCreationParams>,
     @Request() req: express.Request,
   ): Promise<MuscleGroup | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
     return await this.muscleGroupController.createGroup({
       ...group,
-      user_email: email,
+      user_email: req.user_email,
     });
   }
 }

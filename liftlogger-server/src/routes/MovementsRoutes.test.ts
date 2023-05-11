@@ -2,10 +2,8 @@ import MovementNotesController from '../controllers/MovementNotesController';
 import MovementsController from '../controllers/MovementsController';
 import { movementsFixture } from '../fixtures/MovementFixtures';
 import { usersFixture } from '../fixtures/UserFixtures';
-import { authRequestMock } from '../mocks/request.mock';
-import { userResponseMock } from '../mocks/userinfo.mock';
+import { emailRequestMock } from '../mocks/request.mock';
 import { MovementCreationRequestParams } from '../models/MovementModel';
-import { AuthService } from '../services/AuthService';
 import { MovementRoutes } from './MovementsRoutes';
 
 describe('MovementRoutes', () => {
@@ -22,8 +20,6 @@ describe('MovementRoutes', () => {
 
     movementsController = routesController.movementsController;
     notesController = routesController.notesController;
-
-    jest.spyOn(AuthService, 'getUserInfo').mockResolvedValue(userResponseMock(testUser));
   });
 
   describe('getMovement()', () => {
@@ -31,7 +27,7 @@ describe('MovementRoutes', () => {
       const testMovement = testMovements[0];
       const spy = jest.spyOn(movementsController, 'getMovement').mockResolvedValue(testMovement);
 
-      const result = await routesController.getMovement(testMovement.id, authRequestMock);
+      const result = await routesController.getMovement(testMovement.id, emailRequestMock);
 
       expect(spy).toHaveBeenCalledWith(testMovement.id, testUser.email);
       expect(result).toEqual(testMovement);
@@ -44,7 +40,7 @@ describe('MovementRoutes', () => {
         .spyOn(movementsController, 'getMovementsFromUser')
         .mockResolvedValue(testMovements);
 
-      const result = await routesController.getUserMovements(authRequestMock);
+      const result = await routesController.getUserMovements(emailRequestMock);
 
       expect(spy).toBeCalledWith(testUser.email);
       expect(result).toEqual(testMovements);
@@ -67,7 +63,7 @@ describe('MovementRoutes', () => {
       };
       const spy = jest.spyOn(movementsController, 'createMovement').mockResolvedValue(testMovement);
 
-      const result = await routesController.createMovement(testInput, authRequestMock);
+      const result = await routesController.createMovement(testInput, emailRequestMock);
 
       expect(spy).toHaveBeenCalled();
       expect(result).toEqual(testMovement);
@@ -81,7 +77,7 @@ describe('MovementRoutes', () => {
 
       jest.spyOn(movementsController, 'getMovement').mockResolvedValue(testMovement);
 
-      await routesController.getMovementNotes(testMovement.id, authRequestMock);
+      await routesController.getMovementNotes(testMovement.id, emailRequestMock);
 
       expect(spy).toHaveBeenCalledWith(testMovement.id);
     });
@@ -93,7 +89,7 @@ describe('MovementRoutes', () => {
     it("should ask controller for a movement's journal", async () => {
       const spy = jest.spyOn(movementsController, 'getMovementJournal').mockResolvedValue([]);
 
-      await routesController.getMovementJournal(testMovement.id, undefined, authRequestMock);
+      await routesController.getMovementJournal(testMovement.id, undefined, emailRequestMock);
 
       expect(spy).toHaveBeenCalledWith(testMovement.id, testUser.email, false);
     });
@@ -101,7 +97,7 @@ describe('MovementRoutes', () => {
     it("should ask for a movement's journal with the more recent entries first if specified", async () => {
       const spy = jest.spyOn(movementsController, 'getMovementJournal').mockResolvedValue([]);
 
-      await routesController.getMovementJournal(testMovement.id, true, authRequestMock);
+      await routesController.getMovementJournal(testMovement.id, true, emailRequestMock);
 
       expect(spy).toHaveBeenCalledWith(testMovement.id, testUser.email, true);
     });

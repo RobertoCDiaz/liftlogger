@@ -3,8 +3,7 @@ import { Movement, MovementNote } from '@prisma/client';
 import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
 import MovementsController from '../controllers/MovementsController';
 import { MovementCreationParams, MovementCreationRequestParams } from '../models/MovementModel';
-import { AuthService } from '../services/AuthService';
-import { shouldBeAuthenticated } from '../middlewares/auth';
+import { authenticationMiddleware } from '../middlewares/auth';
 import MovementNotesController from '../controllers/MovementNotesController';
 import { MovementJournalEntry } from '../models/MovementJournal';
 import PrismaUtils from '../utils/PrismaUtils';
@@ -27,18 +26,12 @@ export class MovementRoutes extends Controller {
    * @returns A list of movements, or nothing if the fetching was not possible.
    */
   @Get('{id}')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async getMovement(
     @Path() id: number,
     @Request() req: express.Request,
   ): Promise<Movement | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
-    return this.movementsController.getMovement(id, email);
+    return this.movementsController.getMovement(id, req.user_email);
   }
 
   /**
@@ -48,17 +41,11 @@ export class MovementRoutes extends Controller {
    * @returns A list of movements, or nothing if the fetching was not possible
    */
   @Get('')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async getUserMovements(
     @Request() req: express.Request,
   ): Promise<Movement[] | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
-    return this.movementsController.getMovementsFromUser(email);
+    return this.movementsController.getMovementsFromUser(req.user_email);
   }
 
   /**
@@ -69,20 +56,14 @@ export class MovementRoutes extends Controller {
    * @returns The new movement entry
    */
   @Post('')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async createMovement(
     @Body() body: MovementCreationRequestParams,
     @Request() req: express.Request,
   ): Promise<Movement | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const userInfo = await AuthService.getUserInfo(req.auth.token);
-
     const movementCreationData = {
       ...body.movement,
-      user_email: userInfo.email,
+      user_email: req.user_email,
     } satisfies MovementCreationParams;
 
     return this.movementsController.createMovement(movementCreationData, body.muscleGroups);
@@ -96,18 +77,12 @@ export class MovementRoutes extends Controller {
    * @returns List of all the MovementNotes
    */
   @Get('{id}/notes')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async getMovementNotes(
     @Path() id: number,
     @Request() req: express.Request,
   ): Promise<MovementNote[] | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
-    const movement = await this.movementsController.getMovement(id, email);
+    const movement = await this.movementsController.getMovement(id, req.user_email);
 
     if (!movement) {
       this.setStatus(404);
@@ -128,18 +103,12 @@ export class MovementRoutes extends Controller {
    * @returns The workout journal
    */
   @Get('{id}/journal')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async getMovementJournal(
     @Path() id: number,
     @Query() recentsFirst: boolean = false,
     @Request() req: express.Request,
   ): Promise<MovementJournalEntry[] | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
-    return this.movementsController.getMovementJournal(id, email, recentsFirst);
+    return this.movementsController.getMovementJournal(id, req.user_email, recentsFirst);
   }
 }

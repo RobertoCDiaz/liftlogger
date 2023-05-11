@@ -13,3 +13,11 @@ export const noAuthRequestMock = {} as express.Request;
 export const authRequestMock = {
   auth: { token: 'M0CK3dt0k3N' },
 } as express.Request;
+
+/**
+ * A mocked Request object that already has an user_email.
+ * I.e. successfully passed the authentication middleware.
+ */
+export const emailRequestMock = {
+  user_email: 'testing@test.com',
+} as express.Request;

@@ -1,6 +1,6 @@
 import { Body, Controller, Middlewares, Post, Route } from 'tsoa';
 import UserController from '../controllers/UsersController';
-import { shouldBeAuthenticated } from '../middlewares/auth';
+import { authenticationMiddleware } from '../middlewares/auth';
 import { UserCreationParams } from '../models/UserModel';
 import PrismaUtils from '../utils/PrismaUtils';
 
@@ -17,7 +17,7 @@ export class AuthRoutes extends Controller {
    * @returns Whether a new user was successfully created or not.
    */
   @Post('createUser')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async createUser(@Body() user: UserCreationParams): Promise<boolean> {
     const userExists = (await this.userController.get(user.email)) !== null;
 

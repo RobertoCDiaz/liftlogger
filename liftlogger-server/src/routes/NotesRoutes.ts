@@ -1,8 +1,7 @@
 import * as express from 'express';
 import { Note } from '@prisma/client';
 import { Body, Controller, Get, Middlewares, Post, Request, Route } from 'tsoa';
-import { shouldBeAuthenticated } from '../middlewares/auth';
-import { AuthService } from '../services/AuthService';
+import { authenticationMiddleware } from '../middlewares/auth';
 import NotesController from '../controllers/NotesController';
 import { NoteCreationRequestParams } from '../models/NoteModel';
 
@@ -15,15 +14,9 @@ export class NotesRoutes extends Controller {
    * @returns All of the notes of the current user
    */
   @Get('')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   async getNotes(@Request() req: express.Request): Promise<Note[] | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
-    return NotesController.getNotesFromUser(email);
+    return NotesController.getNotesFromUser(req.user_email);
   }
 
   /**
@@ -34,20 +27,14 @@ export class NotesRoutes extends Controller {
    * @returns New Note entry
    */
   @Post('')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   async createNote(
     @Body() note: NoteCreationRequestParams,
     @Request() req: express.Request,
   ): Promise<Note | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
     // sets current date if no date was included in request body
     const noteDate = note.date ?? new Date();
 
-    return NotesController.createNote({ ...note, user_email: email, date: noteDate });
+    return NotesController.createNote({ ...note, user_email: req.user_email, date: noteDate });
   }
 }

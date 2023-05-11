@@ -2,9 +2,8 @@ import * as express from 'express';
 import { Weighting } from '@prisma/client';
 import { Body, Controller, Get, Middlewares, Post, Request, Route } from 'tsoa';
 import { WeightingController } from '../controllers/WeightingController';
-import { shouldBeAuthenticated } from '../middlewares/auth';
+import { authenticationMiddleware } from '../middlewares/auth';
 import { WeightingCreationRequestParams } from '../models/WeightingModel';
-import { AuthService } from '../services/AuthService';
 import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('weightings')
@@ -18,17 +17,11 @@ export class WeightingRoutes extends Controller {
    * @returns All the content from the Weightings DB table
    */
   @Get('')
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async getWeightings(
     @Request() req: express.Request,
   ): Promise<Weighting[] | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
-    return await this.weightingController.getEntries(email);
+    return await this.weightingController.getEntries(req.user_email);
   }
 
   /**
@@ -39,20 +32,14 @@ export class WeightingRoutes extends Controller {
    * @returns Created row
    */
   @Post()
-  @Middlewares([shouldBeAuthenticated])
+  @Middlewares([authenticationMiddleware])
   public async createWeighting(
     @Body() weightingData: WeightingCreationRequestParams,
     @Request() req: express.Request,
   ): Promise<Weighting | null | undefined> {
-    if (!req.auth) {
-      return;
-    }
-
-    const { email } = await AuthService.getUserInfo(req.auth.token);
-
     const newEntry = await this.weightingController.createEntry({
       ...weightingData,
-      user_email: email,
+      user_email: req.user_email,
       datetime: weightingData.datetime ?? new Date(),
     });
 
