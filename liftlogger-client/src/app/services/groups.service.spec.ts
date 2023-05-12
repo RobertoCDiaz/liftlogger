@@ -29,7 +29,7 @@ describe('GroupsService', () => {
 
       service.getUserGroups();
 
-      expect(getSpy).toHaveBeenCalledWith('groups');
+      expect(getSpy).toHaveBeenCalledWith('groups?');
     });
 
     it('should be able to ask for movements', () => {
@@ -37,7 +37,15 @@ describe('GroupsService', () => {
 
       service.getUserGroups(true);
 
-      expect(getSpy).toHaveBeenCalledWith('groups?withMovements=true');
+      expect(getSpy).toHaveBeenCalledWith('groups?withMovements=true&');
+    });
+
+    it('should be able to ask for metadata', () => {
+      const getSpy = spyOn(http, 'get');
+
+      service.getUserGroups(false, true);
+
+      expect(getSpy).toHaveBeenCalledWith('groups?withMetadata=true&');
     });
   });
 

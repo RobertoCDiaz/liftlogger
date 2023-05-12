@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MuscleGroup, MuscleGroupCreationParams } from '../models/MuscleGroupModel';
+import {
+  MuscleGroup,
+  MuscleGroupCreationParams,
+  WithMuscleGroupMetadata,
+} from '../models/MuscleGroupModel';
 import { HttpService } from './http.service';
 
 /**
@@ -16,10 +20,18 @@ export class GroupsService {
    * Retrieves the groups owned by the current user.
    *
    * @param withMovements Whether the returned groups should also include their Movements or not
+   * @param withMetadata Whether the response MuscleGroups should have their metadata or not. Defaults to `false`
    * @returns An array of Group objects representing the groups
    */
-  getUserGroups(withMovements: boolean = false): Observable<MuscleGroup[]> {
-    return this.http.get<MuscleGroup[]>('groups' + (withMovements ? '?withMovements=true' : ''));
+  getUserGroups(
+    withMovements: boolean = false,
+    withMetadata: boolean = false,
+  ): Observable<WithMuscleGroupMetadata<MuscleGroup>[]> {
+    return this.http.get<WithMuscleGroupMetadata<MuscleGroup>[]>(
+      'groups?' +
+        (withMovements ? 'withMovements=true&' : '') +
+        (withMetadata ? 'withMetadata=true&' : ''),
+    );
   }
 
   /**
