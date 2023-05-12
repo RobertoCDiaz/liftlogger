@@ -17,15 +17,21 @@ export class GroupsRoutes extends Controller {
    * Fetches the MuscleGroups DB table for all its content.
    *
    * @param withMovements Whether the groups should be fetched along their movements or not. Defaults to `false`.
+   * @param withMetadata Whether the response MuscleGroups should have their metadata or not. Defaults to `false`.
    * @returns All the Muscle Groups stored in DB.
    */
   @Get('')
   @Middlewares([authenticationMiddleware])
   public async getGroups(
     @Query() withMovements: boolean = false,
+    @Query() withMetadata: boolean = false,
     @Request() req: express.Request,
   ): Promise<MuscleGroup[] | null | undefined> {
-    return await this.muscleGroupController.getMuscleGroupsFromUser(req.user_email, withMovements);
+    return await this.muscleGroupController.getMuscleGroupsFromUser(
+      req.user_email,
+      withMovements,
+      withMetadata,
+    );
   }
 
   /**

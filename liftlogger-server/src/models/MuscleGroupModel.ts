@@ -20,6 +20,29 @@ export type MuscleGroupForMovementModel = {
 };
 
 /**
+ * Includes extra information for a Muscle Group that is usually
+ * computed from other DB tables' information.
+ */
+export type MuscleGroupMetadata = {
+  /**
+   * When was the last time a Muscle Groups was trained.
+   */
+  last_trained?: Date;
+
+  /**
+   * Number of movements that belong to a Muscle Group.
+   */
+  movements_count: number;
+};
+
+/**
+ * Adds a `MuscleGroupMetadata` field to a type.
+ */
+export type WithMuscleGroupMetadata<TBaseType> = TBaseType & {
+  metadata?: MuscleGroupMetadata;
+};
+
+/**
  * Export a prettified version of Params with a proper name.
  */
 // export type MuscleGroupCreationParams = Prettify<Params>;
