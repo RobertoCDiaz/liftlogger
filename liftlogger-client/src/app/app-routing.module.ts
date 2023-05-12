@@ -10,6 +10,7 @@ import { MainComponent } from './pages/main/main.component';
 import { MovementDetailsComponent } from './pages/movement-details/movement-details.component';
 import { MovementJournalComponent } from './pages/movement-journal/movement-journal.component';
 import { MovementsLibraryComponent } from './pages/movements-library/movements-library.component';
+import { MusclegroupsLibraryComponent } from './pages/musclegroups-library/musclegroups-library.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -20,7 +21,8 @@ const routes: Routes = [
   { path: 'movements/:id/journal', component: MovementJournalComponent, canActivate: [AuthGuard] },
   { path: 'add-weighting', component: AddWeightingComponent, canActivate: [AuthGuard] },
   { path: 'create-template', component: CreateTemplateComponent, canActivate: [AuthGuard] },
-  { path: 'create-muscle-group', component: CreateMuscleGroupComponent, canActivate: [AuthGuard] },
+  { path: 'muscle-groups', component: MusclegroupsLibraryComponent, canActivate: [AuthGuard] },
+  { path: 'muscle-groups/create', component: CreateMuscleGroupComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
