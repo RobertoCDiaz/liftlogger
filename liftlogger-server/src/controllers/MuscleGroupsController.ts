@@ -1,10 +1,11 @@
 import { MuscleGroup, PrismaClient } from '@prisma/client';
-
+import moment from 'moment';
 import {
   MuscleGroupCreationParams,
   WithMuscleGroupMetadata,
   MuscleGroupMetadata,
 } from '../models/MuscleGroupModel';
+
 export default class MuscleGroupController {
   constructor(private prisma: PrismaClient) {}
 
@@ -53,10 +54,23 @@ export default class MuscleGroupController {
    * @returns Metadata information
    */
   async getMuscleGroupMetadata(groupId: number): Promise<MuscleGroupMetadata> {
-    const lastSession = await this.prisma.liftingSession.findFirst({
+    const sessions = await this.prisma.liftingSession.findMany({
       where: {
         sets: {
           some: {
+            movement: {
+              groups: {
+                some: {
+                  id: groupId,
+                },
+              },
+            },
+          },
+        },
+      },
+      include: {
+        sets: {
+          where: {
             movement: {
               groups: {
                 some: {
@@ -72,15 +86,28 @@ export default class MuscleGroupController {
       },
     });
 
+    const lastTrained = sessions[0]?.start_time;
+
+    const trainedDates: Record<string, number> = {};
+
+    sessions.forEach(session => {
+      const date: string = moment(session.start_time).format('YYYY-MM-DD');
+
+      if (!trainedDates[date]) {
+        trainedDates[date] = 0;
+      }
+
+      trainedDates[date] += session.sets.length;
+    });
+
     const movementCount = await this.prisma.movement.count({
       where: { groups: { some: { id: groupId } } },
     });
 
-    const lastTrained = lastSession?.start_time;
-
     return {
       last_trained: lastTrained,
       movements_count: movementCount,
+      trained_dates: trainedDates,
     };
   }
 

@@ -1,5 +1,5 @@
 import { muscleGroupsFixture } from '../fixtures/MuscleGroupFixtures';
-import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
+import { MuscleGroupCreationParams, MuscleGroupMetadata } from '../models/MuscleGroupModel';
 import PrismaUtils from '../utils/PrismaUtils';
 import MuscleGroupController from './MuscleGroupsController';
 
@@ -120,6 +120,10 @@ describe('MuscleGroupController', () => {
 
       expect(result.movements_count).toBe(expectedCount);
       expect(result.last_trained).toEqual(expectedDate);
+
+      expect(result.trained_dates['2023-01-02']).toBe(3);
+      expect(result.trained_dates['2022-04-28']).toBe(6);
+      expect(result.trained_dates['2021-08-04']).toBe(8);
     });
   });
 });
