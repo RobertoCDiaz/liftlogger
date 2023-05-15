@@ -11,6 +11,9 @@ import { GroupsService } from 'src/app/services/groups.service';
 export class MusclegroupsLibraryComponent implements OnInit {
   constructor(private groupsService: GroupsService) {}
 
+  /**
+   * Muscle Groups to display.
+   */
   muscleGroups: WithMuscleGroupMetadata<MuscleGroup>[];
 
   ngOnInit(): void {
@@ -19,9 +22,16 @@ export class MusclegroupsLibraryComponent implements OnInit {
     });
   }
 
-  formatDate(date?: Date): string {
+  /**
+   * Takes in a Date object and formats it into a readable form to display
+   * in the page's view.
+   *
+   * @param date Date object to format
+   * @returns Formatted date
+   */
+  formatDate(date?: Date): string | undefined {
     if (!date) {
-      return 'No data available';
+      return;
     }
     return moment(date).format('MMM Do, Y');
   }

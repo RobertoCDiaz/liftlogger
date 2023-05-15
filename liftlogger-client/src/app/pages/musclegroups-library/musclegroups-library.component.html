@@ -24,16 +24,20 @@
 </ng-template>
 
 <ng-template #content>
-  <div class="musclegroups-item" *ngFor="let group of muscleGroups">
+  <a
+    class="musclegroups-item"
+    *ngFor="let group of muscleGroups"
+    [routerLink]="'/muscle-groups/' + group.id"
+  >
     <span class="name">{{ group.name }}</span>
     <span class="description">{{ group.description }}</span>
     <span class="last-trained">
       <span class="last-trained-text">Last trained:</span>
-      <span class="last-trained-value">{{ formatDate(group.metadata?.last_trained) }}</span>
+      <span class="last-trained-value">{{ formatDate(group.metadata?.last_trained) ?? '-' }}</span>
     </span>
     <span class="movements">
       <span class="movements-value">{{ group.metadata?.movements_count }}</span>
       <span class="movements-text"> movements</span>
     </span>
-  </div>
+  </a>
 </ng-template>

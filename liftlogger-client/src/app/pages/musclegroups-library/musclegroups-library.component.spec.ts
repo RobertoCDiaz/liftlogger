@@ -58,7 +58,7 @@ describe('MusclegroupsLibraryComponent', () => {
 
   describe('formatDate()', () => {
     it('should format date objects to properly display it', () => {
-      let result: string = '';
+      let result: string | undefined = '';
 
       result = component.formatDate(new Date('2023-05-12'));
 
@@ -70,7 +70,7 @@ describe('MusclegroupsLibraryComponent', () => {
 
       result = component.formatDate();
 
-      expect(result).toBe('No data available');
+      expect(result).toBeFalsy();
     });
   });
 });

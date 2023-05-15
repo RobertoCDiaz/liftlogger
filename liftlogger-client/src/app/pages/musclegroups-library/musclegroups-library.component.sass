@@ -33,6 +33,10 @@ $table-template: 1fr 5fr 1fr 1fr
     row-gap: 1em
     column-gap: .5em
     align-items: center
+    cursor: pointer
+
+    &:hover
+      background-color: styles.$light-gray
 
     @include styles.isLarge
       grid-template-areas: "name description last-trained movements"
@@ -48,15 +52,16 @@ $table-template: 1fr 5fr 1fr 1fr
       @include styles.isLarge
         font-size: 1rem
 
+    app-content-loader.description
+      width: 100%
+
     .description
+      @include styles.line-clamp(3)
       grid-area: description
-      display: -webkit-box
-      -webkit-line-clamp: 3
-      -webkit-box-orient: vertical
-      overflow: hidden
 
       @include styles.isLarge
-        -webkit-line-clamp: 2
+        @include styles.line-clamp(2)
+        text-align: center
 
     .last-trained
       grid-area: last-trained
@@ -82,6 +87,9 @@ $table-template: 1fr 5fr 1fr 1fr
         text-align: center
         *
           display: block
+
+      *
+        color: styles.$primary-color
 
       .movements-text
         @include styles.isLarge
