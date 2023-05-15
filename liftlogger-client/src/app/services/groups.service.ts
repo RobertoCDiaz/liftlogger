@@ -35,6 +35,28 @@ export class GroupsService {
   }
 
   /**
+   * Retrieves a MuscleGroup owned by the current user.
+   *
+   * @param groupId MuscleGroup identifier
+   * @param withMovements Whether the returned group should also include its Movements or not Defaults to `false`
+   * @param withMetadata Whether the response MuscleGroup should have its metadata or not. Defaults to `false`
+   * @returns The fetched MuscleGroup
+   */
+  getGroup(
+    groupId: number,
+    withMovements: boolean = false,
+    withMetadata: boolean = false,
+  ): Observable<WithMuscleGroupMetadata<MuscleGroup>> {
+    return this.http.get<WithMuscleGroupMetadata<MuscleGroup>>(
+      'groups/' +
+        groupId +
+        '?' +
+        (withMovements ? 'withMovements=true&' : '') +
+        (withMetadata ? 'withMetadata=true&' : ''),
+    );
+  }
+
+  /**
    * Creates a new Muscle Group and inserts it into DB.
    *
    * @param group Group to be inserted into DB.
