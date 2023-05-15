@@ -7,6 +7,16 @@ const prisma = PrismaUtils.getPrismaTestingInstance();
 const controller = new MuscleGroupController(prisma);
 
 describe('MuscleGroupController', () => {
+  const mockedMetadata: MuscleGroupMetadata = {
+    movements_count: 1,
+    trained_dates: {},
+    last_trained: undefined,
+  };
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   afterAll(() => {
     prisma.$disconnect();
   });
@@ -67,10 +77,32 @@ describe('MuscleGroupController', () => {
       expect(result).toEqual(muscleGroupsFixture[0]);
     });
 
-    it('should throw error if no match for id and user email is provided', async () => {
-      const promise = controller.getMuscleGroup(1, 'second@test.com');
+    it('should NOT include movements if flag is set to false', async () => {
+      const groups = await controller.getMuscleGroup(1, 'testing@test.com', false);
 
-      await expect(promise).rejects.toThrowError();
+      expect(groups).not.toHaveProperty('movements');
+    });
+
+    it('should include movements if flag is set to true', async () => {
+      const groups = await controller.getMuscleGroup(1, 'testing@test.com', true);
+
+      expect(groups).toHaveProperty('movements');
+    });
+
+    it('should NOT include metadata if flag is set to false', async () => {
+      jest.spyOn(controller, 'getMuscleGroupMetadata').mockResolvedValue(mockedMetadata);
+
+      const groups = await controller.getMuscleGroup(1, 'testing@test.com', false, false);
+
+      expect(groups).not.toHaveProperty('metadata');
+    });
+
+    it('should include metadata if flag is set to true', async () => {
+      jest.spyOn(controller, 'getMuscleGroupMetadata').mockResolvedValue(mockedMetadata);
+
+      const groups = await controller.getMuscleGroup(1, 'testing@test.com', false, true);
+
+      expect(groups).toHaveProperty('metadata');
     });
   });
 

@@ -64,7 +64,12 @@ describe('GroupsRoutes', () => {
       const testGroup = muscleGroupsFixture[0];
       const spy = jest.spyOn(muscleGroupController, 'getMuscleGroup').mockResolvedValue(testGroup);
 
-      const result = await routesController.getGroup(testGroup.id, emailRequestMock);
+      const result = await routesController.getGroup(
+        testGroup.id,
+        undefined,
+        undefined,
+        emailRequestMock,
+      );
 
       expect(spy).toHaveBeenCalled();
       expect(result).toEqual(testGroup);

@@ -116,15 +116,38 @@ export default class MuscleGroupController {
    *
    * @param id ID of the group to be found.
    * @param userEmail Owner's email.
+   * @param withMovements Whether the Muscle Group should be fetched along its movements or not. Defaults to `false`.
+   * @param withMetadata Whether the MuscleGroup should have its metadata or not. Defaults to `false`.
    * @returns The MuscleGroup that matches the provided ID. Null if not found.
    */
-  async getMuscleGroup(id: number, userEmail: string): Promise<MuscleGroup | null> {
-    return await this.prisma.muscleGroup.findFirstOrThrow({
+  async getMuscleGroup(
+    id: number,
+    userEmail: string,
+    withMovements: boolean = false,
+    withMetadata: boolean = false,
+  ): Promise<WithMuscleGroupMetadata<MuscleGroup> | undefined> {
+    const group = await this.prisma.muscleGroup.findFirst({
       where: {
         id: id,
         user_email: userEmail,
       },
+      include: {
+        movements: withMovements,
+      },
     });
+
+    if (!group) {
+      return;
+    }
+
+    if (withMetadata) {
+      return {
+        ...group,
+        metadata: await this.getMuscleGroupMetadata(id),
+      };
+    }
+
+    return group;
   }
 
   /**
