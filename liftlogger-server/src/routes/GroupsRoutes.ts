@@ -2,7 +2,7 @@ import * as express from 'express';
 import { MuscleGroup } from '@prisma/client';
 import { Body, Controller, Get, Middlewares, Path, Post, Query, Request, Route } from 'tsoa';
 import MuscleGroupController from '../controllers/MuscleGroupsController';
-import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
+import { MuscleGroupCreationParams, WithMuscleGroupMetadata } from '../models/MuscleGroupModel';
 import { ModelRequestParams } from '../utils/ModelRequestParams';
 import { authenticationMiddleware } from '../middlewares/auth';
 import PrismaUtils from '../utils/PrismaUtils';
@@ -17,30 +17,52 @@ export class GroupsRoutes extends Controller {
    * Fetches the MuscleGroups DB table for all its content.
    *
    * @param withMovements Whether the groups should be fetched along their movements or not. Defaults to `false`.
+   * @param withMetadata Whether the response MuscleGroups should have their metadata or not. Defaults to `false`.
    * @returns All the Muscle Groups stored in DB.
    */
   @Get('')
   @Middlewares([authenticationMiddleware])
   public async getGroups(
     @Query() withMovements: boolean = false,
+    @Query() withMetadata: boolean = false,
     @Request() req: express.Request,
-  ): Promise<MuscleGroup[] | null | undefined> {
-    return await this.muscleGroupController.getMuscleGroupsFromUser(req.user_email, withMovements);
+  ): Promise<WithMuscleGroupMetadata<MuscleGroup>[] | null | undefined> {
+    return await this.muscleGroupController.getMuscleGroupsFromUser(
+      req.user_email,
+      withMovements,
+      withMetadata,
+    );
   }
 
   /**
    * Fetches a single group from DB.
    *
    * @param id ID of the group to be fetched.
+   * @param withMovements Whether the Muscle Group should be fetched along its movements or not. Defaults to `false`.
+   * @param withMetadata Whether the MuscleGroup should have its metadata or not. Defaults to `false`.
    * @returns A group with the fetched `id`. `null` if not found.
    */
   @Get('{id}')
   @Middlewares([authenticationMiddleware])
   public async getGroup(
     @Path() id: number,
+    @Query() withMovements: boolean = false,
+    @Query() withMetadata: boolean = false,
     @Request() req: express.Request,
-  ): Promise<MuscleGroup | null | undefined> {
-    return await this.muscleGroupController.getMuscleGroup(id, req.user_email);
+  ): Promise<WithMuscleGroupMetadata<MuscleGroup> | null | undefined> {
+    const group = await this.muscleGroupController.getMuscleGroup(
+      id,
+      req.user_email,
+      withMovements,
+      withMetadata,
+    );
+
+    if (!group) {
+      this.setStatus(404);
+      return;
+    }
+
+    return group;
   }
 
   /**

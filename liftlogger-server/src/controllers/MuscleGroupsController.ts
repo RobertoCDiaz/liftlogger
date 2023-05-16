@@ -1,5 +1,10 @@
 import { MuscleGroup, PrismaClient } from '@prisma/client';
-import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
+import moment from 'moment';
+import {
+  MuscleGroupCreationParams,
+  WithMuscleGroupMetadata,
+  MuscleGroupMetadata,
+} from '../models/MuscleGroupModel';
 
 export default class MuscleGroupController {
   constructor(private prisma: PrismaClient) {}
@@ -9,24 +14,101 @@ export default class MuscleGroupController {
    *
    * @param userEmail Email of the user whose MuscleGroups are to be fetched.
    * @param withMovements Whether the groups should be fetched along their movements or not. Defaults to `false`.
+   * @param withMetadata Whether the response MuscleGroups should have their metadata or not. Defaults to `false`.
    * @returns List of groups.
    */
   async getMuscleGroupsFromUser(
     userEmail: string,
     withMovements: boolean = false,
-  ): Promise<MuscleGroup[]> {
-    return await this.prisma.muscleGroup.findMany({
+    withMetadata: boolean = false,
+  ): Promise<WithMuscleGroupMetadata<MuscleGroup>[]> {
+    const muscleGroups: WithMuscleGroupMetadata<MuscleGroup>[] =
+      await this.prisma.muscleGroup.findMany({
+        where: {
+          user_email: userEmail,
+        },
+        include: {
+          movements: withMovements && {
+            include: {
+              groups: true,
+            },
+          },
+        },
+      });
+
+    if (withMetadata) {
+      for (let i = 0; i < muscleGroups.length; ++i) {
+        const group = muscleGroups[i];
+
+        group.metadata = await this.getMuscleGroupMetadata(group.id);
+      }
+    }
+
+    return muscleGroups;
+  }
+
+  /**
+   * Fetches the metadata for a specific MuscleGroup
+   *
+   * @param groupId Muscle Group Identifier
+   * @returns Metadata information
+   */
+  async getMuscleGroupMetadata(groupId: number): Promise<MuscleGroupMetadata> {
+    const sessions = await this.prisma.liftingSession.findMany({
       where: {
-        user_email: userEmail,
-      },
-      include: {
-        movements: withMovements && {
-          include: {
-            groups: true,
+        sets: {
+          some: {
+            movement: {
+              groups: {
+                some: {
+                  id: groupId,
+                },
+              },
+            },
           },
         },
       },
+      include: {
+        sets: {
+          where: {
+            movement: {
+              groups: {
+                some: {
+                  id: groupId,
+                },
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        start_time: 'desc',
+      },
     });
+
+    const lastTrained = sessions[0]?.start_time;
+
+    const trainedDates: Record<string, number> = {};
+
+    sessions.forEach(session => {
+      const date: string = moment(session.start_time).format('YYYY-MM-DD');
+
+      if (!trainedDates[date]) {
+        trainedDates[date] = 0;
+      }
+
+      trainedDates[date] += session.sets.length;
+    });
+
+    const movementCount = await this.prisma.movement.count({
+      where: { groups: { some: { id: groupId } } },
+    });
+
+    return {
+      last_trained: lastTrained,
+      movements_count: movementCount,
+      trained_dates: trainedDates,
+    };
   }
 
   /**
@@ -34,15 +116,38 @@ export default class MuscleGroupController {
    *
    * @param id ID of the group to be found.
    * @param userEmail Owner's email.
+   * @param withMovements Whether the Muscle Group should be fetched along its movements or not. Defaults to `false`.
+   * @param withMetadata Whether the MuscleGroup should have its metadata or not. Defaults to `false`.
    * @returns The MuscleGroup that matches the provided ID. Null if not found.
    */
-  async getMuscleGroup(id: number, userEmail: string): Promise<MuscleGroup | null> {
-    return await this.prisma.muscleGroup.findFirstOrThrow({
+  async getMuscleGroup(
+    id: number,
+    userEmail: string,
+    withMovements: boolean = false,
+    withMetadata: boolean = false,
+  ): Promise<WithMuscleGroupMetadata<MuscleGroup> | undefined> {
+    const group = await this.prisma.muscleGroup.findFirst({
       where: {
         id: id,
         user_email: userEmail,
       },
+      include: {
+        movements: withMovements,
+      },
     });
+
+    if (!group) {
+      return;
+    }
+
+    if (withMetadata) {
+      return {
+        ...group,
+        metadata: await this.getMuscleGroupMetadata(id),
+      };
+    }
+
+    return group;
   }
 
   /**

@@ -1,5 +1,5 @@
 import { muscleGroupsFixture } from '../fixtures/MuscleGroupFixtures';
-import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
+import { MuscleGroupCreationParams, MuscleGroupMetadata } from '../models/MuscleGroupModel';
 import PrismaUtils from '../utils/PrismaUtils';
 import MuscleGroupController from './MuscleGroupsController';
 
@@ -7,6 +7,16 @@ const prisma = PrismaUtils.getPrismaTestingInstance();
 const controller = new MuscleGroupController(prisma);
 
 describe('MuscleGroupController', () => {
+  const mockedMetadata: MuscleGroupMetadata = {
+    movements_count: 1,
+    trained_dates: {},
+    last_trained: undefined,
+  };
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   afterAll(() => {
     prisma.$disconnect();
   });
@@ -44,7 +54,19 @@ describe('MuscleGroupController', () => {
     it('should include movements if flag is set to true', async () => {
       const groups = await controller.getMuscleGroupsFromUser('testing@test.com', true);
 
-      expect(groups[0]).toHaveProperty('movements'!);
+      expect(groups[0]).toHaveProperty('movements');
+    });
+
+    it('should NOT include metadata if flag is set to false', async () => {
+      const groups = await controller.getMuscleGroupsFromUser('testing@test.com', false, false);
+
+      expect(groups[0]).not.toHaveProperty('metadata');
+    });
+
+    it('should include metadata if flag is set to true', async () => {
+      const groups = await controller.getMuscleGroupsFromUser('testing@test.com', false, true);
+
+      expect(groups[0]).toHaveProperty('metadata');
     });
   });
 
@@ -55,10 +77,32 @@ describe('MuscleGroupController', () => {
       expect(result).toEqual(muscleGroupsFixture[0]);
     });
 
-    it('should throw error if no match for id and user email is provided', async () => {
-      const promise = controller.getMuscleGroup(1, 'second@test.com');
+    it('should NOT include movements if flag is set to false', async () => {
+      const groups = await controller.getMuscleGroup(1, 'testing@test.com', false);
 
-      await expect(promise).rejects.toThrowError();
+      expect(groups).not.toHaveProperty('movements');
+    });
+
+    it('should include movements if flag is set to true', async () => {
+      const groups = await controller.getMuscleGroup(1, 'testing@test.com', true);
+
+      expect(groups).toHaveProperty('movements');
+    });
+
+    it('should NOT include metadata if flag is set to false', async () => {
+      jest.spyOn(controller, 'getMuscleGroupMetadata').mockResolvedValue(mockedMetadata);
+
+      const groups = await controller.getMuscleGroup(1, 'testing@test.com', false, false);
+
+      expect(groups).not.toHaveProperty('metadata');
+    });
+
+    it('should include metadata if flag is set to true', async () => {
+      jest.spyOn(controller, 'getMuscleGroupMetadata').mockResolvedValue(mockedMetadata);
+
+      const groups = await controller.getMuscleGroup(1, 'testing@test.com', false, true);
+
+      expect(groups).toHaveProperty('metadata');
     });
   });
 
@@ -95,6 +139,23 @@ describe('MuscleGroupController', () => {
       expect(parentGroup.groups).toContainEqual(result);
 
       await prisma.muscleGroup.delete({ where: { id: result.id } });
+    });
+  });
+
+  describe('getMuscleGroupMetadata', () => {
+    it("should correctly fetch a group's metadata", async () => {
+      const testGroup = muscleGroupsFixture[0];
+      const expectedCount = 16;
+      const expectedDate = new Date('2023-01-02T15:46:12.167Z');
+
+      const result = await controller.getMuscleGroupMetadata(testGroup.id);
+
+      expect(result.movements_count).toBe(expectedCount);
+      expect(result.last_trained).toEqual(expectedDate);
+
+      expect(result.trained_dates['2023-01-02']).toBe(3);
+      expect(result.trained_dates['2022-04-28']).toBe(6);
+      expect(result.trained_dates['2021-08-04']).toBe(8);
     });
   });
 });

@@ -1,0 +1,85 @@
+@use '../../../styles'
+
+:host
+  @include styles.flex(column)
+
+.page-content
+  @include styles.responsiveContent
+  padding: 1em
+  display: grid
+  row-gap: 2em
+  column-gap: 2em
+  grid-template-areas: "group-info" "training-calendar" "movements"
+
+  @include styles.isLarge
+    grid-template-areas: "group-info movements" "training-calendar movements"
+    grid-template-columns: 3fr 2fr
+    grid-template-rows: max-content 1fr
+
+  section
+    .section-title
+      font-size: 1.5rem
+
+  .group-info
+    grid-area: group-info
+    display: grid
+    row-gap: 1em
+    grid-template-rows: max-content 1fr
+
+    .name
+      font-size: 2.25rem
+
+    .last-trained
+      color: styles.$dark-gray
+
+  .training-calendar
+    grid-area: training-calendar
+    display: grid
+    row-gap: 1em
+    align-items: start
+    grid-template-rows: max-content 1fr
+
+    .calendar-container
+      display: grid
+      grid-template-rows: max-content 1fr
+      row-gap: .5em
+
+      .month-selector
+        justify-self: center
+        display: grid
+        column-gap: .5em
+        grid-template-columns: 1fr max-content 1fr
+        align-items: center
+
+        .month-label
+          font-size: 1.25rem
+
+  .movements
+    grid-area: movements
+    display: grid
+    row-gap: 1em
+    grid-template-rows: max-content 1fr
+
+    .movements-list
+      @include styles.flex(column)
+      row-gap: .5em
+
+      .movement-item
+        @include styles.shadow
+        @include styles.transition
+        cursor: pointer
+        border-radius: .25em
+        padding: .5em 1em
+        background-color: styles.$white
+        display: grid
+        grid-template-rows: max-content 1fr
+
+        &:hover
+          background-color: styles.$light-gray
+
+        .movement-name
+          font-size: 1.1rem
+
+        .movement-description
+          @include styles.line-clamp(1)
+          color: styles.$dark-gray

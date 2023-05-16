@@ -28,22 +28,34 @@ describe('GroupsRoutes', () => {
     });
 
     it('should ask controller for user groups and return its response', async () => {
-      const result = await routesController.getGroups(undefined, emailRequestMock);
+      const result = await routesController.getGroups(undefined, undefined, emailRequestMock);
 
       expect(spy).toHaveBeenCalled();
       expect(result).toEqual(muscleGroupsFixture);
     });
 
     it('should ask to include movements if specified', async () => {
-      await routesController.getGroups(true, emailRequestMock);
+      await routesController.getGroups(true, undefined, emailRequestMock);
 
-      expect(spy).toBeCalledWith(userResponseMock(testUser).email, true);
+      expect(spy).toBeCalledWith(userResponseMock(testUser).email, true, false);
     });
 
     it('should ask to not include movements if specified', async () => {
-      await routesController.getGroups(false, emailRequestMock);
+      await routesController.getGroups(false, undefined, emailRequestMock);
 
-      expect(spy).toBeCalledWith(userResponseMock(testUser).email, false);
+      expect(spy).toBeCalledWith(userResponseMock(testUser).email, false, false);
+    });
+
+    it('should ask to include metadata if specified', async () => {
+      await routesController.getGroups(undefined, true, emailRequestMock);
+
+      expect(spy).toBeCalledWith(userResponseMock(testUser).email, false, true);
+    });
+
+    it('should ask to not include metadata if specified', async () => {
+      await routesController.getGroups(undefined, false, emailRequestMock);
+
+      expect(spy).toBeCalledWith(userResponseMock(testUser).email, false, false);
     });
   });
 
@@ -52,7 +64,12 @@ describe('GroupsRoutes', () => {
       const testGroup = muscleGroupsFixture[0];
       const spy = jest.spyOn(muscleGroupController, 'getMuscleGroup').mockResolvedValue(testGroup);
 
-      const result = await routesController.getGroup(testGroup.id, emailRequestMock);
+      const result = await routesController.getGroup(
+        testGroup.id,
+        undefined,
+        undefined,
+        emailRequestMock,
+      );
 
       expect(spy).toHaveBeenCalled();
       expect(result).toEqual(testGroup);

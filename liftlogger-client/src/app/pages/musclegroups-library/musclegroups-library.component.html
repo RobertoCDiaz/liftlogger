@@ -1,0 +1,43 @@
+<app-drawer-page pageName="Muscle Groups" actionIcon="add" actionUrl="/muscle-groups/create">
+  <div class="musclegroups-list">
+    <div class="table-headers">
+      <span class="item">Name</span>
+      <span class="item">Description</span>
+      <span class="item">Last trained</span>
+      <span class="item">Movements count</span>
+    </div>
+    <ng-container *ngTemplateOutlet="muscleGroups ? content : loading"></ng-container>
+  </div>
+</app-drawer-page>
+
+<ng-template #loading>
+  <div class="musclegroups-item" *ngFor="let group of [1, 2, 3, 4, 5]">
+    <app-content-loader class="name"></app-content-loader>
+    <app-content-loader class="description" [lineCount]="2"></app-content-loader>
+    <app-content-loader
+      class="last-trained"
+      [isSecondary]="true"
+      [lineCount]="2"
+    ></app-content-loader>
+    <app-content-loader class="movements"></app-content-loader>
+  </div>
+</ng-template>
+
+<ng-template #content>
+  <a
+    class="musclegroups-item"
+    *ngFor="let group of muscleGroups"
+    [routerLink]="'/muscle-groups/' + group.id"
+  >
+    <span class="name">{{ group.name }}</span>
+    <span class="description">{{ group.description }}</span>
+    <span class="last-trained">
+      <span class="last-trained-text">Last trained:</span>
+      <span class="last-trained-value">{{ formatDate(group.metadata?.last_trained) ?? '-' }}</span>
+    </span>
+    <span class="movements">
+      <span class="movements-value">{{ group.metadata?.movements_count }}</span>
+      <span class="movements-text"> movements</span>
+    </span>
+  </a>
+</ng-template>

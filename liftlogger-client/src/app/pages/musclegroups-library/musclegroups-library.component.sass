@@ -1,0 +1,96 @@
+@use '../../../styles'
+
+$table-template: 1fr 5fr 1fr 1fr
+
+.musclegroups-list
+  @include styles.isLarge
+    @include styles.shadow
+    border-radius: .25em
+    background-color: styles.$white
+    margin: 1em 0
+
+  .table-headers
+    display: none
+    @include styles.no-selection
+
+    @include styles.isLarge
+      display: grid
+      grid-template-columns: $table-template
+      justify-items: center
+      align-items: center
+      gap: 1em
+      padding: 1em
+
+      *
+        text-align: center
+        font-weight: bold
+
+  .musclegroups-item
+    display: grid
+    padding: 1em 2em
+    grid-template-areas: "name last-trained" "description description" "movements movements "
+    grid-template-columns: 1fr max-content
+    row-gap: 1em
+    column-gap: .5em
+    align-items: center
+    cursor: pointer
+
+    &:hover
+      background-color: styles.$light-gray
+
+    @include styles.isLarge
+      grid-template-areas: "name description last-trained movements"
+      grid-template-columns: $table-template
+      column-gap: 1em
+      justify-items: center
+      padding: 1em
+
+    .name
+      grid-area: name
+      font-size: 1.5rem
+
+      @include styles.isLarge
+        font-size: 1rem
+
+    app-content-loader.description
+      width: 100%
+
+    .description
+      @include styles.line-clamp(3)
+      grid-area: description
+
+      @include styles.isLarge
+        @include styles.line-clamp(2)
+        text-align: center
+
+    .last-trained
+      grid-area: last-trained
+      font-size: .9rem
+      text-align: end
+
+      @include styles.isLarge
+        text-align: center
+
+      *
+        color: styles.$dark-gray
+        display: block
+        width: auto
+
+      .last-trained-text
+        @include styles.isLarge
+          display: none
+
+    .movements
+      grid-area: movements
+
+      @include styles.isLarge
+        text-align: center
+        *
+          display: block
+
+      *
+        color: styles.$primary-color
+
+      .movements-text
+        @include styles.isLarge
+          display: none

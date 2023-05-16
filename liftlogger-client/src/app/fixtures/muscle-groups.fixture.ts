@@ -1,7 +1,11 @@
-import { MuscleGroup } from '../models/MuscleGroupModel';
+import { MuscleGroup, MuscleGroupMetadata } from '../models/MuscleGroupModel';
 
 export function getMuscleGroupsFixture(): MuscleGroup[] {
   return JSON.parse(JSON.stringify(muscleGroupsFixture));
+}
+
+export function getMetadataFixture(): MuscleGroupMetadata {
+  return JSON.parse(JSON.stringify(metadataFixture));
 }
 
 const muscleGroupsFixture: MuscleGroup[] = [
@@ -84,3 +88,44 @@ const muscleGroupsFixture: MuscleGroup[] = [
     parent_group_id: 4,
   },
 ];
+
+const metadataFixture: MuscleGroupMetadata = {
+  movements_count: 8,
+  last_trained: new Date(),
+  trained_dates: {
+    '2022-10-10': 8,
+    '2022-11-25': 2,
+    '2021-01-08': 9,
+    '2021-02-13': 7,
+    '2021-03-24': 5,
+    '2021-05-06': 1,
+    '2021-06-16': 3,
+    '2021-07-31': 10,
+    '2021-09-09': 4,
+    '2021-10-22': 2,
+    '2021-11-28': 6,
+    '2021-12-30': 8,
+    '2022-03-08': 3,
+    '2021-07-21': 7,
+    '2022-01-19': 2,
+    '2021-10-12': 6,
+    '2021-12-22': 5,
+    '2021-09-29': 1,
+    '2022-12-18': 10,
+    '2022-10-28': 4,
+    '2021-11-09': 9,
+    '2021-02-20': 8,
+    '2022-05-10': 6,
+    '2021-03-13': 7,
+    '2021-09-27': 4,
+    '2022-11-08': 5,
+    '2022-11-18': 10,
+    '2021-01-05': 2,
+    '2021-06-27': 3,
+    '2022-02-02': 6,
+    '2021-07-17': 1,
+    '2021-08-11': 8,
+    '2022-12-01': 7,
+    '2021-04-09': 9,
+  },
+};
