@@ -41,6 +41,7 @@ import { MovementDetailsComponent } from './pages/movement-details/movement-deta
 import { MovementJournalComponent } from './pages/movement-journal/movement-journal.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { MusclegroupsLibraryComponent } from './pages/musclegroups-library/musclegroups-library.component';
+import { MusclegroupsDetailsComponent } from './pages/musclegroups-details/musclegroups-details.component';
 
 import { environment } from 'src/environment/environment';
 
@@ -78,6 +79,7 @@ import { environment } from 'src/environment/environment';
     MovementJournalComponent,
     CalendarComponent,
     MusclegroupsLibraryComponent,
+    MusclegroupsDetailsComponent,
   ],
   imports: [
     BrowserModule,

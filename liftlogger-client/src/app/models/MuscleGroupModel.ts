@@ -85,6 +85,12 @@ export type MuscleGroupMetadata = {
    * Number of movements that belong to a Muscle Group.
    */
   movements_count: number;
+
+  /**
+   * A list of dates in which the Muscle Group was trained on (keys), along with
+   * the number of sets made for movements of this muscle group (values).
+   */
+  trained_dates: Record<string, number>;
 };
 
 /**

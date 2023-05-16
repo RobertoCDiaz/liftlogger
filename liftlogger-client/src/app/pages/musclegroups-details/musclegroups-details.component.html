@@ -1,0 +1,79 @@
+<app-page-header pageTitle="Muscle Group Details"></app-page-header>
+
+<div class="page-content" *ngIf="group$ | async as group; else loading">
+  <section class="group-info">
+    <div class="title">
+      <p class="name">{{ group.name }}</p>
+      <p class="last-trained">Last trained: {{ formatDate(group.metadata?.last_trained) }}</p>
+    </div>
+    <p class="description">{{ group.description }}</p>
+  </section>
+  <section class="training-calendar">
+    <p class="section-title">Training Calendar</p>
+    <div class="calendar-container">
+      <div class="month-selector">
+        <app-button class="arrow" type="no-border" (onClicked)="changeMonth(-1)">{{
+          '<'
+        }}</app-button>
+        <span class="month-label">{{ (currentMonth$ | async)!.format('MMM, Y') }}</span>
+        <app-button class="arrow" type="no-border" (onClicked)="changeMonth(1)">{{
+          '>'
+        }}</app-button>
+      </div>
+      <app-calendar
+        class="calendar"
+        [month]="momentToDate((currentMonth$ | async)!)"
+        [highlightedDays]="(trainedDays$ | async)!"
+      ></app-calendar>
+    </div>
+  </section>
+  <section class="movements">
+    <p class="section-title">Movements List ({{ group.metadata?.movements_count }})</p>
+    <div class="movements-list">
+      <a
+        class="movement-item"
+        *ngFor="let movement of group.movements"
+        [routerLink]="'/movements/' + movement.id"
+      >
+        <p class="movement-name">{{ movement.name }}</p>
+        <p class="movement-description">{{ movement.description }}</p>
+      </a>
+    </div>
+  </section>
+</div>
+
+<ng-template #loading>
+  <div class="page-content">
+    <section class="group-info">
+      <div class="title">
+        <app-content-loader class="name" [fontSize]="2.5"></app-content-loader>
+        <app-content-loader [isSecondary]="true"></app-content-loader>
+      </div>
+      <app-content-loader class="description" [lineCount]="3"></app-content-loader>
+    </section>
+    <section class="training-calendar">
+      <p class="section-title">Training Calendar</p>
+      <div class="calendar-container">
+        <div class="month-selector">
+          <app-button class="arrow" type="no-border">{{ '<' }}</app-button>
+          <app-content-loader [fontSize]="1.25"></app-content-loader>
+          <app-button class="arrow" type="no-border">{{ '>' }}</app-button>
+        </div>
+
+        <app-calendar class="calendar"></app-calendar>
+      </div>
+    </section>
+    <section class="movements">
+      <app-content-loader class="section-title"></app-content-loader>
+      <div class="movements-list">
+        <a class="movement-item" *ngFor="let movement of [1, 2, 3, 4, 5]">
+          <app-content-loader class="movement-name"></app-content-loader>
+          <app-content-loader
+            class="movement-description"
+            [isSecondary]="true"
+          ></app-content-loader>
+        </a>
+      </div>
+    </section>
+  </div>
+</ng-template>
