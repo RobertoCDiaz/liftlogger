@@ -31,7 +31,7 @@ export default class TemplateController {
 
   /**
    * Fetches the Templates table in search of the user's templates.
-   * It also includes the templates' movements.
+   * It also includes the templates' movements and the MuscleGroups they belong to.
    *
    * @param userEmail Email of the user whose templates are to be fetched.
    * @returns List of the user's templates.
@@ -42,7 +42,11 @@ export default class TemplateController {
         user_email: userEmail,
       },
       include: {
-        movements: true,
+        movements: {
+          include: {
+            groups: true,
+          },
+        },
       },
     });
 
