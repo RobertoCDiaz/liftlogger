@@ -1,3 +1,9 @@
-<app-creator-page title="Create Template" inputTitle="Template name...">
+<app-creator-page
+  title="Create Template"
+  inputTitle="Template name..."
+  (formChanged)="handleFormChanged($event)"
+  [createEnabled]="templateForm.valid && (areMovementsSelected$ | async)!"
+  (onCreate)="createTemplate()"
+>
   <app-template-movements-list />
 </app-creator-page>
