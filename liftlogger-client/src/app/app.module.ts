@@ -8,6 +8,7 @@ import { AuthModule } from '@auth0/auth0-angular';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './pages/main/main.component';
@@ -93,6 +94,7 @@ import { environment } from 'src/environment/environment';
     MatDividerModule,
     NgxSkeletonLoaderModule,
     ReactiveFormsModule,
+    DragDropModule,
     AuthModule.forRoot({
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,
