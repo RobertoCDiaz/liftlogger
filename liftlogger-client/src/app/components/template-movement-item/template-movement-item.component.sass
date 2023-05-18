@@ -1,13 +1,35 @@
-@use '/src/styles'
+@use '../../../styles'
 
-:host
+.template-movement-item
   @include styles.flex(row)
   align-items: center
   gap: 1em
   padding: .5em 0
+
+  *
+    @include styles.no-selection
 
   .name
     flex-grow: 1
 
   .drag, .close
     cursor: pointer
+
+// "Shadow item", shows up where the dragging item would be placed
+.cdk-drag-placeholder
+  opacity: 0.25
+
+// Item being dragged
+.cdk-drag-preview
+  @include styles.shadow
+  background-color: styles.$white
+  border-radius: .25em
+  padding: 0 1em
+
+// Animation for the item being dragged
+.cdk-drag-animating
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1)
+
+// Animation for the remaining items in the list
+.template-movement-item:not(.cdk-drag-placeholder):not(.cdk-drag-preview)
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1)

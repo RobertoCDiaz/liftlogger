@@ -1,6 +1,11 @@
-<span class="material-icons drag">drag_indicator</span>
-<span class="name">
-  <!-- Placeholder for the template's name -->
-  Template name
-</span>
-<span (click)="onDelete()" class="material-icons close"> close </span>
+<div class="template-movement-item" cdkDrag>
+  <span class="material-icons drag" cdkDragHandle>drag_indicator</span>
+  <span class="name" *ngIf="movement; else loading">
+    {{ movement.name }}
+  </span>
+  <span (click)="removeMovement()" class="material-icons close"> close </span>
+</div>
+
+<ng-template #loading>
+  <app-content-loader></app-content-loader>
+</ng-template>
