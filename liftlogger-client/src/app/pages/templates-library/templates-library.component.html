@@ -1,0 +1,44 @@
+<app-drawer-page pageName="Templates" actionIcon="add" actionUrl="/templates/create">
+  <div class="templates-list" *ngIf="templates$ | async as templates; else loading">
+    <div class="template-item" *ngFor="let template of templates">
+      <p class="template-name">{{ template.name }}</p>
+      <div class="template-groups-list">
+        <div
+          class="group-item"
+          *ngFor="let group of templateService.getMuscleGroupsFromTemplate(template)"
+        >
+          {{ group }}
+        </div>
+      </div>
+      <p class="template-description" [ngClass]="{ 'no-description': !template.description }">
+        {{ template.description ?? 'No description provided' }}
+      </p>
+      <ul class="template-movements-list">
+        <li class="movement-item" *ngFor="let movement of template.movements">
+          {{ movement.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</app-drawer-page>
+
+<ng-template #loading>
+  <div class="templates-list">
+    <div class="template-item" *ngFor="let i of [1, 2, 3]">
+      <app-content-loader class="template-name" [fontSize]="1.5"></app-content-loader>
+      <div class="template-groups-list">
+        <div *ngFor="let j of [1, 2, 3, 4]">
+          <app-content-loader></app-content-loader>
+        </div>
+      </div>
+      <app-content-loader class="template-description" [isSecondary]="true" [lineCount]="5">
+      </app-content-loader>
+      <ul class="template-movements-list">
+        <app-content-loader
+          class="movement-item"
+          *ngFor="let k of [1, 2, 3, 4, 5, 6]"
+        ></app-content-loader>
+      </ul>
+    </div>
+  </div>
+</ng-template>
