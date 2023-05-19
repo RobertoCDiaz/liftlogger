@@ -7,11 +7,11 @@ const prisma = PrismaUtils.getPrismaTestingInstance();
 const controller = new UserController(prisma);
 
 describe('UsersController', () => {
-  describe('get()', () => {
-    afterAll(() => {
-      prisma.$disconnect();
-    });
+  afterAll(() => {
+    prisma.$disconnect();
+  });
 
+  describe('get()', () => {
     it('should return the correct user given an email', async () => {
       const expectedUser = usersFixture[0];
       const result = await controller.get(expectedUser.email);
