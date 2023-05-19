@@ -1,21 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateTemplateComponent, CreateTemplateComponentState } from './create-template.component';
-import { environment } from 'src/environment/environment';
-import { AuthModule } from '@auth0/auth0-angular';
-import { HttpClientModule } from '@angular/common/http';
-import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { PageHeaderComponent } from 'src/app/components/page-header/page-header.component';
-import { CreatorInputComponent } from 'src/app/components/creator-input/creator-input.component';
-import { ButtonComponent } from 'src/app/components/button/button.component';
-import { TemplateMovementsListComponent } from 'src/app/components/template-movements-list/template-movements-list.component';
-import { TemplateMovementItemComponent } from 'src/app/components/template-movement-item/template-movement-item.component';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, of } from 'rxjs';
 import { Movement } from 'src/app/models/MovementModel';
 import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
-import {
-  CreatorForm,
-  CreatorPageComponent,
-} from 'src/app/components/creator-page/creator-page.component';
+import { CreatorForm } from 'src/app/components/creator-page/creator-page.component';
+import { AppModule } from 'src/app/app.module';
 
 describe('CreateTemplateComponent', () => {
   let state: CreateTemplateComponentState;
@@ -99,28 +89,8 @@ describe('CreateTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        CreateTemplateComponent,
-        CreatorPageComponent,
-        PageHeaderComponent,
-        CreatorInputComponent,
-        ButtonComponent,
-        TemplateMovementsListComponent,
-        TemplateMovementItemComponent,
-      ],
-      imports: [
-        FormsModule,
-        HttpClientModule,
-        AuthModule.forRoot({
-          domain: environment.auth0Domain,
-          clientId: environment.auth0ClientId,
-          authorizationParams: {
-            redirect_uri: environment.auth0CallbackUrl,
-            audience: environment.auth0Audience,
-          },
-        }),
-      ],
       providers: [CreateTemplateComponentState],
+      imports: [AppModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateTemplateComponent);

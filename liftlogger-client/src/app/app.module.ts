@@ -9,6 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './pages/main/main.component';
@@ -19,7 +20,10 @@ import { WeightscaleDataInputComponent } from './components/weightscale-data-inp
 import { ButtonComponent } from './components/button/button.component';
 import { CreateTemplateComponent } from './pages/create-template/create-template.component';
 import { TemplateMovementItemComponent } from './components/template-movement-item/template-movement-item.component';
-import { TemplateMovementsListComponent } from './components/template-movements-list/template-movements-list.component';
+import {
+  MovementsPickerDialog,
+  TemplateMovementsListComponent,
+} from './components/template-movements-list/template-movements-list.component';
 import { CreateMovementComponent } from './pages/create-movement/create-movement.component';
 import { CreatorInputComponent } from './components/creator-input/creator-input.component';
 import { CreatorPageComponent } from './components/creator-page/creator-page.component';
@@ -83,6 +87,7 @@ import { environment } from 'src/environment/environment';
     MusclegroupsLibraryComponent,
     MusclegroupsDetailsComponent,
     TemplatesLibraryComponent,
+    MovementsPickerDialog,
   ],
   imports: [
     BrowserModule,
@@ -95,6 +100,7 @@ import { environment } from 'src/environment/environment';
     NgxSkeletonLoaderModule,
     ReactiveFormsModule,
     DragDropModule,
+    MatDialogModule,
     AuthModule.forRoot({
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,
