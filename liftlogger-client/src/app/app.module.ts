@@ -10,6 +10,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatRippleModule } from '@angular/material/core';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './pages/main/main.component';
@@ -101,6 +103,8 @@ import { environment } from 'src/environment/environment';
     ReactiveFormsModule,
     DragDropModule,
     MatDialogModule,
+    MatRippleModule,
+    MatSnackBarModule,
     AuthModule.forRoot({
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,

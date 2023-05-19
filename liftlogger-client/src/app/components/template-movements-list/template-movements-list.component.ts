@@ -4,6 +4,7 @@ import { Movement } from 'src/app/models/MovementModel';
 import { CreateTemplateComponentState } from 'src/app/pages/create-template/create-template.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 /**
  * Defines the data that will be passed from the current component to a dialog.
@@ -80,6 +81,7 @@ export class TemplateMovementsListComponent {
 })
 export class MovementsPickerDialog {
   dialogRef: MatDialogRef<MovementsPickerDialog> = inject(MatDialogRef<MovementsPickerDialog>);
+  snackBar: MatSnackBar = inject(MatSnackBar);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: MovementPickerDialogData) {}
 
@@ -88,6 +90,9 @@ export class MovementsPickerDialog {
    * @param movement
    */
   selectMovement(movement: Movement): void {
+    this.snackBar.open('Added [' + movement.name + ']', undefined, {
+      duration: 1500,
+    });
     this.data.stateRef.addMovements(movement);
   }
 
