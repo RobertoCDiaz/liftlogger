@@ -20,5 +20,25 @@ export type TemplateCreationRequestParams = {
   /**
    * Ids of the movements to be included in the new template.
    */
-  movements_ids: number[];
+  movements_ids?: number[];
 };
+
+/**
+ * Shape of the `body` property for a PUT request to update an existing template.
+ */
+export type TemplateUpdateRequestParams = {
+  /**
+   * Data to update the Template with.
+   */
+  template: TemplateUpdateParams;
+
+  /**
+   * Ids of the movements to be included in the new template.
+   */
+  movements_ids?: number[];
+};
+
+/**
+ * Editable fields for a Template.
+ */
+export type TemplateUpdateParams = Partial<Omit<Template, 'id' | 'user_email'>>;

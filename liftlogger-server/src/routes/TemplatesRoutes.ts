@@ -1,12 +1,18 @@
 import { Template } from '@prisma/client';
+import PrismaUtils from '../utils/PrismaUtils';
 import * as express from 'express';
-import { Body, Controller, Get, Middlewares, Path, Post, Request, Route } from 'tsoa';
+import { Body, Controller, Get, Middlewares, Path, Post, Put, Request, Route } from 'tsoa';
 import TemplateController from '../controllers/TemplateController';
 import { authenticationMiddleware } from '../middlewares/auth';
-import { TemplateCreationRequestParams } from '../models/TemplateModel';
+import {
+  TemplateCreationRequestParams,
+  TemplateUpdateRequestParams,
+} from '../models/TemplateModel';
 
 @Route('templates')
 export class TemplateRoutes extends Controller {
+  templatesController = new TemplateController(PrismaUtils.getPrismaInstance());
+
   /**
    * Returns a template, making sure it is owned by the current user.
    *
@@ -20,7 +26,7 @@ export class TemplateRoutes extends Controller {
     @Path() id: number,
     @Request() req: express.Request,
   ): Promise<Template | null | undefined> {
-    const templates = TemplateController.getTemplate(id, req.user_email);
+    const templates = await this.templatesController.getTemplate(id, req.user_email);
 
     return templates;
   }
@@ -36,7 +42,7 @@ export class TemplateRoutes extends Controller {
   async getTemplatesFromUser(
     @Request() req: express.Request,
   ): Promise<Template[] | null | undefined> {
-    const templates = TemplateController.getTemplates(req.user_email);
+    const templates = await this.templatesController.getTemplates(req.user_email);
 
     return templates;
   }
@@ -54,9 +60,34 @@ export class TemplateRoutes extends Controller {
     @Body() body: TemplateCreationRequestParams,
     @Request() req: express.Request,
   ): Promise<Template | null | undefined> {
-    return TemplateController.create(
+    return await this.templatesController.create(
       { ...body.template, user_email: req.user_email },
       body.movements_ids,
     );
+  }
+
+  /**
+   * Tries to update a template only if the user requesting owns it.
+   *
+   * @param id Template identifier
+   * @param body Data to update the Template with.
+   * @param req Request object
+   * @returns Updated Template
+   */
+  @Put('{id}')
+  @Middlewares([authenticationMiddleware])
+  async updateTemplate(
+    @Path() id: number,
+    @Body() body: TemplateUpdateRequestParams,
+    @Request() req: express.Request,
+  ): Promise<Template | undefined> {
+    const template = await this.templatesController.getTemplate(id, req.user_email);
+
+    if (!template) {
+      this.setStatus(404);
+      return;
+    }
+
+    return await this.templatesController.updateTemplate(id, body.template, body.movements_ids);
   }
 }
