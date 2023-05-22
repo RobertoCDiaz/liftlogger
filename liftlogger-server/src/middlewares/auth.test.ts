@@ -7,29 +7,43 @@ import * as express from 'express';
 
 describe('Auth Middleware', () => {
   describe('authenticationMiddleware', () => {
-    const res = { send: jest.fn() } as unknown as express.Response;
+    let req: express.Request;
+    let res: express.Response;
     const next = jest.fn();
 
     const testUser = usersFixture[0];
+
+    beforeEach(() => {
+      req = authRequestMock();
+      res = { send: jest.fn() } as unknown as express.Response;
+    });
+
+    afterEach(() => {
+      next.mockClear();
+    });
 
     beforeEach(() => {
       jest.spyOn(AuthService, 'getUserInfo').mockResolvedValue(userResponseMock(testUser));
     });
 
     it('should execute next function if authenticated', async () => {
-      await authenticationMiddleware(authRequestMock, res, next);
+      await authenticationMiddleware(req, res, next);
 
       expect(next).toHaveBeenCalled();
+    });
 
-      next.mockClear();
+    it('should add `user_email` property to request', async () => {
+      expect(req.user_email).toBeFalsy();
+
+      await authenticationMiddleware(req, res, next);
+
+      expect(req.user_email).toBeTruthy();
     });
 
     it('should send "Unauthorized" if not authenticated', async () => {
       await authenticationMiddleware(noAuthRequestMock, res, next);
 
       expect(res.send).toHaveBeenCalledWith('Unauthorized');
-
-      next.mockClear();
     });
   });
 });

@@ -10,9 +10,13 @@ export const noAuthRequestMock = {} as express.Request;
  * Mocks an Express request that has an `auth` property.
  * I.e. comes from an authenticated user.
  */
-export const authRequestMock = {
-  auth: { token: 'M0CK3dt0k3N' },
-} as express.Request;
+export function authRequestMock(): express.Request {
+  const mock = {
+    auth: { token: 'M0CK3dt0k3N' },
+  };
+
+  return JSON.parse(JSON.stringify(mock));
+}
 
 /**
  * A mocked Request object that already has an user_email.
