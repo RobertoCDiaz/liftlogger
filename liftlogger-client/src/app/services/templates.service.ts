@@ -33,7 +33,7 @@ export class TemplatesService {
    * @param movementsIds Identifiers of the movements to be included in the template
    * @returns The new Template record
    */
-  createTemplate(template: TemplateCreationParams, movementsIds: number[]): Observable<Template> {
+  createTemplate(template: TemplateCreationParams, movementsIds?: number[]): Observable<Template> {
     return this.http.post<TemplateCreationRequestParams, Template>('templates', {
       template,
       movements_ids: movementsIds,

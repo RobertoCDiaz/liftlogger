@@ -2,7 +2,7 @@
   title="Create Template"
   inputTitle="Template name..."
   (formChanged)="handleFormChanged($event)"
-  [createEnabled]="templateForm.valid && (areMovementsSelected$ | async)!"
+  [createEnabled]="templateForm.get('title')?.valid!"
   (onCreate)="createTemplate()"
 >
   <app-template-movements-list />

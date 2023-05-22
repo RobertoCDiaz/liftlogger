@@ -6,6 +6,10 @@ import { Movement } from 'src/app/models/MovementModel';
 import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
 import { CreatorForm } from 'src/app/components/creator-page/creator-page.component';
 import { AppModule } from 'src/app/app.module';
+import { TemplatesService } from 'src/app/services/templates.service';
+import { Router } from '@angular/router';
+import { getTemplatesFixture } from 'src/app/fixtures/templates.fixture';
+import { Template } from 'src/app/models/TemplateModel';
 
 describe('CreateTemplateComponent', () => {
   let state: CreateTemplateComponentState;
@@ -87,6 +91,12 @@ describe('CreateTemplateComponent', () => {
 
   let state: CreateTemplateComponentState;
 
+  let templateService: TemplatesService;
+  let router: Router;
+
+  let alertSpy: jasmine.Spy;
+  let navigateSpy: jasmine.Spy;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [CreateTemplateComponentState],
@@ -98,32 +108,78 @@ describe('CreateTemplateComponent', () => {
     fixture.detectChanges();
 
     state = fixture.debugElement.injector.get(CreateTemplateComponentState);
+    templateService = TestBed.inject(TemplatesService);
+    router = TestBed.inject(Router);
+
+    alertSpy = spyOn(window, 'alert');
+    navigateSpy = spyOn(router, 'navigate');
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('ngOnInit()', () => {
-    it('should store true if there are movements selected in state', () => {
-      const testMovements = getMovementsFixture();
-      spyOn(state, 'getMovements').and.returnValue(of(testMovements));
+  describe('createTemplate', () => {
+    let testTemplate: Template;
+    const testTitle: string = 'test title';
+    const testDescription: string = 'test description';
 
-      component.ngOnInit();
-
-      component.areMovementsSelected$.subscribe(result => {
-        expect(result).toBeTrue();
-      });
+    beforeEach(() => {
+      testTemplate = getTemplatesFixture()[0];
     });
 
-    it('should store false if there are no movements selected in state', () => {
-      spyOn(state, 'getMovements').and.returnValue(of([]));
-
-      component.ngOnInit();
-
-      component.areMovementsSelected$.subscribe(result => {
-        expect(result).toBeFalse();
+    it('should try to create template using service', async () => {
+      let spy = spyOn(templateService, 'createTemplate').and.returnValue(of(testTemplate));
+      spyOn(state, 'getMovements').and.returnValue(of(getMovementsFixture()));
+      component.templateForm = new FormGroup({
+        title: new FormControl<string | null>(testTitle),
+        description: new FormControl<string | null>(testDescription),
       });
+
+      await component.createTemplate();
+
+      expect(spy).toHaveBeenCalled();
+      expect(alertSpy).toHaveBeenCalled();
+      expect(navigateSpy).toHaveBeenCalled();
+    });
+
+    it('should prevent creation if no title submitted', async () => {
+      let spy = spyOn(templateService, 'createTemplate').and.returnValue(of(testTemplate));
+
+      await component.createTemplate();
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(alertSpy).toHaveBeenCalled();
+      expect(navigateSpy).not.toHaveBeenCalled();
+    });
+
+    it('should create even if no description provided', async () => {
+      let spy = spyOn(templateService, 'createTemplate').and.returnValue(of(testTemplate));
+      component.templateForm = new FormGroup({
+        title: new FormControl<string | null>(testTitle, { validators: Validators.required }),
+        description: new FormControl<string | null>(null),
+      });
+
+      await component.createTemplate();
+
+      expect(spy).toHaveBeenCalled();
+      expect(alertSpy).toHaveBeenCalled();
+      expect(navigateSpy).toHaveBeenCalled();
+    });
+
+    it('should create even if no movements provided', async () => {
+      let spy = spyOn(templateService, 'createTemplate').and.returnValue(of(testTemplate));
+      spyOn(state, 'getMovements').and.returnValue(of([]));
+      component.templateForm = new FormGroup({
+        title: new FormControl<string | null>(testTitle),
+        description: new FormControl<string | null>(testDescription),
+      });
+
+      await component.createTemplate();
+
+      expect(spy).toHaveBeenCalled();
+      expect(alertSpy).toHaveBeenCalled();
+      expect(navigateSpy).toHaveBeenCalled();
     });
   });
 

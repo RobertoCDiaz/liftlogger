@@ -51,6 +51,20 @@ describe('TemplatesService', () => {
         expect(result.description).toBe(testTemplate.description!);
       });
     });
+
+    it('should work even if no movements provided', () => {
+      const testTemplate = getNewTemplateFixture();
+      const spy = spyOn(http, 'post').and.returnValue(of(testTemplate));
+
+      service.createTemplate(testTemplate).subscribe(result => {
+        expect(spy).toHaveBeenCalledWith('templates', {
+          template: testTemplate,
+          movements_ids: undefined,
+        });
+        expect(result.name).toBe(testTemplate.name);
+        expect(result.description).toBe(testTemplate.description!);
+      });
+    });
   });
 
   describe('getMuscleGroupsFromTemplate()', () => {

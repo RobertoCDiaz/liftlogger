@@ -1,9 +1,12 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable, catchError, lastValueFrom, map, take } from 'rxjs';
 import { CreatorForm } from 'src/app/components/creator-page/creator-page.component';
 import { Movement } from 'src/app/models/MovementModel';
+import { TemplateCreationParams } from 'src/app/models/TemplateModel';
+import { TemplatesService } from 'src/app/services/templates.service';
 
 /**
  * Handles State for the whole CreateTemplate page component tree.
@@ -76,11 +79,10 @@ export class CreateTemplateComponentState {
   styleUrls: ['./create-template.component.sass'],
   providers: [CreateTemplateComponentState],
 })
-export class CreateTemplateComponent implements OnInit {
-  /**
-   * Page's state.
-   */
+export class CreateTemplateComponent {
   state: CreateTemplateComponentState = inject(CreateTemplateComponentState);
+  templatesService: TemplatesService = inject(TemplatesService);
+  router: Router = inject(Router);
 
   /**
    * Form tha stores the data for the new Template.
@@ -91,19 +93,37 @@ export class CreateTemplateComponent implements OnInit {
   });
 
   /**
-   * Whether there is at least one movement selected or not.
+   * Tries to create a new Template.
    */
-  areMovementsSelected$: Observable<boolean>;
+  async createTemplate() {
+    if (!this.templateForm.get('title')?.valid) {
+      alert('You have missing information');
+      return;
+    }
 
-  ngOnInit(): void {
-    this.areMovementsSelected$ = this.state.getMovements().pipe(
-      switchMap(movements => {
-        return of(movements.length > 0);
-      }),
-    );
+    this.state
+      .getMovements()
+      .pipe(
+        take(1),
+        map(movements => movements.map(m => m.id)),
+      )
+      .subscribe(ids => {
+        const template: TemplateCreationParams = {
+          name: this.templateForm.value.title!,
+          description: this.templateForm.value.description! ?? undefined,
+        };
+
+        this.templatesService.createTemplate(template, ids).subscribe({
+          next: template => {
+            alert(`Template ${template.name} successfully created!`);
+            this.router.navigate(['/templates']);
+          },
+          error: err => {
+            alert(err.message);
+          },
+        });
+      });
   }
-
-  createTemplate(): void {}
 
   /**
    * Takes in the form from the CreatorPage component and stores its reference to use in this
