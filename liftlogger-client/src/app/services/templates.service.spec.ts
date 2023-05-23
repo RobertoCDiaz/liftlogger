@@ -36,6 +36,19 @@ describe('TemplatesService', () => {
     });
   });
 
+  describe('getTemplate()', () => {
+    it('should make a get request to fetch a template of the user', () => {
+      const testTemplate = getTemplatesFixture()[0];
+      const testId = 3;
+      const spy = spyOn(http, 'get').and.returnValue(of(testTemplate));
+
+      service.getTemplate(testId).subscribe(result => {
+        expect(spy).toHaveBeenCalledWith('templates/' + testId);
+        expect(result).toEqual(testTemplate);
+      });
+    });
+  });
+
   describe('createTemplate()', () => {
     it('should make a post request to create a new template', () => {
       const testTemplate = getNewTemplateFixture();
