@@ -27,6 +27,16 @@ export class TemplatesService {
   }
 
   /**
+   * Fetches from the server a specific Template from the user.
+   *
+   * @param id Identifier for the Template
+   * @returns Template record
+   */
+  getTemplate(id: number): Observable<Template> {
+    return this.http.get<Template>('templates/' + id);
+  }
+
+  /**
    * Makes a request to the server to create a new Template.
    *
    * @param template Data for the new Template
