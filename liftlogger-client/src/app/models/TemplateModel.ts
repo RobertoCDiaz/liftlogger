@@ -69,7 +69,7 @@ export type TemplateUpdateRequestParams = {
   /**
    * Ids of the movements to be included in the new template.
    */
-  movements_ids: number[];
+  movements_ids?: number[];
 };
 
 /**

@@ -32,7 +32,7 @@ export class HttpService {
   }
 
   /**
-   * Makes a GET request to the application's backend appending a Authorization Bearer token to it.
+   * Makes a POST request to the application's backend appending a Authorization Bearer token to it.
    * This means that it will be an Auth request, a request with user information.
    *
    * @param endpoint API endpoint to make the request to
@@ -45,6 +45,24 @@ export class HttpService {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${tokenId}`);
 
         return this.http.post<ResponseType>(this.url + endpoint, body, { headers });
+      }),
+    );
+  }
+
+  /**
+   * Makes a PUT request to the application's backend appending a Authorization Bearer token to it.
+   * This means that it will be an Auth request, a request with user information.
+   *
+   * @param endpoint API endpoint to make the request to
+   * @param body Body parameters for the PUST request
+   * @returns Response from request
+   */
+  put<BodyType, ResponseType>(endpoint: string, body: BodyType): Observable<ResponseType> {
+    return this.authService.getAccessTokenSilently().pipe(
+      switchMap(tokenId => {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${tokenId}`);
+
+        return this.http.put<ResponseType>(this.url + endpoint, body, { headers });
       }),
     );
   }

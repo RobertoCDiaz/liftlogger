@@ -9,7 +9,7 @@ import { By } from '@angular/platform-browser';
  *
  * @param fixture Component fixture
  * @param selector Unique selector for the element
- * @param detectChanges Whether the method should trigger `fixture.detectOnChanges()` or not. Defaults to false.
+ * @param detectChanges Whether the method should trigger `fixture.detectOnChanges()` or not. Defaults to true.
  * @returns DebugElement of the element
  */
 export function getComponent(
@@ -31,7 +31,7 @@ export function getComponent(
  *
  * @param fixture Component fixture
  * @param selector Unique selector for the element
- * @param detectChanges Whether the method should trigger `fixture.detectOnChanges()` or not. Defaults to false.
+ * @param detectChanges Whether the method should trigger `fixture.detectOnChanges()` or not. Defaults to true.
  * @returns DOM element
  */
 export function getElement<TElement>(
@@ -53,7 +53,7 @@ export function getElement<TElement>(
  *
  * @param fixture Component fixture
  * @param selector Selector to match element with
- * @param detectChanges Whether the method should trigger `fixture.detectOnChanges()` or not. Defaults to false.
+ * @param detectChanges Whether the method should trigger `fixture.detectOnChanges()` or not. Defaults to true.
  * @returns List of all the element in the fixture to match the selector
  */
 export function getComponents(
@@ -75,7 +75,7 @@ export function getComponents(
  *
  * @param fixture Component fixture
  * @param selector Unique selector for the element
- * @param detectChanges Whether the method should trigger `fixture.detectOnChanges()` or not. Defaults to false.
+ * @param detectChanges Whether the method should trigger `fixture.detectOnChanges()` or not. Defaults to true.
  * @returns DOM elements
  */
 export function getElements<TElement>(

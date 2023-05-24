@@ -5,6 +5,8 @@ import {
   Template,
   TemplateCreationParams,
   TemplateCreationRequestParams,
+  TemplateUpdateParams,
+  TemplateUpdateRequestParams,
 } from '../models/TemplateModel';
 
 /**
@@ -45,6 +47,25 @@ export class TemplatesService {
    */
   createTemplate(template: TemplateCreationParams, movementsIds?: number[]): Observable<Template> {
     return this.http.post<TemplateCreationRequestParams, Template>('templates', {
+      template,
+      movements_ids: movementsIds,
+    });
+  }
+
+  /**
+   * Makes a request to the server to updaet a Template.
+   *
+   * @param id Identifier of te Template to be updated
+   * @param template Data to update the Template with
+   * @param movementsIds Identifiers of the movements to be included in the template
+   * @returns Updated Template record
+   */
+  updateTemplate(
+    id: number,
+    template: TemplateUpdateParams,
+    movementsIds?: number[],
+  ): Observable<Template> {
+    return this.http.put<TemplateUpdateRequestParams, Template>('templates/' + id, {
       template,
       movements_ids: movementsIds,
     });

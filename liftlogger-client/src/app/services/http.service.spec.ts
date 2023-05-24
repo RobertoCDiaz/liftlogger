@@ -84,4 +84,35 @@ describe('HttpService', () => {
       });
     });
   });
+
+  describe('put()', () => {
+    const testToken = 'T0K3N';
+    const testBody = 1;
+    const testReturn: string = '200';
+    const url = environment.serverUrl;
+
+    it('should make a put request', (done: DoneFn) => {
+      const spy = spyOn(http, 'put').and.returnValue(of(testReturn));
+      spyOn(authService, 'getAccessTokenSilently').and.returnValue(of(testToken));
+
+      service.put<number, string>('test', testBody).subscribe(value => {
+        expect(value).toBe(testReturn);
+        expect(spy).toHaveBeenCalled();
+
+        done();
+      });
+    });
+
+    it('should get access token and use it in request along with the server url and the specified body', (done: DoneFn) => {
+      const spy = spyOn(http, 'put').and.returnValue(of(testReturn));
+      const testHeader = new HttpHeaders().set('Authorization', 'Bearer ' + testToken);
+      spyOn(authService, 'getAccessTokenSilently').and.returnValue(of(testToken));
+
+      service.put<number, string>('test', testBody).subscribe(value => {
+        expect(spy).toHaveBeenCalledWith(url + 'test', testBody, { headers: testHeader });
+
+        done();
+      });
+    });
+  });
 });

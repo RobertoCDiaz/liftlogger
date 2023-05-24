@@ -80,6 +80,39 @@ describe('TemplatesService', () => {
     });
   });
 
+  describe('updateTemplate()', () => {
+    const testId = 2;
+    const testTemplate = getNewTemplateFixture();
+    const movsIds = [1, 4, 6];
+    let putSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      putSpy = spyOn(http, 'put').and.returnValue(of(testTemplate));
+    });
+
+    it('should make a request to update a new template', () => {
+      service.updateTemplate(testId, testTemplate, movsIds).subscribe(result => {
+        expect(putSpy).toHaveBeenCalledWith('templates/' + testId, {
+          template: testTemplate,
+          movements_ids: movsIds,
+        });
+        expect(result.name).toBe(testTemplate.name);
+        expect(result.description).toBe(testTemplate.description!);
+      });
+    });
+
+    it('should work even if no movements provided', () => {
+      service.updateTemplate(testId, testTemplate).subscribe(result => {
+        expect(putSpy).toHaveBeenCalledWith('templates/' + testId, {
+          template: testTemplate,
+          movements_ids: undefined,
+        });
+        expect(result.name).toBe(testTemplate.name);
+        expect(result.description).toBe(testTemplate.description!);
+      });
+    });
+  });
+
   describe('getMuscleGroupsFromTemplate()', () => {
     it('should get the names of the muscle groups contained in a template', () => {
       const testTemplate = getTemplatesFixture()[2];
