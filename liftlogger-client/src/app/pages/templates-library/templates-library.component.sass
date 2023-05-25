@@ -21,6 +21,11 @@
     grid-template-rows: max-content max-content max-content max-content
     grid-template-areas: "name" "groups-list" "description" "movements-list"
     border-bottom: 1px solid styles.$dark-gray
+    cursor: pointer
+    @include styles.transition
+
+    &:hover
+      background-color: styles.$light-gray
 
     @include styles.isLarge
       @include styles.shadow

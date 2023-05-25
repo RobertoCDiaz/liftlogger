@@ -43,7 +43,7 @@ export class CreatorInputComponent {
   /**
    * Stores the current value for the input.
    */
-  value: string;
+  @Input() value: string;
 
   /**
    * Emits the `valueChanged` event, and passes the new input's value to it.

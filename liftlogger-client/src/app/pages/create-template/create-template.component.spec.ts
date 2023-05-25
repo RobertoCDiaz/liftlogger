@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateTemplateComponent, CreateTemplateComponentState } from './create-template.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of, skip } from 'rxjs';
 import { Movement } from 'src/app/models/MovementModel';
 import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
 import { CreatorForm } from 'src/app/components/creator-page/creator-page.component';
 import { AppModule } from 'src/app/app.module';
 import { TemplatesService } from 'src/app/services/templates.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { getTemplatesFixture } from 'src/app/fixtures/templates.fixture';
 import { Template } from 'src/app/models/TemplateModel';
 
@@ -93,6 +93,7 @@ describe('CreateTemplateComponent', () => {
 
   let templateService: TemplatesService;
   let router: Router;
+  let activatedRoute: ActivatedRoute;
 
   let alertSpy: jasmine.Spy;
   let navigateSpy: jasmine.Spy;
@@ -110,6 +111,7 @@ describe('CreateTemplateComponent', () => {
     state = fixture.debugElement.injector.get(CreateTemplateComponentState);
     templateService = TestBed.inject(TemplatesService);
     router = TestBed.inject(Router);
+    activatedRoute = TestBed.inject(ActivatedRoute);
 
     alertSpy = spyOn(window, 'alert');
     navigateSpy = spyOn(router, 'navigate');
@@ -119,7 +121,72 @@ describe('CreateTemplateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('createTemplate', () => {
+  describe('ngOnInit()', () => {
+    const templateId = 2;
+    const testTemplate = getTemplatesFixture()[0];
+
+    let idSpy: jasmine.Spy;
+    let routerUrlSpy: jasmine.Spy;
+    let getTemplateSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      idSpy = spyOnProperty(activatedRoute, 'paramMap').and.returnValue(
+        of(convertToParamMap({ id: templateId })),
+      );
+      routerUrlSpy = spyOnProperty(router, 'url').and.returnValue(
+        'https://liflogger-test.com/templates/update/' + templateId,
+      );
+      getTemplateSpy = spyOn(templateService, 'getTemplate').and.returnValue(of(testTemplate));
+    });
+
+    it('should properly set updateFormData$ when operation url is being used and valid template id', () => {
+      component.ngOnInit();
+
+      // fist value is skipped because it starts as false
+      component.updateFormData$.pipe(skip(1)).subscribe(result => {
+        expect(result.isUpdate).toBeTrue();
+        expect(result.originalData).toEqual({
+          title: testTemplate.name,
+          description: testTemplate.description!,
+        });
+      });
+    });
+
+    it('should set update operation as false if not template found', () => {
+      getTemplateSpy.and.returnValue(of()).and.throwError('Not found');
+
+      component.ngOnInit();
+
+      component.updateFormData$.pipe().subscribe({
+        error: err => {
+          expect(err.message).toBe('Not found');
+        },
+      });
+    });
+
+    it('should set update operation as false if no valid id', () => {
+      idSpy.and.returnValue(of(convertToParamMap({ id: 'not-valid' })));
+
+      component.ngOnInit();
+
+      component.updateFormData$.pipe(skip(1)).subscribe(result => {
+        expect(result.isUpdate).toBeFalse();
+        expect(navigateSpy).toHaveBeenCalled();
+      });
+    });
+
+    it('should set update operation as false not in update path', () => {
+      routerUrlSpy.and.returnValue('https://liflogger-test.com/templates/create');
+
+      component.ngOnInit();
+
+      component.updateFormData$.pipe(skip(1)).subscribe(result => {
+        expect(result.isUpdate).toBeFalse();
+      });
+    });
+  });
+
+  describe('createTemplate()', () => {
     let testTemplate: Template;
     const testTitle: string = 'test title';
     const testDescription: string = 'test description';
@@ -180,6 +247,101 @@ describe('CreateTemplateComponent', () => {
       expect(spy).toHaveBeenCalled();
       expect(alertSpy).toHaveBeenCalled();
       expect(navigateSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('updateTemplate()', () => {
+    const testId: number = 57;
+    const movsIs: number[] = [1, 7, 23];
+    const testTitle = 'Test Title';
+    const testDescription: string = 'Test Description';
+
+    const resultTemplate: Template = getTemplatesFixture()[0];
+
+    let updateSpy: jasmine.Spy;
+    let getIdsSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      updateSpy = spyOn(templateService, 'updateTemplate').and.returnValue(of(resultTemplate));
+
+      component.templateForm = new FormGroup({
+        title: new FormControl<string | null>(testTitle, { validators: Validators.required }),
+        description: new FormControl<string | null>(testDescription, {
+          validators: Validators.required,
+        }),
+      });
+
+      getIdsSpy = component['getMovementsIds'] = jasmine.createSpy().and.returnValue(of(movsIs));
+    });
+
+    it('should use service to try and update a template', () => {
+      component.updateTemplate(testId);
+
+      expect(updateSpy).toHaveBeenCalledWith(
+        testId,
+        {
+          name: component.templateForm.value.title!,
+          description: component.templateForm.value.description!,
+        },
+        movsIs,
+      );
+      expect(alertSpy).toHaveBeenCalled();
+      expect(navigateSpy).toHaveBeenCalled();
+    });
+
+    it('should not call update if no title', () => {
+      component.templateForm.setValue({ title: null, description: testDescription });
+
+      component.updateTemplate(testId);
+
+      expect(alertSpy).toHaveBeenCalledWith('You have missing information');
+    });
+
+    it('should update even if no description', () => {
+      component.templateForm.setValue({ title: testTitle, description: null });
+
+      component.updateTemplate(testId);
+
+      expect(updateSpy).toHaveBeenCalledWith(
+        testId,
+        {
+          name: component.templateForm.value.title!,
+          description: undefined,
+        },
+        movsIs,
+      );
+      expect(alertSpy).toHaveBeenCalled();
+      expect(navigateSpy).toHaveBeenCalled();
+    });
+    it('should update even if no movements', () => {
+      getIdsSpy.and.returnValue(of([]));
+
+      component.updateTemplate(testId);
+
+      expect(updateSpy).toHaveBeenCalledWith(
+        testId,
+        {
+          name: testTitle,
+          description: testDescription,
+        },
+        [],
+      );
+      expect(alertSpy).toHaveBeenCalled();
+      expect(navigateSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('getMovementsIds()', () => {
+    it('should transform movements list to ids list', () => {
+      const movements = getMovementsFixture();
+      const ids = movements.map(m => m.id);
+      const movs$ = of(movements);
+
+      const result = component['getMovementsIds'](movs$);
+
+      result.subscribe(resultValue => {
+        expect(resultValue).toEqual(ids);
+      });
     });
   });
 

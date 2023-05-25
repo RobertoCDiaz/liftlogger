@@ -27,6 +27,7 @@ const routes: Routes = [
   { path: 'muscle-groups/:id', component: MusclegroupsDetailsComponent, canActivate: [AuthGuard] },
   { path: 'templates', component: TemplatesLibraryComponent, canActivate: [AuthGuard] },
   { path: 'templates/create', component: CreateTemplateComponent, canActivate: [AuthGuard] },
+  { path: 'templates/update/:id', component: CreateTemplateComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

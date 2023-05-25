@@ -4,6 +4,26 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToForm } from 'src/app/helpers/types.helper';
 
 /**
+ * Holds useful information for update forms.
+ */
+export type UpdateFormData<T = number> = {
+  /**
+   * Whether the current instance of the page is a update operation or not.
+   */
+  isUpdate: boolean;
+
+  /**
+   * Original data for the object that will be updated, if one.
+   */
+  originalData?: CreatorFormType;
+
+  /**
+   * Identifier for the object to be updated.
+   */
+  objectId?: T;
+};
+
+/**
  * Defines the shape of the form for a creator page.
  */
 export type CreatorFormType = {
@@ -37,6 +57,12 @@ export type CreatorForm = FormGroup<ToForm<CreatorFormType>>;
 })
 export class CreatorPageComponent {
   /**
+   * Contains information for when an update operation is being made.
+   * By default, it is set to NOT being an update operation.
+   */
+  @Input() updateFormData: UpdateFormData = { isUpdate: false };
+
+  /**
    * Internal form to store data from the page inputs.
    */
   pageForm: CreatorForm = new FormGroup({
@@ -68,6 +94,13 @@ export class CreatorPageComponent {
   @Output() onCreate = new EventEmitter<void>();
 
   /**
+   * Fires up when the `Update` button is clicked.
+   *
+   * `$event: number` Identifier for the object to be updated
+   */
+  @Output() onUpdate = new EventEmitter<number>();
+
+  /**
    * Informs that the page form has changed and emits it.
    *
    * @emits `pageForm` The page form with updated values
@@ -90,9 +123,14 @@ export class CreatorPageComponent {
   }
 
   /**
-   * Emits the `onCreate` EventEmitter when the `Create` button is clicked.
+   * Depending on whether the page operation is update or create,
+   * triggers the right event for it.
    */
-  onCreateClicked(): void {
+  triggerPageAction(): void {
+    if (this.updateFormData.isUpdate) {
+      this.onUpdate.emit(this.updateFormData.objectId);
+      return;
+    }
     this.onCreate.emit();
   }
 

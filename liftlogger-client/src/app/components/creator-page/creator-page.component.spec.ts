@@ -11,6 +11,8 @@ describe('CreatorPageComponent', () => {
   let component: CreatorPageComponent;
   let fixture: ComponentFixture<CreatorPageComponent>;
 
+  const actionButtonId: string = '#actionButton';
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CreatorPageComponent],
@@ -75,7 +77,7 @@ describe('CreatorPageComponent', () => {
   });
 
   it('should disable and enable the create button', () => {
-    const button: ButtonComponent = getComponent(fixture, '#createButton').componentInstance;
+    const button: ButtonComponent = getComponent(fixture, actionButtonId).componentInstance;
 
     component.createEnabled = false;
     fixture.detectChanges();
@@ -89,22 +91,18 @@ describe('CreatorPageComponent', () => {
   });
 
   it('should init with creation disabled by default', () => {
-    const button: ButtonComponent = getComponent(fixture, '#createButton').componentInstance;
+    const button: ButtonComponent = getComponent(fixture, actionButtonId).componentInstance;
 
     expect(button.disabled).toBeTrue();
   });
 
-  it('should emit the onCreate event when create button is clicked', () => {
-    const createButton = getComponent(fixture, '#createButton');
-
-    let emitted = false;
-    component.onCreate.subscribe(() => {
-      emitted = true;
-    });
+  it('should execute triggerPageAction() event when create button is clicked', () => {
+    const createButton = getComponent(fixture, actionButtonId);
+    const spy = spyOn(component, 'triggerPageAction');
 
     createButton.triggerEventHandler('onClicked');
 
-    expect(emitted).toBeTrue();
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should update title in form with the title input's value when it changes", () => {
@@ -146,5 +144,44 @@ describe('CreatorPageComponent', () => {
       component.pageForm.patchValue({ description: 'just a description' });
       expect(emittedValue!.value.description).toBe('just a description');
     });
+  });
+
+  describe('triggerPageAction()', () => {
+    it('should trigger onCreate event by default', () => {
+      component.triggerPageAction();
+
+      component.onCreate.subscribe(expect(true).toBeTrue());
+    });
+    it('should trigger onUpdate event when uppdate operation is being made', () => {
+      component.updateFormData.isUpdate = true;
+
+      component.triggerPageAction();
+
+      component.onUpdate.subscribe(expect(true).toBeTrue());
+    });
+  });
+
+  it('should put original data in inputs when update operation', () => {
+    const testTitle = 'Test title';
+    const testDescription = 'Test description of a Template that will be updated';
+    component.updateFormData = {
+      isUpdate: true,
+      originalData: {
+        title: testTitle,
+        description: testDescription,
+      },
+    };
+
+    const titleComponent: CreatorInputComponent = getComponent(
+      fixture,
+      'app-creator-input#titleInput',
+    ).componentInstance;
+    const descriptionComponent: CreatorInputComponent = getComponent(
+      fixture,
+      'app-creator-input#descriptionInput',
+    ).componentInstance;
+
+    expect(titleComponent.value).toBe(testTitle);
+    expect(descriptionComponent.value).toBe(testDescription);
   });
 });

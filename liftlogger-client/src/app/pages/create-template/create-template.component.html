@@ -1,9 +1,11 @@
 <app-creator-page
-  title="Create Template"
+  [title]="(updateFormData$ | async)?.isUpdate ? 'Update Template' : 'Create Template'"
   inputTitle="Template name..."
   (formChanged)="handleFormChanged($event)"
   [createEnabled]="templateForm.get('title')?.valid!"
   (onCreate)="createTemplate()"
+  (onUpdate)="updateTemplate($event)"
+  [updateFormData]="(updateFormData$ | async)!"
 >
   <app-template-movements-list />
 </app-creator-page>

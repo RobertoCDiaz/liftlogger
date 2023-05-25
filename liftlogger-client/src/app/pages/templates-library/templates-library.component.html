@@ -1,6 +1,10 @@
 <app-drawer-page pageName="Templates" actionIcon="add" actionUrl="/templates/create">
   <div class="templates-list" *ngIf="templates$ | async as templates; else loading">
-    <div class="template-item" *ngFor="let template of templates">
+    <a
+      class="template-item"
+      *ngFor="let template of templates"
+      [routerLink]="'/templates/update/' + template.id"
+    >
       <p class="template-name">{{ template.name }}</p>
       <div class="template-groups-list">
         <div
@@ -18,7 +22,7 @@
           {{ movement.name }}
         </li>
       </ul>
-    </div>
+    </a>
   </div>
 </app-drawer-page>
 

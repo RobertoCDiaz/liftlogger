@@ -7,12 +7,14 @@
       placeholder="{{ inputTitle }}..."
       (valueChanged)="onTitleChanged($event)"
       [isTitle]="true"
+      [value]="updateFormData.isUpdate ? updateFormData.originalData?.title! : ''"
     />
     <app-creator-input
       id="descriptionInput"
       placeholder="Description..."
       (valueChanged)="onDescriptionChanged($event)"
       [isTextArea]="true"
+      [value]="updateFormData.isUpdate ? updateFormData.originalData?.description! : ''"
     />
   </div>
   <div class="page-content">
@@ -21,13 +23,13 @@
   <div class="footer">
     <app-button type="no-border" (onClicked)="onCancelClicked()"> Cancel </app-button>
     <app-button
-      id="createButton"
+      id="actionButton"
       type="primary"
       class="action"
-      (onClicked)="onCreateClicked()"
-      [disabled]="!createEnabled"
+      (onClicked)="triggerPageAction()"
+      [disabled]="!createEnabled && !updateFormData.isUpdate"
     >
-      Create
+      {{ updateFormData.isUpdate ? 'Update' : 'Create' }}
     </app-button>
   </div>
 </div>
