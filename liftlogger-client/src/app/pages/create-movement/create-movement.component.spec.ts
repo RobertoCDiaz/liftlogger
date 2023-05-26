@@ -3,9 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { environment } from 'src/environment/environment';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
-import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CreateMovementComponent } from './create-movement.component';
-import { CreatorPageComponent } from 'src/app/components/creator-page/creator-page.component';
+import {
+  CreatorPageComponent,
+  CreatorPageState,
+} from 'src/app/components/creator-page/creator-page.component';
 import { MuscularGroupSelectorComponent } from 'src/app/components/muscular-group-selector/muscular-group-selector.component';
 import { PageHeaderComponent } from 'src/app/components/page-header/page-header.component';
 import { CreatorInputComponent } from 'src/app/components/creator-input/creator-input.component';
@@ -20,15 +23,13 @@ import { getComponent } from 'src/app/helpers/testing.helper';
 describe('CreateMovementComponent', () => {
   let component: CreateMovementComponent;
   let fixture: ComponentFixture<CreateMovementComponent>;
+  let creatorPageState: CreatorPageState;
   let service: MovementsService;
   let router: Router;
 
   const testTitle = 'test title';
   const testDescription = 'test description';
-  const testForm = new FormGroup({
-    title: new FormControl(testTitle),
-    description: new FormControl(testDescription),
-  });
+  const testForm = { title: testTitle, description: testDescription };
   const testGroups = getMuscleGroupsFixture();
 
   beforeEach(async () => {
@@ -53,11 +54,14 @@ describe('CreateMovementComponent', () => {
           },
         }),
       ],
+      providers: [CreatorPageState],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateMovementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    creatorPageState = fixture.debugElement.injector.get(CreatorPageState);
 
     service = TestBed.inject(MovementsService);
     router = TestBed.inject(Router);
@@ -101,7 +105,7 @@ describe('CreateMovementComponent', () => {
     });
 
     it('should return false if no group is selected', () => {
-      component.movementForm = testForm;
+      creatorPageState.setFormValues(testForm);
 
       const result: boolean = component.shouldEnableCreation();
 
@@ -109,30 +113,12 @@ describe('CreateMovementComponent', () => {
     });
 
     it('should return true if a name, a description, and at least one muscle group is given', () => {
-      component.movementForm = testForm;
+      creatorPageState.setFormValues(testForm);
       component.selectedGroups = testGroups;
 
       const result: boolean = component.shouldEnableCreation();
 
       expect(result).toBeTrue();
-    });
-  });
-
-  describe('handleFormChanged()', () => {
-    it('should update movement information', () => {
-      component.handleFormChanged(testForm);
-
-      expect(component.movementForm.value.title).toBe(testTitle);
-      expect(component.movementForm.value.description).toBe(testDescription);
-    });
-
-    it('should be triggered by creator page when its form changes', () => {
-      const spy = spyOn(component, 'handleFormChanged');
-      const pageCreator = getComponent(fixture, 'app-creator-page');
-
-      pageCreator.triggerEventHandler('formChanged', testForm);
-
-      expect(spy).toHaveBeenCalledWith(testForm);
     });
   });
 
@@ -163,7 +149,7 @@ describe('CreateMovementComponent', () => {
 
       expect(creatorPage.createEnabled).toBeFalse();
 
-      component.movementForm = testForm;
+      creatorPageState.setFormValues(testForm);
       fixture.detectChanges();
 
       expect(creatorPage.createEnabled).toBeFalse();

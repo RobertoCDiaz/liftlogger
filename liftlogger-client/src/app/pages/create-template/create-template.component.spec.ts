@@ -1,17 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateTemplateComponent, CreateTemplateComponentState } from './create-template.component';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, of, skip } from 'rxjs';
 import { Movement } from 'src/app/models/MovementModel';
 import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
-import { CreatorForm } from 'src/app/components/creator-page/creator-page.component';
+import {
+  CreatorPageComponent,
+  CreatorPageState,
+} from 'src/app/components/creator-page/creator-page.component';
 import { AppModule } from 'src/app/app.module';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { getTemplatesFixture } from 'src/app/fixtures/templates.fixture';
 import { Template } from 'src/app/models/TemplateModel';
+import { getComponent } from 'src/app/helpers/testing.helper';
 
-describe('CreateTemplateComponent', () => {
+describe('CreateTemplateComponentState', () => {
   let state: CreateTemplateComponentState;
 
   beforeEach(() => {
@@ -90,6 +93,7 @@ describe('CreateTemplateComponent', () => {
   let fixture: ComponentFixture<CreateTemplateComponent>;
 
   let state: CreateTemplateComponentState;
+  let creatorPageState: CreatorPageState;
 
   let templateService: TemplatesService;
   let router: Router;
@@ -100,7 +104,7 @@ describe('CreateTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [CreateTemplateComponentState],
+      providers: [CreateTemplateComponentState, CreatorPageState],
       imports: [AppModule],
     }).compileComponents();
 
@@ -109,6 +113,7 @@ describe('CreateTemplateComponent', () => {
     fixture.detectChanges();
 
     state = fixture.debugElement.injector.get(CreateTemplateComponentState);
+    creatorPageState = fixture.debugElement.injector.get(CreatorPageState);
     templateService = TestBed.inject(TemplatesService);
     router = TestBed.inject(Router);
     activatedRoute = TestBed.inject(ActivatedRoute);
@@ -198,9 +203,10 @@ describe('CreateTemplateComponent', () => {
     it('should try to create template using service', async () => {
       let spy = spyOn(templateService, 'createTemplate').and.returnValue(of(testTemplate));
       spyOn(state, 'getMovements').and.returnValue(of(getMovementsFixture()));
-      component.templateForm = new FormGroup({
-        title: new FormControl<string | null>(testTitle),
-        description: new FormControl<string | null>(testDescription),
+
+      creatorPageState['form'].setValue({
+        title: testTitle,
+        description: testDescription,
       });
 
       await component.createTemplate();
@@ -222,9 +228,10 @@ describe('CreateTemplateComponent', () => {
 
     it('should create even if no description provided', async () => {
       let spy = spyOn(templateService, 'createTemplate').and.returnValue(of(testTemplate));
-      component.templateForm = new FormGroup({
-        title: new FormControl<string | null>(testTitle, { validators: Validators.required }),
-        description: new FormControl<string | null>(null),
+
+      creatorPageState['form'].setValue({
+        title: testTitle,
+        description: 'testDescription',
       });
 
       await component.createTemplate();
@@ -237,9 +244,10 @@ describe('CreateTemplateComponent', () => {
     it('should create even if no movements provided', async () => {
       let spy = spyOn(templateService, 'createTemplate').and.returnValue(of(testTemplate));
       spyOn(state, 'getMovements').and.returnValue(of([]));
-      component.templateForm = new FormGroup({
-        title: new FormControl<string | null>(testTitle),
-        description: new FormControl<string | null>(testDescription),
+
+      creatorPageState['form'].setValue({
+        title: testTitle,
+        description: testDescription,
       });
 
       await component.createTemplate();
@@ -264,11 +272,9 @@ describe('CreateTemplateComponent', () => {
     beforeEach(() => {
       updateSpy = spyOn(templateService, 'updateTemplate').and.returnValue(of(resultTemplate));
 
-      component.templateForm = new FormGroup({
-        title: new FormControl<string | null>(testTitle, { validators: Validators.required }),
-        description: new FormControl<string | null>(testDescription, {
-          validators: Validators.required,
-        }),
+      creatorPageState['form'].setValue({
+        title: testTitle,
+        description: testDescription,
       });
 
       getIdsSpy = component['getMovementsIds'] = jasmine.createSpy().and.returnValue(of(movsIs));
@@ -280,8 +286,8 @@ describe('CreateTemplateComponent', () => {
       expect(updateSpy).toHaveBeenCalledWith(
         testId,
         {
-          name: component.templateForm.value.title!,
-          description: component.templateForm.value.description!,
+          name: creatorPageState.getFormValues().title!,
+          description: creatorPageState.getFormValues().description!,
         },
         movsIs,
       );
@@ -290,7 +296,10 @@ describe('CreateTemplateComponent', () => {
     });
 
     it('should not call update if no title', () => {
-      component.templateForm.setValue({ title: null, description: testDescription });
+      creatorPageState['form'].setValue({
+        title: '',
+        description: testDescription,
+      });
 
       component.updateTemplate(testId);
 
@@ -298,14 +307,17 @@ describe('CreateTemplateComponent', () => {
     });
 
     it('should update even if no description', () => {
-      component.templateForm.setValue({ title: testTitle, description: null });
+      creatorPageState['form'].setValue({
+        title: testTitle,
+        description: '',
+      });
 
       component.updateTemplate(testId);
 
       expect(updateSpy).toHaveBeenCalledWith(
         testId,
         {
-          name: component.templateForm.value.title!,
+          name: creatorPageState.getFormValues().title!,
           description: undefined,
         },
         movsIs,
@@ -345,23 +357,19 @@ describe('CreateTemplateComponent', () => {
     });
   });
 
-  describe('handleFormChanged()', () => {
-    it('should set local form to provided form', () => {
-      const testTitle: string = 'Test Name';
-      const testDescription: string =
-        'This is just some testing information to test the Template creation page';
+  describe('HTML View', () => {
+    it('should not enable creation if no title provided', () => {
+      const creatorPage: CreatorPageComponent = getComponent(
+        fixture,
+        'app-creator-page',
+      ).componentInstance;
 
-      const formMock: CreatorForm = new FormGroup({
-        title: new FormControl<string | null>(testTitle, { validators: Validators.required }),
-        description: new FormControl<string | null>(testDescription, {
-          validators: Validators.required,
-        }),
-      });
+      expect(creatorPage.createEnabled).toBeFalse();
 
-      component.handleFormChanged(formMock);
+      creatorPageState.setFormValues({ title: 'Test Title', description: '' });
+      fixture.detectChanges();
 
-      expect(component.templateForm.value.title).toBe(testTitle);
-      expect(component.templateForm.value.description).toBe(testDescription);
+      expect(creatorPage.createEnabled).toBeTrue();
     });
   });
 });

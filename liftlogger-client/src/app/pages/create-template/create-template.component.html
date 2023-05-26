@@ -1,8 +1,7 @@
 <app-creator-page
   [title]="(updateFormData$ | async)?.isUpdate ? 'Update Template' : 'Create Template'"
   inputTitle="Template name..."
-  (formChanged)="handleFormChanged($event)"
-  [createEnabled]="templateForm.get('title')?.valid!"
+  [createEnabled]="creatorPageState.isFormValid()"
   (onCreate)="createTemplate()"
   (onUpdate)="updateTemplate($event)"
   [updateFormData]="(updateFormData$ | async)!"

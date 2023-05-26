@@ -1,10 +1,9 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, map, of, startWith, switchMap, take } from 'rxjs';
 import {
-  CreatorForm,
+  CreatorPageState,
   UpdateFormData,
 } from 'src/app/components/creator-page/creator-page.component';
 import { Movement } from 'src/app/models/MovementModel';
@@ -80,26 +79,19 @@ export class CreateTemplateComponentState {
   selector: 'app-create-template',
   templateUrl: './create-template.component.html',
   styleUrls: ['./create-template.component.sass'],
-  providers: [CreateTemplateComponentState],
+  providers: [CreateTemplateComponentState, CreatorPageState],
 })
 export class CreateTemplateComponent implements OnInit {
   state: CreateTemplateComponentState = inject(CreateTemplateComponentState);
   templatesService: TemplatesService = inject(TemplatesService);
   router: Router = inject(Router);
   route: ActivatedRoute = inject(ActivatedRoute);
+  creatorPageState: CreatorPageState = inject(CreatorPageState);
 
   /**
    * Stores data to determine if the page should show the update operation instead.
    */
   updateFormData$: Observable<UpdateFormData> = of({ isUpdate: false });
-
-  /**
-   * Form tha stores the data for the new Template.
-   */
-  templateForm: CreatorForm = new FormGroup({
-    title: new FormControl<string | null>(null, { validators: Validators.required }),
-    description: new FormControl<string | null>(null, { validators: Validators.required }),
-  });
 
   ngOnInit(): void {
     const inUpdatePath: boolean = this.router.url.includes('/templates/update/');
@@ -125,6 +117,11 @@ export class CreateTemplateComponent implements OnInit {
 
         this.state.addMovements(...(template.movements ?? []));
 
+        this.creatorPageState.setFormValues({
+          title: template.name,
+          description: template.description ?? '',
+        });
+
         return {
           isUpdate: true,
           objectId: template.id,
@@ -142,15 +139,17 @@ export class CreateTemplateComponent implements OnInit {
    * Tries to create a new Template.
    */
   async createTemplate() {
-    if (!this.templateForm.get('title')?.valid) {
+    if (!this.creatorPageState.isFormValid()) {
       alert('You have missing information');
       return;
     }
 
     this.getMovementsIds(this.state.getMovements()).subscribe(ids => {
+      const formValues = this.creatorPageState.getFormValues();
+
       const template: TemplateCreationParams = {
-        name: this.templateForm.value.title!,
-        description: this.templateForm.value.description! ?? undefined,
+        name: formValues.title!,
+        description: formValues.description,
       };
 
       this.templatesService.createTemplate(template, ids).subscribe({
@@ -171,17 +170,16 @@ export class CreateTemplateComponent implements OnInit {
    * @param templateId Identifier for the template to be updated
    */
   async updateTemplate(templateId: number) {
-    if (!this.templateForm.get('title')?.valid) {
+    if (!this.creatorPageState.isFormValid()) {
       alert('You have missing information');
       return;
     }
-
     this.getMovementsIds(this.state.getMovements()).subscribe(ids => {
+      const formValues = this.creatorPageState.getFormValues();
       const data: TemplateUpdateParams = {
-        name: this.templateForm.value.title!,
-        description: this.templateForm.value.description! ?? undefined,
+        name: formValues.title!,
+        description: formValues.description!,
       };
-
       this.templatesService.updateTemplate(templateId, data, ids).subscribe({
         next: template => {
           alert(template.name + ' successfully updated!');
@@ -205,16 +203,6 @@ export class CreateTemplateComponent implements OnInit {
       take(1),
       map(movements => movements.map(m => m.id)),
     );
-  }
-
-  /**
-   * Takes in the form from the CreatorPage component and stores its reference to use in this
-   * component.
-   *
-   * @param form CreatorPage form
-   */
-  handleFormChanged(form: CreatorForm) {
-    this.templateForm = form;
   }
 
   getPageTitle(): Observable<string> {

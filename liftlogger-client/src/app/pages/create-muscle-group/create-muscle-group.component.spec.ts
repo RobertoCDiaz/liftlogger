@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateMuscleGroupComponent } from './create-muscle-group.component';
-import { CreatorPageComponent } from 'src/app/components/creator-page/creator-page.component';
+import {
+  CreatorPageComponent,
+  CreatorPageState,
+} from 'src/app/components/creator-page/creator-page.component';
 import { MuscularGroupSelectorComponent } from 'src/app/components/muscular-group-selector/muscular-group-selector.component';
 import { PageHeaderComponent } from 'src/app/components/page-header/page-header.component';
 import { CreatorInputComponent } from 'src/app/components/creator-input/creator-input.component';
@@ -19,15 +22,17 @@ import { of } from 'rxjs';
 describe('CreateMuscleGroupComponent', () => {
   let component: CreateMuscleGroupComponent;
   let fixture: ComponentFixture<CreateMuscleGroupComponent>;
+  let creatorPageState: CreatorPageState;
+
   let service: GroupsService;
   let location: Location;
 
   const testTitle = 'test title';
   const testDescription = 'test description';
-  const testForm = new FormGroup({
-    title: new FormControl(testTitle),
-    description: new FormControl(testDescription),
-  });
+  const testForm = {
+    title: testTitle,
+    description: testDescription,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -51,12 +56,14 @@ describe('CreateMuscleGroupComponent', () => {
           },
         }),
       ],
-      providers: [Location],
+      providers: [Location, CreatorPageState],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateMuscleGroupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    creatorPageState = fixture.debugElement.injector.get(CreatorPageState);
 
     service = TestBed.inject(GroupsService);
     location = TestBed.inject(Location);
@@ -75,7 +82,7 @@ describe('CreateMuscleGroupComponent', () => {
 
       expect(creatorPage.createEnabled).toBeFalse();
 
-      component.groupForm = testForm;
+      creatorPageState.setFormValues(testForm);
       fixture.detectChanges();
 
       expect(creatorPage.createEnabled).toBeTrue();
@@ -117,7 +124,7 @@ describe('CreateMuscleGroupComponent', () => {
       );
       spyOn(location, 'back');
 
-      component.groupForm = testForm;
+      creatorPageState.setFormValues(testForm);
       component.onCreateClicked();
 
       expect(serviceSpy).toHaveBeenCalled();
@@ -128,23 +135,6 @@ describe('CreateMuscleGroupComponent', () => {
       const creatorPage = getComponent(fixture, 'app-creator-page');
 
       creatorPage.triggerEventHandler('onCreate');
-
-      expect(spy).toHaveBeenCalled();
-    });
-  });
-  describe('handleFormChanged()', () => {
-    it('should update form data', () => {
-      component.handleFormChanged(testForm);
-
-      expect(component.groupForm.value.title).toBe(testTitle);
-      expect(component.groupForm.value.description).toBe(testDescription);
-    });
-
-    it('should be triggered when form changes', () => {
-      const spy = spyOn(component, 'handleFormChanged');
-      const creatorPage = getComponent(fixture, 'app-creator-page');
-
-      creatorPage.triggerEventHandler('formChanged');
 
       expect(spy).toHaveBeenCalled();
     });

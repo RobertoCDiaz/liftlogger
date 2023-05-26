@@ -166,6 +166,7 @@ describe('CreatorPageState', () => {
 describe('CreatorPageComponent', () => {
   let component: CreatorPageComponent;
   let fixture: ComponentFixture<CreatorPageComponent>;
+  let state: CreatorPageState;
 
   const actionButtonId: string = '#actionButton';
 
@@ -173,11 +174,14 @@ describe('CreatorPageComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CreatorPageComponent],
       imports: [AppModule],
+      providers: [CreatorPageState],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreatorPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    state = TestBed.inject(CreatorPageState);
   });
 
   it('should create', () => {
@@ -268,7 +272,7 @@ describe('CreatorPageComponent', () => {
     testTitles.forEach(title => {
       titleInput.triggerEventHandler('valueChanged', title);
 
-      expect(component.pageForm.value.title).toBe(title);
+      expect(state.getFormValues().title).toBe(title);
     });
   });
 
@@ -283,22 +287,7 @@ describe('CreatorPageComponent', () => {
     testDescriptions.forEach(description => {
       descriptionInput.triggerEventHandler('valueChanged', description);
 
-      expect(component.pageForm.value.description).toBe(description);
-    });
-  });
-
-  describe('formChanged EventEmitted', () => {
-    it('should emit the page form when it changes', () => {
-      let emittedValue: CreatorForm | null = null;
-      component.formChanged.subscribe(form => {
-        emittedValue = form;
-      });
-
-      component.pageForm.patchValue({ title: 'testing title' });
-      expect(emittedValue!.value.title).toBe('testing title');
-
-      component.pageForm.patchValue({ description: 'just a description' });
-      expect(emittedValue!.value.description).toBe('just a description');
+      expect(state.getFormValues().description).toBe(description);
     });
   });
 

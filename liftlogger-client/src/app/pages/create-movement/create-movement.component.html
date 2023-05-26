@@ -2,9 +2,8 @@
   #creatorPage
   title="New Movement"
   inputTitle="Movement name..."
-  [createEnabled]="!(movementForm.invalid || selectedGroups.length === 0)"
+  [createEnabled]="shouldEnableCreation()"
   (onCreate)="createMovement()"
-  (formChanged)="handleFormChanged($event)"
 >
   <app-muscular-group-selector
     text="Which group does this target?"

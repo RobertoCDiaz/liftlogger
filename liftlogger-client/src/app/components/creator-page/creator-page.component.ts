@@ -46,32 +46,69 @@ export type CreatorFormType = {
  */
 export type CreatorForm = FormGroup<ToForm<CreatorFormType>>;
 
+/**
+ * Stores state for a CreatorPage component.
+ */
 export class CreatorPageState {
+  /**
+   * Form used to store the common data for all the create pages.
+   */
   private form: CreatorForm = new FormGroup({
     title: new FormControl<string>(''),
     description: new FormControl<string>(''),
   });
 
+  /**
+   * Replaces the current values of the page form with new ones.
+   *
+   * @param values New values to be placed in the form
+   */
   setFormValues(values: Partial<CreatorFormType>) {
     this.form.patchValue(values);
   }
 
+  /**
+   * Gets the current values of the form.
+   * If a value is an empty string (''), it is not included.
+   *
+   * @returns Form values
+   */
   getFormValues(): Partial<CreatorFormType> {
+    const theresTitle: boolean = this.form.value.title !== '';
+    const titleObject = theresTitle ? { title: this.form.value.title! } : {};
+
+    const theresDescription: boolean = this.form.value.description !== '';
+    const descriptionObject = theresDescription
+      ? { description: this.form.value.description! }
+      : {};
+
     return {
-      title: this.form.value.title !== '' ? this.form.value.title! : undefined,
-      description: this.form.value.description !== '' ? this.form.value.description! : undefined,
+      ...titleObject,
+      ...descriptionObject,
     };
   }
 
+  /**
+   * Whether the current values in the form are all valid, meaning they have valid values (no
+   * nulls/undefined, no empty string, etc).
+   *
+   * @param requireDescription Whether the `description` value should be required or not
+   * @returns Current form valid state
+   */
   isFormValid(requireDescription: boolean = false): boolean {
     return (
-      // title always has to be different than empty string
-      this.getFormValues().title! !== '' &&
-      // description only needs to not be empty when it is required
-      (!requireDescription || this.getFormValues().description !== '')
+      // title is always required
+      !!this.getFormValues().title &&
+      // description is only required if specified
+      (!requireDescription || !!this.getFormValues().description)
     );
   }
 
+  /**
+   * Fires up whenever the current form values change.
+   *
+   * @returns Observable of the current values of the form.
+   */
   formValueChanges$(): Observable<Partial<CreatorFormType>> {
     return this.form.valueChanges.pipe(map(_ => this.getFormValues()));
   }
@@ -86,7 +123,6 @@ export class CreatorPageState {
   selector: 'app-creator-page',
   templateUrl: './creator-page.component.html',
   styleUrls: ['./creator-page.component.sass'],
-  providers: [CreatorPageState],
 })
 export class CreatorPageComponent {
   state: CreatorPageState = inject(CreatorPageState);
@@ -96,14 +132,6 @@ export class CreatorPageComponent {
    * By default, it is set to NOT being an update operation.
    */
   @Input() updateFormData: UpdateFormData = { isUpdate: false };
-
-  /**
-   * Internal form to store data from the page inputs.
-   */
-  pageForm: CreatorForm = new FormGroup({
-    title: new FormControl<string | null>(null, { validators: [Validators.required] }),
-    description: new FormControl<string | null>(null, { validators: [Validators.required] }),
-  });
 
   /**
    * Name of the page. This wil be placed as the title in the header bar.
@@ -135,19 +163,6 @@ export class CreatorPageComponent {
    */
   @Output() onUpdate = new EventEmitter<number>();
 
-  /**
-   * Informs that the page form has changed and emits it.
-   *
-   * @emits `pageForm` The page form with updated values
-   */
-  @Output() formChanged = new EventEmitter<CreatorForm>();
-
-  ngOnInit() {
-    this.pageForm.valueChanges.subscribe(_ => {
-      this.formChanged.emit(this.pageForm);
-    });
-  }
-
   constructor(private location: Location) {}
 
   /**
@@ -175,7 +190,7 @@ export class CreatorPageComponent {
    * @param value New value for the title
    */
   onTitleChanged(value: string): void {
-    this.pageForm.patchValue({
+    this.state.setFormValues({
       title: value,
     });
   }
@@ -186,7 +201,7 @@ export class CreatorPageComponent {
    * @param value New value for the description
    */
   onDescriptionChanged(value: string): void {
-    this.pageForm.patchValue({
+    this.state.setFormValues({
       description: value,
     });
   }
