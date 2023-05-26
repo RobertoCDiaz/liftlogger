@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Observable, map } from 'rxjs';
 import { ToForm } from 'src/app/helpers/types.helper';
 
 /**
@@ -45,6 +46,37 @@ export type CreatorFormType = {
  */
 export type CreatorForm = FormGroup<ToForm<CreatorFormType>>;
 
+export class CreatorPageState {
+  private form: CreatorForm = new FormGroup({
+    title: new FormControl<string>(''),
+    description: new FormControl<string>(''),
+  });
+
+  setFormValues(values: Partial<CreatorFormType>) {
+    this.form.patchValue(values);
+  }
+
+  getFormValues(): Partial<CreatorFormType> {
+    return {
+      title: this.form.value.title !== '' ? this.form.value.title! : undefined,
+      description: this.form.value.description !== '' ? this.form.value.description! : undefined,
+    };
+  }
+
+  isFormValid(requireDescription: boolean = false): boolean {
+    return (
+      // title always has to be different than empty string
+      this.getFormValues().title! !== '' &&
+      // description only needs to not be empty when it is required
+      (!requireDescription || this.getFormValues().description !== '')
+    );
+  }
+
+  formValueChanges$(): Observable<Partial<CreatorFormType>> {
+    return this.form.valueChanges.pipe(map(_ => this.getFormValues()));
+  }
+}
+
 /**
  * Serves as a base component for any page that can create a DB entity. It was
  * originally designed to be the base of the template/movement/group creator,
@@ -54,8 +86,11 @@ export type CreatorForm = FormGroup<ToForm<CreatorFormType>>;
   selector: 'app-creator-page',
   templateUrl: './creator-page.component.html',
   styleUrls: ['./creator-page.component.sass'],
+  providers: [CreatorPageState],
 })
 export class CreatorPageComponent {
+  state: CreatorPageState = inject(CreatorPageState);
+
   /**
    * Contains information for when an update operation is being made.
    * By default, it is set to NOT being an update operation.

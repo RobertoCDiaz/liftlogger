@@ -1,11 +1,167 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreatorForm, CreatorPageComponent } from './creator-page.component';
+import { CreatorPageComponent, CreatorPageState } from './creator-page.component';
 import { getComponent, getComponents } from 'src/app/helpers/testing.helper';
 import { AppModule } from 'src/app/app.module';
 import { PageHeaderComponent } from '../page-header/page-header.component';
 import { CreatorInputComponent } from '../creator-input/creator-input.component';
 import { ButtonComponent } from '../button/button.component';
+
+describe('CreatorPageState', () => {
+  let state: CreatorPageState;
+
+  const testTitle = 'Test Title';
+  const testDescription = 'Just a testing description';
+
+  beforeEach(() => {
+    state = new CreatorPageState();
+  });
+
+  describe('setFormValues()', () => {
+    it('can replace form values', () => {
+      state.setFormValues({
+        title: testTitle,
+        description: testDescription,
+      });
+
+      expect(state['form'].value).toEqual({
+        title: testTitle,
+        description: testDescription,
+      });
+    });
+
+    it('can only set the title', () => {
+      state.setFormValues({ title: testTitle });
+
+      expect(state['form'].value).toEqual({
+        title: testTitle,
+        description: '',
+      });
+    });
+
+    it('can only set the description', () => {
+      state.setFormValues({ description: testDescription });
+
+      expect(state['form'].value).toEqual({
+        title: '',
+        description: testDescription,
+      });
+    });
+  });
+
+  describe('getFormValues()', () => {
+    it('should get current form values', () => {
+      state['form'].setValue({
+        title: testTitle,
+        description: testDescription,
+      });
+
+      const result = state.getFormValues();
+
+      expect(result).toEqual({
+        title: testTitle,
+        description: testDescription,
+      });
+    });
+
+    it('should be empty if empty title and description', () => {
+      state['form'].setValue({
+        title: '',
+        description: '',
+      });
+
+      const result = state.getFormValues();
+
+      expect(result).toEqual({});
+    });
+
+    it('should not include an empty title', () => {
+      state['form'].setValue({
+        title: '',
+        description: testDescription,
+      });
+
+      const result = state.getFormValues();
+
+      expect(result).toEqual({
+        description: testDescription,
+      });
+    });
+
+    it('should not include an empty description', () => {
+      state['form'].setValue({
+        title: testTitle,
+        description: '',
+      });
+
+      const result = state.getFormValues();
+
+      expect(result).toEqual({
+        title: testTitle,
+      });
+    });
+  });
+
+  describe('isFormValid()', () => {
+    it('should return true if a title is provided', () => {
+      state['form'].setValue({
+        title: testTitle,
+        description: '',
+      });
+
+      const result = state.isFormValid();
+
+      expect(result).toBeTrue();
+    });
+
+    it('should return false if no title is provided', () => {
+      state['form'].setValue({
+        title: '',
+        description: '',
+      });
+
+      const result = state.isFormValid();
+
+      expect(result).toBeFalse();
+    });
+
+    it('should return true if description is provided when required', () => {
+      state['form'].setValue({
+        title: testTitle,
+        description: testDescription,
+      });
+
+      const result = state.isFormValid(true);
+
+      expect(result).toBeTrue();
+    });
+
+    it('should return false if no description is provided when required', () => {
+      state['form'].setValue({
+        title: testTitle,
+        description: '',
+      });
+
+      const result = state.isFormValid(true);
+
+      expect(result).toBeFalse();
+    });
+  });
+
+  describe('formValueChanges$()', () => {
+    it('should react to form changes and pass the values', () => {
+      state.formValueChanges$().subscribe(values => {
+        expect(values.title).toBe(testTitle);
+        expect(values.description).toBe(testDescription);
+      });
+
+      state['form'].setValue({
+        title: testTitle,
+        description: testDescription,
+      });
+    });
+  });
+});
 
 describe('CreatorPageComponent', () => {
   let component: CreatorPageComponent;
