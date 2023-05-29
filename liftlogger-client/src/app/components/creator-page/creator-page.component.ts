@@ -5,24 +5,29 @@ import { Observable, map } from 'rxjs';
 import { ToForm } from 'src/app/helpers/types.helper';
 
 /**
- * Holds useful information for update forms.
+ * Defines the shapes of the Update state of a creation form.
  */
-export type UpdateFormData<T = number> = {
-  /**
-   * Whether the current instance of the page is a update operation or not.
-   */
-  isUpdate: boolean;
+export type UpdateState =
+  | {
+      /**
+       * Whether the current instance of the page is a update operation or not. When `false`, it
+       * means the current form is not an update form, but a create form instead.
+       */
+      isUpdate: false;
+    }
+  | {
+      /**
+       * Whether the current instance of the page is a update operation or not. When `true`, it
+       * means the current form is an update form. It will also require the object to have other
+       * properties to help in the updating process, such as `objectId`.
+       */
+      isUpdate: true;
 
-  /**
-   * Original data for the object that will be updated, if one.
-   */
-  originalData?: CreatorFormType;
-
-  /**
-   * Identifier for the object to be updated.
-   */
-  objectId?: T;
-};
+      /**
+       * Identifier for the object to be updated.
+       */
+      objectId: number;
+    };
 
 /**
  * Defines the shape of the form for a creator page.
@@ -57,6 +62,12 @@ export class CreatorPageState {
     title: new FormControl<string>(''),
     description: new FormControl<string>(''),
   });
+
+  /**
+   * Contains information for when an update operation is being made.
+   * By default, it is set to NOT being an update operation.
+   */
+  updateState: UpdateState = { isUpdate: false };
 
   /**
    * Replaces the current values of the page form with new ones.
@@ -126,12 +137,6 @@ export class CreatorPageState {
 })
 export class CreatorPageComponent {
   state: CreatorPageState = inject(CreatorPageState);
-
-  /**
-   * Contains information for when an update operation is being made.
-   * By default, it is set to NOT being an update operation.
-   */
-  @Input() updateFormData: UpdateFormData = { isUpdate: false };
 
   /**
    * Name of the page. This wil be placed as the title in the header bar.

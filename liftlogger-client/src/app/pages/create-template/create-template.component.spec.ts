@@ -144,40 +144,30 @@ describe('CreateTemplateComponent', () => {
       getTemplateSpy = spyOn(templateService, 'getTemplate').and.returnValue(of(testTemplate));
     });
 
-    it('should properly set updateFormData$ when operation url is being used and valid template id', () => {
+    it('should properly set update state when update url is being used and valid template id', () => {
       component.ngOnInit();
 
-      // fist value is skipped because it starts as false
-      component.updateFormData$.pipe(skip(1)).subscribe(result => {
-        expect(result.isUpdate).toBeTrue();
-        expect(result.originalData).toEqual({
-          title: testTemplate.name,
-          description: testTemplate.description!,
-        });
+      expect(creatorPageState.updateState.isUpdate).toBeTrue();
+      expect(creatorPageState.getFormValues()).toEqual({
+        title: testTemplate.name,
+        description: testTemplate.description! ?? '',
       });
     });
 
-    it('should set update operation as false if not template found', () => {
+    it('should redirect to /templates if not template found', () => {
       getTemplateSpy.and.returnValue(of()).and.throwError('Not found');
 
       component.ngOnInit();
 
-      component.updateFormData$.pipe().subscribe({
-        error: err => {
-          expect(err.message).toBe('Not found');
-        },
-      });
+      expect(navigateSpy).toHaveBeenCalled();
     });
 
-    it('should set update operation as false if no valid id', () => {
+    it('should redirect to /templates if no valid id', () => {
       idSpy.and.returnValue(of(convertToParamMap({ id: 'not-valid' })));
 
       component.ngOnInit();
 
-      component.updateFormData$.pipe(skip(1)).subscribe(result => {
-        expect(result.isUpdate).toBeFalse();
-        expect(navigateSpy).toHaveBeenCalled();
-      });
+      expect(navigateSpy).toHaveBeenCalled();
     });
 
     it('should set update operation as false not in update path', () => {
@@ -185,9 +175,7 @@ describe('CreateTemplateComponent', () => {
 
       component.ngOnInit();
 
-      component.updateFormData$.pipe(skip(1)).subscribe(result => {
-        expect(result.isUpdate).toBeFalse();
-      });
+      expect(creatorPageState.updateState.isUpdate).toBeFalse();
     });
   });
 

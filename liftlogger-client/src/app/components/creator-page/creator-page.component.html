@@ -7,14 +7,14 @@
       placeholder="{{ inputTitle }}..."
       (valueChanged)="onTitleChanged($event)"
       [isTitle]="true"
-      [value]="updateFormData.isUpdate ? updateFormData.originalData?.title! : ''"
+      [value]="this.state.getFormValues().title!"
     />
     <app-creator-input
       id="descriptionInput"
       placeholder="Description..."
       (valueChanged)="onDescriptionChanged($event)"
       [isTextArea]="true"
-      [value]="updateFormData.isUpdate ? updateFormData.originalData?.description! : ''"
+      [value]="this.state.getFormValues().description!"
     />
   </div>
   <div class="page-content">
@@ -27,9 +27,9 @@
       type="primary"
       class="action"
       (onClicked)="triggerPageAction()"
-      [disabled]="!createEnabled && !updateFormData.isUpdate"
+      [disabled]="!createEnabled && !this.state.updateState.isUpdate"
     >
-      {{ updateFormData.isUpdate ? 'Update' : 'Create' }}
+      {{ this.state.updateState.isUpdate ? 'Update' : 'Create' }}
     </app-button>
   </div>
 </div>

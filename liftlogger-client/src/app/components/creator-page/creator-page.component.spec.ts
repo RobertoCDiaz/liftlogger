@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreatorPageComponent, CreatorPageState } from './creator-page.component';
-import { getComponent, getComponents } from 'src/app/helpers/testing.helper';
+import { CreatorPageComponent, CreatorPageState, UpdateState } from './creator-page.component';
+import { getComponent, getComponents, getElement } from 'src/app/helpers/testing.helper';
 import { AppModule } from 'src/app/app.module';
 import { PageHeaderComponent } from '../page-header/page-header.component';
 import { CreatorInputComponent } from '../creator-input/creator-input.component';
@@ -236,13 +236,27 @@ describe('CreatorPageComponent', () => {
     });
   });
 
-  it('should disable and enable the create button', () => {
+  it('should disable and enable the action button when creating', () => {
+    state.updateState.isUpdate = false;
     const button: ButtonComponent = getComponent(fixture, actionButtonId).componentInstance;
 
     component.createEnabled = false;
     fixture.detectChanges();
 
     expect(button.disabled).toBeTrue();
+
+    component.createEnabled = true;
+    fixture.detectChanges();
+
+    expect(button.disabled).toBeFalse();
+  });
+
+  it('should always enable action button if update operation', () => {
+    state.updateState.isUpdate = true;
+    component.createEnabled = false;
+    const button: ButtonComponent = getComponent(fixture, actionButtonId).componentInstance;
+
+    expect(button.disabled).toBeFalse();
 
     component.createEnabled = true;
     fixture.detectChanges();
@@ -298,7 +312,7 @@ describe('CreatorPageComponent', () => {
       component.onCreate.subscribe(expect(true).toBeTrue());
     });
     it('should trigger onUpdate event when uppdate operation is being made', () => {
-      component.updateFormData.isUpdate = true;
+      state.updateState.isUpdate = true;
 
       component.triggerPageAction();
 
@@ -309,13 +323,8 @@ describe('CreatorPageComponent', () => {
   it('should put original data in inputs when update operation', () => {
     const testTitle = 'Test title';
     const testDescription = 'Test description of a Template that will be updated';
-    component.updateFormData = {
-      isUpdate: true,
-      originalData: {
-        title: testTitle,
-        description: testDescription,
-      },
-    };
+    state.updateState.isUpdate = true;
+    state.setFormValues({ title: testTitle, description: testDescription });
 
     const titleComponent: CreatorInputComponent = getComponent(
       fixture,

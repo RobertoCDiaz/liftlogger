@@ -1,11 +1,8 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Observable, map, of, startWith, switchMap, take } from 'rxjs';
-import {
-  CreatorPageState,
-  UpdateFormData,
-} from 'src/app/components/creator-page/creator-page.component';
+import { BehaviorSubject, Observable, catchError, map, of, switchMap, take } from 'rxjs';
+import { CreatorPageState } from 'src/app/components/creator-page/creator-page.component';
 import { Movement } from 'src/app/models/MovementModel';
 import { TemplateCreationParams, TemplateUpdateParams } from 'src/app/models/TemplateModel';
 import { TemplatesService } from 'src/app/services/templates.service';
@@ -88,51 +85,46 @@ export class CreateTemplateComponent implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   creatorPageState: CreatorPageState = inject(CreatorPageState);
 
-  /**
-   * Stores data to determine if the page should show the update operation instead.
-   */
-  updateFormData$: Observable<UpdateFormData> = of({ isUpdate: false });
-
   ngOnInit(): void {
     const inUpdatePath: boolean = this.router.url.includes('/templates/update/');
-    this.updateFormData$ = this.route.paramMap.pipe(
-      switchMap(paramMap => {
-        let id: number = parseInt(paramMap.get('id')!);
 
-        if (Number.isNaN(id) || !inUpdatePath) {
-          return of(null);
-        }
+    if (inUpdatePath) {
+      this.route.paramMap
+        .pipe(
+          take(1),
+          switchMap(paramMap => {
+            let id: number = parseInt(paramMap.get('id')!);
 
-        return this.templatesService.getTemplate(id);
-      }),
-      map(template => {
-        if (!template && inUpdatePath) {
-          this.router.navigate(['/templates']);
-          return { isUpdate: false } satisfies UpdateFormData;
-        }
+            if (Number.isNaN(id) || !inUpdatePath) {
+              return of(null);
+            }
 
-        if (!template) {
-          return { isUpdate: false } satisfies UpdateFormData;
-        }
+            return this.templatesService.getTemplate(id);
+          }),
+          catchError(_ => {
+            this.router.navigate(['/templates']);
+            return of(null);
+          }),
+        )
+        .subscribe(template => {
+          if (!template) {
+            this.router.navigate(['/templates']);
+            return;
+          }
 
-        this.state.addMovements(...(template.movements ?? []));
+          this.state.addMovements(...(template.movements ?? []));
 
-        this.creatorPageState.setFormValues({
-          title: template.name,
-          description: template.description ?? '',
-        });
-
-        return {
-          isUpdate: true,
-          objectId: template.id,
-          originalData: {
+          this.creatorPageState.setFormValues({
             title: template.name,
             description: template.description ?? '',
-          },
-        } satisfies UpdateFormData;
-      }),
-      startWith<UpdateFormData>({ isUpdate: false }),
-    );
+          });
+
+          this.creatorPageState.updateState = {
+            isUpdate: true,
+            objectId: template.id,
+          };
+        });
+    }
   }
 
   /**
@@ -202,12 +194,6 @@ export class CreateTemplateComponent implements OnInit {
     return movements$.pipe(
       take(1),
       map(movements => movements.map(m => m.id)),
-    );
-  }
-
-  getPageTitle(): Observable<string> {
-    return this.updateFormData$.pipe(
-      switchMap(formData => (formData.isUpdate ? of('Update Template') : of('Create Template'))),
     );
   }
 }
