@@ -66,4 +66,21 @@ export class HttpService {
       }),
     );
   }
+
+  /**
+   * Makes a DELETE request to the application's backend appending a Authorization Bearer token to it.
+   * This means that it will be an Auth request, a request with user information.
+   *
+   * @param endpoint API endpoint to make the request to
+   * @returns Response from request
+   */
+  delete<ResponseType>(endpoint: string): Observable<ResponseType> {
+    return this.authService.getAccessTokenSilently().pipe(
+      switchMap(tokenId => {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${tokenId}`);
+
+        return this.http.delete<ResponseType>(this.url + endpoint, { headers });
+      }),
+    );
+  }
 }
