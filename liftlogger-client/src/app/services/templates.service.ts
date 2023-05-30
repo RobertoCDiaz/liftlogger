@@ -53,7 +53,7 @@ export class TemplatesService {
   }
 
   /**
-   * Makes a request to the server to updaet a Template.
+   * Makes a request to the server to update a Template.
    *
    * @param id Identifier of te Template to be updated
    * @param template Data to update the Template with
@@ -69,6 +69,16 @@ export class TemplatesService {
       template,
       movements_ids: movementsIds,
     });
+  }
+
+  /**
+   * Makes a request to the server to delete a Template.
+   *
+   * @param id Identifier of te Template to be deleted
+   * @returns Delete operation observable
+   */
+  deleteTemplate(id: number): Observable<void> {
+    return this.http.delete<void>('templates/' + id);
   }
 
   /**

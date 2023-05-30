@@ -113,6 +113,17 @@ describe('TemplatesService', () => {
     });
   });
 
+  describe('deleteTemplate', () => {
+    it('should make a request to delete a template', () => {
+      const testId: number = 3;
+      const deleteSpy = spyOn(http, 'delete').and.returnValue(of(''));
+
+      service.deleteTemplate(testId).subscribe(_ => {
+        expect(deleteSpy).toHaveBeenCalledWith('templates/' + testId);
+      });
+    });
+  });
+
   describe('getMuscleGroupsFromTemplate()', () => {
     it('should get the names of the muscle groups contained in a template', () => {
       const testTemplate = getTemplatesFixture()[2];
