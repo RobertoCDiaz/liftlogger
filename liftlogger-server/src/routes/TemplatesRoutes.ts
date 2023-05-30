@@ -1,7 +1,7 @@
 import { Template } from '@prisma/client';
 import PrismaUtils from '../utils/PrismaUtils';
 import * as express from 'express';
-import { Body, Controller, Get, Middlewares, Path, Post, Put, Request, Route } from 'tsoa';
+import { Body, Controller, Delete, Get, Middlewares, Path, Post, Put, Request, Route } from 'tsoa';
 import TemplateController from '../controllers/TemplateController';
 import { authenticationMiddleware } from '../middlewares/auth';
 import {
@@ -89,5 +89,24 @@ export class TemplateRoutes extends Controller {
     }
 
     return await this.templatesController.updateTemplate(id, body.template, body.movements_ids);
+  }
+
+  /**
+   * Tries to delete a template only if the user requesting owns it.
+   *
+   * @param id Template identifier
+   * @param req Request object
+   */
+  @Delete('{id}')
+  @Middlewares([authenticationMiddleware])
+  async deleteTemplate(@Path() id: number, @Request() req: express.Request) {
+    const userEmail = req.user_email;
+
+    const deleted: boolean = await this.templatesController.deleteTemplate(id, userEmail);
+
+    if (!deleted) {
+      this.setStatus(404);
+      return;
+    }
   }
 }

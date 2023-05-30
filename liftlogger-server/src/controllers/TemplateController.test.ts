@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import PrismaUtils from '../utils/PrismaUtils';
 import TemplateController from './TemplateController';
 import { getNewTemplateFixture, getTemplatesFixture } from '../fixtures/TemplateFixtures';
-import { TemplateUpdateParams } from '../models/TemplateModel';
+import { TemplateCreationParams, TemplateUpdateParams } from '../models/TemplateModel';
 
 const prismaInstance: PrismaClient = PrismaUtils.getPrismaTestingInstance();
 const controller: TemplateController = new TemplateController(prismaInstance);
@@ -121,6 +121,56 @@ describe('TemplateController', () => {
       expect(template.name).toBe(newData.name);
       expect(template.description).toBe(newData.description);
       expect(new Set(movIds)).toEqual(new Set(newMovementIds));
+    });
+  });
+
+  describe('deleteTemplate()', () => {
+    it('should properly delete a template', async () => {
+      const newTemplateData: TemplateCreationParams = getNewTemplateFixture();
+      const email = newTemplateData.user_email;
+      const realCount: number = await prismaInstance.template.count();
+
+      const newTemplate = await prismaInstance.template.create({ data: newTemplateData });
+
+      let newCount: number = await prismaInstance.template.count();
+      let countWithId: number = await prismaInstance.template.count({
+        where: { id: newTemplate.id },
+      });
+
+      expect(newCount).toBe(realCount + 1);
+      expect(countWithId).toBe(1);
+
+      await controller.deleteTemplate(newTemplate.id, email);
+
+      newCount = await prismaInstance.template.count();
+      countWithId = await prismaInstance.template.count({ where: { id: newTemplate.id } });
+
+      expect(newCount).toBe(realCount);
+      expect(countWithId).toBe(0);
+    });
+
+    it('should not delete a template if provided email doesnt own it', async () => {
+      const newTemplateData: TemplateCreationParams = getNewTemplateFixture();
+      const email = 'another-email@test.com';
+      const realCount: number = await prismaInstance.template.count();
+
+      const newTemplate = await prismaInstance.template.create({ data: newTemplateData });
+
+      let newCount: number = await prismaInstance.template.count();
+      let countWithId: number = await prismaInstance.template.count({
+        where: { id: newTemplate.id },
+      });
+
+      expect(newCount).toBe(realCount + 1);
+      expect(countWithId).toBe(1);
+
+      await controller.deleteTemplate(newTemplate.id, email);
+
+      newCount = await prismaInstance.template.count();
+      countWithId = await prismaInstance.template.count({ where: { id: newTemplate.id } });
+
+      expect(newCount).toBe(realCount + 1);
+      expect(countWithId).toBe(1);
     });
   });
 });

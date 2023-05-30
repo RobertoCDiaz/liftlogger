@@ -130,4 +130,15 @@ describe('TemplateRoutes', () => {
       expect(result).toEqual(testResult);
     });
   });
+
+  describe('deleteTemplate()', () => {
+    it('should call delete template from controller', async () => {
+      const testId: number = 1;
+      const spy = jest.spyOn(templateController, 'deleteTemplate').mockResolvedValue(true);
+
+      await routesController.deleteTemplate(testId, emailRequestMock);
+
+      expect(spy).toHaveBeenCalled();
+    });
+  });
 });

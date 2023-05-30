@@ -117,4 +117,25 @@ export default class TemplateController {
 
     return updated;
   }
+
+  /**
+   * Deletes a Template from DB only if the provided email is its owner.
+   *
+   * @param id Identifier of the Template to be deleted
+   * @param email Email of the owner of the Template
+   * @returns Whether the delete operation was done or not.
+   */
+  async deleteTemplate(id: number, email: string): Promise<boolean> {
+    const belongsToEmail: boolean =
+      (await this.prisma.template.count({
+        where: { id, user_email: email },
+      })) > 0;
+
+    if (!belongsToEmail) {
+      return false;
+    }
+
+    await this.prisma.template.delete({ where: { id } });
+    return true;
+  }
 }
