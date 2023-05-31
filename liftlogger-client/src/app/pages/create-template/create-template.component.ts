@@ -185,6 +185,29 @@ export class CreateTemplateComponent implements OnInit {
   }
 
   /**
+   * Asks the user if they want to delete a given Template. If they want to, it then deletes it.
+   *
+   * @param id Identifier for the Template to delete
+   */
+  async deleteTemplate(id: number) {
+    const response = confirm('Are you sure you want to delete this template?');
+
+    if (!response) {
+      return;
+    }
+
+    this.templatesService.deleteTemplate(id).subscribe({
+      next: _ => {
+        alert('Template was succesfully deleted');
+        this.router.navigate(['/templates']);
+      },
+      error: err => {
+        alert(err.message);
+      },
+    });
+  }
+
+  /**
    * Transforms the last
    *
    * @param movements$ Movements observable

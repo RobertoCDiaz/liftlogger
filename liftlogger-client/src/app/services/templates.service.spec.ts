@@ -5,6 +5,8 @@ import { HttpService } from './http.service';
 import { getNewTemplateFixture, getTemplatesFixture } from '../fixtures/templates.fixture';
 import { of } from 'rxjs';
 import { AppModule } from '../app.module';
+import { MuscleGroup } from '../models/MuscleGroupModel';
+import { Movement, MovementToTemplateModel } from '../models/MovementModel';
 
 describe('TemplatesService', () => {
   let service: TemplatesService;
@@ -127,6 +129,31 @@ describe('TemplatesService', () => {
   describe('getMuscleGroupsFromTemplate()', () => {
     it('should get the names of the muscle groups contained in a template', () => {
       const testTemplate = getTemplatesFixture()[2];
+
+      // mocks groups in movements
+      testTemplate.movements = [
+        {
+          movement: {
+            groups: [
+              {
+                name: 'Chest',
+              } as MuscleGroup,
+            ],
+          } as Movement,
+        } as MovementToTemplateModel,
+        {
+          movement: {
+            groups: [
+              {
+                name: 'Chest',
+              } as MuscleGroup,
+              {
+                name: 'Back',
+              } as MuscleGroup,
+            ],
+          } as Movement,
+        } as MovementToTemplateModel,
+      ];
 
       const result = service.getMuscleGroupsFromTemplate(testTemplate);
 

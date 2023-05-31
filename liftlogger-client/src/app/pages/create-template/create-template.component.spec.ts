@@ -331,6 +331,32 @@ describe('CreateTemplateComponent', () => {
     });
   });
 
+  describe('deleteTemplate', () => {
+    const testId: number = 23;
+
+    let deleteSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      deleteSpy = spyOn(templateService, 'deleteTemplate').and.returnValue(of());
+    });
+
+    it('should call service to delete template if user confirms deletion', async () => {
+      spyOn(window, 'confirm').and.returnValue(true);
+
+      await component.deleteTemplate(testId);
+
+      expect(deleteSpy).toHaveBeenCalled();
+    });
+
+    it("should not call service to delete template if user doesn't confirm deletion", async () => {
+      spyOn(window, 'confirm').and.returnValue(false);
+
+      await component.deleteTemplate(testId);
+
+      expect(deleteSpy).not.toHaveBeenCalled();
+    });
+  });
+
   describe('getMovementsIds()', () => {
     it('should transform movements list to ids list', () => {
       const movements = getMovementsFixture();

@@ -2,6 +2,13 @@
 
 <div class="content">
   <div class="header">
+    <span
+      class="material-icons delete-button"
+      *ngIf="this.state.updateState.isUpdate"
+      (click)="triggerDeleteEvent()"
+    >
+      delete
+    </span>
     <app-creator-input
       id="titleInput"
       placeholder="{{ inputTitle }}..."

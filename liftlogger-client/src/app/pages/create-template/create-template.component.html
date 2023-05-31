@@ -4,6 +4,7 @@
   [createEnabled]="creatorPageState.isFormValid()"
   (onCreate)="createTemplate()"
   (onUpdate)="updateTemplate($event)"
+  (onDelete)="deleteTemplate($event)"
 >
   <app-template-movements-list />
 </app-creator-page>

@@ -338,4 +338,47 @@ describe('CreatorPageComponent', () => {
     expect(titleComponent.value).toBe(testTitle);
     expect(descriptionComponent.value).toBe(testDescription);
   });
+
+  describe('triggerDeleteEvent()', () => {
+    it('should emit object id through the onDelete event if update operation', () => {
+      const testId = 34;
+      state.updateState = { isUpdate: true, objectId: testId };
+
+      let emittedId: number = -1;
+      component.onDelete.subscribe(value => {
+        emittedId = value;
+      });
+
+      component.triggerDeleteEvent();
+
+      expect(emittedId).toBe(testId);
+    });
+
+    it('should not emit onDelete event if not update operation', () => {
+      state.updateState = { isUpdate: false };
+
+      let flag = false;
+      component.onDelete.subscribe(_ => {
+        flag = true;
+      });
+
+      component.triggerDeleteEvent();
+
+      expect(flag).toBeFalse();
+    });
+  });
+
+  it('should render delete button if update operation', () => {
+    state.updateState = { isUpdate: true } as UpdateState;
+    const deleteBtn: HTMLSpanElement = getElement(fixture, '.delete-button');
+
+    expect(deleteBtn).toBeTruthy();
+  });
+
+  it('should not render delete button if create operation', () => {
+    state.updateState = { isUpdate: false };
+    const deleteBtn: HTMLSpanElement = getElement(fixture, '.delete-button');
+
+    expect(deleteBtn).toBeFalsy();
+  });
 });
