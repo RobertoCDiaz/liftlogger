@@ -11,7 +11,7 @@ import MovementsController from './MovementsController';
 import TemplateController from './TemplateController';
 import { weightingFixtures } from '../fixtures/WeightingFixtures';
 import { getNotesFixture } from '../fixtures/MovementNotesFixture';
-import { getMovementsForTemplatesFixture, getTemplatesFixture } from '../fixtures/TemplateFixtures';
+import { getTemplatesFixture } from '../fixtures/TemplateFixtures';
 
 export default class SeedingsController {
   constructor(private prisma: PrismaClient) {}
@@ -21,14 +21,20 @@ export default class SeedingsController {
    *
    * @param userEmail User to add groups to
    */
-  defaultUserSeeding(userEmail: string) {
-    const muscleGroups: MuscleGroupCreationParams[] = muscleGroupsFixture.map(fixture => ({
-      name: fixture.name,
-      description: fixture.description,
-      user_email: userEmail,
-    }));
+  async defaultUserSeeding(userEmail: string) {
+    const muscleGroups: MuscleGroupCreationParams[] = muscleGroupsFixture
+      .filter(mg => mg.user_email === 'testing@test.com')
+      .map(fixture => ({
+        name: fixture.name,
+        description: fixture.description,
+        user_email: userEmail,
+      }));
 
-    this.prisma.muscleGroup.createMany({ data: muscleGroups });
+    if ((await this.prisma.muscleGroup.count({ where: { user_email: userEmail } })) > 0) {
+      return;
+    }
+
+    await this.prisma.muscleGroup.createMany({ data: muscleGroups });
   }
 
   /**
@@ -75,7 +81,12 @@ export default class SeedingsController {
             data: {
               ...template,
               movements: {
-                connect: getMovementsForTemplatesFixture()[template.id].map(id => ({ id })),
+                createMany: {
+                  data: [4, 5, 9, 10, 12, 13, 15, 16, 17].map((movId, idx) => ({
+                    movement_id: movId,
+                    position: idx + 1,
+                  })),
+                },
               },
             },
           });
@@ -116,7 +127,7 @@ export default class SeedingsController {
     });
 
     const movements = await new MovementsController(this.prisma).getMovementsFromUser(userEmail);
-    const movementsIds = faker.helpers.arrayElements(movements?.map(movement => movement.id));
+    const movementsIds = movements?.map(movement => movement.id);
 
     // movementNotes
     new Array(50).fill(0).forEach(async mn => {
@@ -137,7 +148,7 @@ export default class SeedingsController {
           name: faker.name.jobType(),
           user_email: userEmail,
         },
-        movementsIds,
+        faker.helpers.arrayElements(movementsIds),
       );
     });
 

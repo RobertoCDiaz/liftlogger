@@ -91,7 +91,7 @@ export class TemplatesService {
     const result: Set<string> = new Set();
 
     template.movements?.forEach(movement => {
-      movement.groups?.forEach(g => {
+      movement.movement?.groups?.forEach(g => {
         result.add(g.name);
       });
     });

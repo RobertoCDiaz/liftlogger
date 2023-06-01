@@ -112,7 +112,7 @@ export class CreateTemplateComponent implements OnInit {
             return;
           }
 
-          this.state.addMovements(...(template.movements ?? []));
+          this.state.addMovements(...(template.movements?.flatMap(m => m.movement!) ?? []));
 
           this.creatorPageState.setFormValues({
             title: template.name,

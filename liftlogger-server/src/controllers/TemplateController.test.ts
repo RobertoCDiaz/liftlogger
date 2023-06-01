@@ -9,6 +9,9 @@ const controller: TemplateController = new TemplateController(prismaInstance);
 
 describe('TemplateController', () => {
   afterEach(async () => {
+    await prismaInstance.movementToTemplate.deleteMany({
+      where: { template_id: { notIn: getTemplatesFixture().map(t => t.id) } },
+    });
     await prismaInstance.template.deleteMany({
       where: { id: { notIn: getTemplatesFixture().map(t => t.id) } },
     });
@@ -63,7 +66,7 @@ describe('TemplateController', () => {
     });
   });
 
-  describe('updateTemplate', () => {
+  describe('updateTemplate()', () => {
     it('should update a templates information', async () => {
       const testTemplateData = getNewTemplateFixture();
       const newData: TemplateUpdateParams = {
@@ -95,12 +98,22 @@ describe('TemplateController', () => {
       const newMovementIds = [4, 5];
 
       let template = await prismaInstance.template.create({
-        data: { ...testTemplateData, movements: { connect: testMovementIds.map(id => ({ id })) } },
+        data: {
+          ...testTemplateData,
+          movements: {
+            createMany: {
+              data: testMovementIds.map((movId, idx) => ({
+                movement_id: movId,
+                position: idx + 1,
+              })),
+            },
+          },
+        },
       });
       let movIds: number[] = (
         await prismaInstance.movement.findMany({
           select: { id: true },
-          where: { templates: { some: { id: template.id } } },
+          where: { templates: { some: { template_id: template.id } } },
         })
       ).map(mov => mov.id);
 
@@ -114,7 +127,7 @@ describe('TemplateController', () => {
       movIds = (
         await prismaInstance.movement.findMany({
           select: { id: true },
-          where: { templates: { some: { id: template.id } } },
+          where: { templates: { some: { template_id: template.id } } },
         })
       ).map(mov => mov.id);
 

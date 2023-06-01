@@ -66,20 +66,3 @@ const templatesFixture: Template[] = [
     user_email: 'testing@test.com',
   },
 ];
-
-export function getMovementsForTemplatesFixture(): Record<string, number[]> {
-  return JSON.parse(JSON.stringify(movementsForTemplates));
-}
-
-const movementsForTemplates: Record<string, number[]> = {
-  '1': [4, 5, 9, 10, 12, 13, 15, 16, 17],
-  '2': [4, 5, 9, 10, 12, 13, 15, 16, 17],
-  '3': [4, 5, 9, 10, 12, 13, 15, 16, 17],
-  '4': [4, 5, 9, 10, 12, 13, 15, 16, 17],
-  '5': [4, 5, 9, 10, 12, 13, 15, 16, 17],
-  '6': [4, 5, 9, 10, 12, 13, 15, 16, 17],
-  '7': [4, 5, 9, 10, 12, 13, 15, 16, 17],
-  '8': [4, 5, 9, 10, 12, 13, 15, 16, 17],
-  '9': [4, 5, 9, 10, 12, 13, 15, 16, 17],
-  '10': [4, 5, 9, 10, 12, 13, 15, 16, 17],
-};

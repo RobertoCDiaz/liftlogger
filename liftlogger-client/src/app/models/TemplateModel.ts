@@ -1,4 +1,4 @@
-import { Movement } from './MovementModel';
+import { MovementToTemplateModel } from './MovementModel';
 
 /**
  * A Template stores information about lifting templates, which are pre-defined sets of movements and rep/weight schemes.
@@ -29,7 +29,7 @@ export type Template = {
   /**
    * List of Movements that belong to this template.
    */
-  movements?: Movement[];
+  movements?: MovementToTemplateModel[];
 };
 
 /**

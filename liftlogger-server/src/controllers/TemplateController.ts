@@ -19,7 +19,14 @@ export default class TemplateController {
         user_email: userEmail,
       },
       include: {
-        movements: true,
+        movements: {
+          include: {
+            movement: true,
+          },
+          orderBy: {
+            position: 'asc',
+          },
+        },
       },
     });
 
@@ -41,7 +48,14 @@ export default class TemplateController {
       include: {
         movements: {
           include: {
-            groups: true,
+            movement: {
+              include: {
+                groups: true,
+              },
+            },
+          },
+          orderBy: {
+            position: 'asc',
           },
         },
       },
@@ -59,14 +73,17 @@ export default class TemplateController {
    * @returns Template created.
    */
   async create(template: TemplateCreationParams, movementsIds?: number[]): Promise<Template> {
-    const newTemplate = await this.prisma.template.create({
-      data: {
-        ...template,
-        movements: movementsIds && {
-          connect: movementsIds.map(id => ({ id: id })),
-        },
-      },
-    });
+    const newTemplate = await this.prisma.template.create({ data: template });
+
+    if (movementsIds) {
+      await this.prisma.movementToTemplate.createMany({
+        data: movementsIds.map((movId, idx) => ({
+          template_id: newTemplate.id,
+          movement_id: movId,
+          position: idx + 1,
+        })),
+      });
+    }
 
     return newTemplate;
   }
@@ -85,29 +102,16 @@ export default class TemplateController {
     newMovementsIds?: number[],
   ): Promise<Template> {
     if (newMovementsIds) {
-      // get current movements ids as list
-      const oldMovementsIds: number[] = (
-        await this.prisma.movement.findMany({
-          select: { id: true },
-          where: { templates: { some: { id } } },
-        })
-      ).map(currTemplate => currTemplate.id);
-
-      // delete relationship between template and its movements
-      await this.prisma.template.update({
-        where: { id },
-        data: {
-          movements: {
-            disconnect: oldMovementsIds.map(id => ({ id })),
-          },
-        },
-      });
-
-      // create relationships between template and new movements
-      await this.prisma.template.update({
-        where: { id },
-        data: { movements: { connect: newMovementsIds.map(id => ({ id })) } },
-      });
+      await this.prisma.$transaction([
+        this.prisma.movementToTemplate.deleteMany({ where: { template_id: id } }),
+        this.prisma.movementToTemplate.createMany({
+          data: newMovementsIds.map((movId, idx) => ({
+            template_id: id,
+            movement_id: movId,
+            position: idx + 1,
+          })),
+        }),
+      ]);
     }
 
     const updated = await this.prisma.template.update({
