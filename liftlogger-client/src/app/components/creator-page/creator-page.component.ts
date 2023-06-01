@@ -168,6 +168,13 @@ export class CreatorPageComponent {
    */
   @Output() onUpdate = new EventEmitter<number>();
 
+  /**
+   * Used to inform a Creator Page to delete the current object.
+   *
+   * `$event: number` Identifier for the object to be deleted
+   */
+  @Output() onDelete = new EventEmitter<number>();
+
   constructor(private location: Location) {}
 
   /**
@@ -182,11 +189,22 @@ export class CreatorPageComponent {
    * triggers the right event for it.
    */
   triggerPageAction(): void {
-    if (this.updateFormData.isUpdate) {
-      this.onUpdate.emit(this.updateFormData.objectId);
+    if (this.state.updateState.isUpdate) {
+      this.onUpdate.emit(this.state.updateState.objectId);
       return;
     }
     this.onCreate.emit();
+  }
+
+  /**
+   * Fires up the `onDelete` event.
+   */
+  triggerDeleteEvent(): void {
+    if (!this.state.updateState.isUpdate) {
+      return;
+    }
+
+    this.onDelete.emit(this.state.updateState.objectId);
   }
 
   /**
