@@ -62,4 +62,12 @@ export type Weighting = {
 /**
  * Data required to create a new Weighting entry.
  */
-export type WeightingCreationParams = Omit<Weighting, 'id' | 'user_email' | 'datetime' | 'ignored'>;
+export type WeightingCreationParams = Omit<
+  Weighting,
+  'id' | 'user_email' | 'datetime' | 'ignored'
+> & {
+  /**
+   * Moment in which the user had this specific measurements. When creating a new entry, it is optional.
+   */
+  datetime?: Date;
+};

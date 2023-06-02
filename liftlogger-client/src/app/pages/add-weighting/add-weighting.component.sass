@@ -6,7 +6,7 @@
   .content
     @include styles.responsiveContent
     @include styles.flex(column)
-    gap: 2em
+    gap: 1em
     padding: 2em
 
     .inputs
@@ -18,6 +18,12 @@
       @include styles.flex(column)
       gap: 1em
       grid-area: options
+
+      .datepicker-input
+        width: 0
+        height: 0
+        opacity: 0
+        place-self: center
 
     .graph-container
       grid-area: graph-container

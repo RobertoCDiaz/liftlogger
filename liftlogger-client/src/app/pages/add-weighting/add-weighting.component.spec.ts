@@ -11,6 +11,7 @@ import { of } from 'rxjs';
 import { getWeightingsFixture } from 'src/app/fixtures/weightings.fixture';
 import { Router } from '@angular/router';
 import { getComponent } from 'src/app/helpers/testing.helper';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 describe('AddWeightingComponent', () => {
   let component: AddWeightingComponent;
@@ -85,5 +86,29 @@ describe('AddWeightingComponent', () => {
     const graphComponent: GraphComponent = getComponent(fixture, 'app-graph').componentInstance;
 
     expect(graphComponent.data).toEqual(component.graphData);
+  });
+
+  describe('handleDatePicked()', () => {
+    it('should set form date to provided value', () => {
+      const testDate = new Date('2023-05-21');
+
+      component.handleDatePicked({ value: testDate } as MatDatepickerInputEvent<Date>);
+
+      expect(component.weightingForm.value.datetime).toEqual(testDate);
+    });
+  });
+
+  describe('getAddDateText()', () => {
+    it('should return regular text when no date provided', () => {
+      const result = component.getAddDateText();
+
+      expect(result).toBe('Add a date');
+    });
+
+    it('should return proper formated date when a date is provided', () => {
+      const result = component.getAddDateText(new Date('2023-05-21'));
+
+      expect(result).toBe('May 21st, 2023');
+    });
   });
 });

@@ -38,8 +38,16 @@
     />
   </div>
   <div class="options">
-    <!-- TODO: Add ability to add custom date to new entry -->
-    <app-button type="no-border" [isSubmitButton]="true" icon="today"> Add a date </app-button>
+    <input
+      class="datepicker-input"
+      matInput
+      [matDatepicker]="datepicker"
+      (dateChange)="handleDatePicked($event)"
+    />
+    <mat-datepicker #datepicker></mat-datepicker>
+    <app-button type="no-border" icon="today" (onClicked)="datepicker.open()">{{
+      getAddDateText(weightingForm.value.datetime)
+    }}</app-button>
     <app-button type="primary" [isSubmitButton]="true" [disabled]="weightingForm.invalid">
       Submit
     </app-button>

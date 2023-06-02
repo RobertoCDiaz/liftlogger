@@ -4,6 +4,8 @@ import { WeightingsService } from 'src/app/services/weightings.service';
 import { GraphInput } from 'src/app/components/graph/graph.component';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-weighting',
@@ -24,6 +26,7 @@ export class AddWeightingComponent {
     protein_percentage: new FormControl(undefined),
     metabolism: new FormControl(undefined),
     visceral_fat: new FormControl(undefined),
+    datetime: new FormControl(undefined),
   });
 
   /**
@@ -61,9 +64,33 @@ export class AddWeightingComponent {
 
     this.weightingsService
       .createEntry(this.weightingForm.value as WeightingCreationParams)
-      .subscribe(result => {
+      .subscribe(_ => {
         alert('New entry added successfully!');
         this.router.navigate(['dashboard']);
       });
+  }
+
+  /**
+   * Stores the selected date into the main form.
+   *
+   * @param event Event object from the date input
+   */
+  handleDatePicked(event: MatDatepickerInputEvent<Date>) {
+    this.weightingForm.patchValue({ datetime: event.value });
+  }
+
+  /**
+   * From a provided date (intented to be the date value of the form), returns the text to be
+   * displayed in the "Add a date" button.
+   *
+   * @param selectedDate Date to be formatted
+   * @returns Appropriate text for provided date
+   */
+  getAddDateText(selectedDate?: Date): string {
+    if (!selectedDate) {
+      return 'Add a date';
+    }
+
+    return moment(selectedDate).format('MMMM Do, Y');
   }
 }

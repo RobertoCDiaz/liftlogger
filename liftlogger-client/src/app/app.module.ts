@@ -12,6 +12,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './pages/main/main.component';
@@ -105,6 +108,9 @@ import { environment } from 'src/environment/environment';
     MatDialogModule,
     MatRippleModule,
     MatSnackBarModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     AuthModule.forRoot({
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,
