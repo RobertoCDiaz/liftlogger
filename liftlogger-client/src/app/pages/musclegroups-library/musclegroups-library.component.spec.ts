@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MusclegroupsLibraryComponent } from './musclegroups-library.component';
-import { getComponent } from 'src/app/helpers/testing.helper';
+import { getComponent, getElement } from 'src/app/helpers/testing.helper';
 import { DrawerPageComponent } from 'src/app/components/drawer-page/drawer-page.component';
 import { AppModule } from 'src/app/app.module';
 import { GroupsService } from 'src/app/services/groups.service';
@@ -42,6 +42,22 @@ describe('MusclegroupsLibraryComponent', () => {
       expect(drawerPage).toBeTruthy();
       expect(drawerPage.pageName).toBe('Muscle Groups');
       expect(drawerPage.actionUrl).toBe('/muscle-groups/create');
+    });
+
+    it('should render empty list message if no groups', () => {
+      component.muscleGroups = [];
+
+      const emptyListEl = getElement(fixture, '.empty-list');
+
+      expect(emptyListEl).toBeTruthy();
+    });
+
+    it('should NOT render empty list message if there are groups', () => {
+      component.muscleGroups = getMuscleGroupsFixture();
+
+      const emptyListEl = getElement(fixture, '.empty-list');
+
+      expect(emptyListEl).toBeFalsy();
     });
   });
 

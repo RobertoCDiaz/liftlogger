@@ -9,7 +9,6 @@
     <ng-container *ngTemplateOutlet="muscleGroups ? content : loading"></ng-container>
   </div>
 </app-drawer-page>
-<!-- TODO: A placeholder for when empty list of muscle groups -->
 
 <ng-template #loading>
   <div class="musclegroups-item" *ngFor="let group of [1, 2, 3, 4, 5]">
@@ -25,6 +24,10 @@
 </ng-template>
 
 <ng-template #content>
+  <div class="empty-list" *ngIf="muscleGroups.length === 0">
+    <span class="material-symbols-outlined">playlist_remove</span>
+    <p>You don't have any Muscle Groups yet!</p>
+  </div>
   <a
     class="musclegroups-item"
     *ngFor="let group of muscleGroups"

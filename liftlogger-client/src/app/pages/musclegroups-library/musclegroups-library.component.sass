@@ -20,10 +20,24 @@ $table-template: 1fr 5fr 1fr 1fr
       align-items: center
       gap: 1em
       padding: 1em
+      border-bottom: 1px solid styles.$light-gray
 
       *
         text-align: center
         font-weight: bold
+
+  .empty-list
+    display: grid
+    place-content: center
+    gap: 1em
+    padding: 2em
+
+    *
+      text-align: center
+      color: styles.$dark-gray
+
+    span
+      font-size: 5rem
 
   .musclegroups-item
     display: grid
