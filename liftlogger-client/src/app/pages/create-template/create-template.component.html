@@ -1,3 +1,10 @@
-<app-creator-page title="Create Template" inputTitle="Template name...">
+<app-creator-page
+  [title]="creatorPageState.updateState.isUpdate ? 'Update Template' : 'Create Template'"
+  inputTitle="Template name..."
+  [createEnabled]="creatorPageState.isFormValid()"
+  (onCreate)="createTemplate()"
+  (onUpdate)="updateTemplate($event)"
+  (onDelete)="deleteTemplate($event)"
+>
   <app-template-movements-list />
 </app-creator-page>

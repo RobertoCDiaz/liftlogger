@@ -9,10 +9,10 @@
   app-search-bar
     flex-grow: 1
 
-.groups-list
+.groups-list:not(.picker)
   @include styles.isLarge
     @include styles.shadow
-    border-radius: .5em
+    border-radius: .25em
     background-color: styles.$white
 
 .empty-list

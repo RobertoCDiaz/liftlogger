@@ -1,0 +1,66 @@
+@use '../../../styles'
+
+.templates-list
+  display: grid
+  grid-template-columns: 1fr
+
+  @include styles.isLarge
+    row-gap: 1em
+    column-gap: 2em
+    padding: 1em 0
+
+    @include styles.isXL
+      grid-template-columns: 1fr 1fr
+
+  .template-item
+    padding: 1em
+    display: grid
+    row-gap: .5em
+    column-gap: 1em
+    grid-template-columns: 1fr
+    grid-template-rows: max-content max-content max-content max-content
+    grid-template-areas: "name" "groups-list" "description" "movements-list"
+    border-bottom: 1px solid styles.$dark-gray
+    cursor: pointer
+    @include styles.transition
+
+    &:hover
+      background-color: styles.$light-gray
+
+    @include styles.isLarge
+      @include styles.shadow
+      border-bottom: none
+      background-color: styles.$white
+      border-radius: .25em
+      grid-template-columns: 4fr minmax(max-content, 2fr)
+      grid-template-rows: max-content max-content 1fr
+      grid-template-areas: "name movements-list" "groups-list movements-list" "description movements-list"
+
+    .template-name
+      grid-area: name
+      font-size: 1.5rem
+
+    .template-groups-list
+      @include styles.flex(row)
+      gap: .25em
+      grid-area: groups-list
+
+      .group-item
+        padding: .25em
+        border-radius: 1em
+        background-color: styles.$dark-gray
+        color: styles.$white
+
+    .template-description
+      grid-area: description
+      color: styles.$dark-gray
+
+      &.no-description
+        font-style: italic
+
+    .template-movements-list
+      grid-area: movements-list
+      padding: 0 1.5em
+
+      @include styles.isLarge
+        align-self: center

@@ -7,6 +7,10 @@ const prismaInstance = PrismaUtils.getPrismaTestingInstance();
 const controller = new WeightingController(prismaInstance);
 
 describe('WeightingController', () => {
+  afterAll(() => {
+    prismaInstance.$disconnect();
+  });
+
   describe('getEntries()', () => {
     it('should fetch all the weighting entries of a user', async () => {
       const testEmail = 'testing@test.com';

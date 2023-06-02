@@ -1,4 +1,4 @@
-@use '/src/styles'
+@use '../../../styles'
 
 :host
   @include styles.flex(column)
@@ -7,3 +7,14 @@
   .items
     @include styles.flex(column)
     align-items: stretch
+
+  .no-items
+    display: grid
+    justify-items: center
+    padding: 1em 0
+
+    *
+      color: styles.$dark-gray
+
+    .icon
+      font-size: 5rem

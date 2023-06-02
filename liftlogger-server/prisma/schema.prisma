@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,7 +11,8 @@ datasource db {
 
 // The User table stores information about users of the application.
 // Each user is identified by their email address, which is used as the primary key.
-// The table has relationships to other tables in the schema, including MuscleGroup, Movement, Template, and LiftingSession.
+// The table has relationships to other tables in the schema, including MuscleGroup, Movement,
+// Template, and LiftingSession.
 model User {
   email String @id @db.VarChar(255)
 
@@ -27,7 +27,8 @@ model User {
 }
 
 // Weighting data, usually retrieved from a physical weightscale.
-// You can choose to ignore some registers by setting `ignored` to true, so that those are not taken into account to critical computations.
+// You can choose to ignore some registers by setting `ignored` to true, so that those are not
+// taken into account to critical computations.
 model Weighting {
   id                 Int      @id @default(autoincrement())
   datetime           DateTime
@@ -46,7 +47,8 @@ model Weighting {
   @@map("weightings")
 }
 
-// The MuscleGroup table stores information about different muscle groups, such as chest, back, legs, etc.
+// The MuscleGroup table stores information about different muscle groups, such as chest, back,
+// legs, etc.
 // Each muscle group can have subgroups, which are stored in the groups field.
 // Each muscle group can also belong to a parent group, which is stored in the parent_group field.
 // The group_movements field is used to store the movements associated with a muscle group.
@@ -66,7 +68,8 @@ model MuscleGroup {
   @@map("musclegroups")
 }
 
-// The Movement table stores information about different weightlifting movements, such as bench press, squats, deadlifts, etc.
+// The Movement table stores information about different weightlifting movements, such as bench
+// press, squats, deadlifts, etc.
 // Each movement has a name and an optional description.
 model Movement {
   id               Int     @id @default(autoincrement())
@@ -78,13 +81,14 @@ model Movement {
   sets      LiftingSet[]
   notes     MovementNote[]
   groups    MuscleGroup[]
-  templates Template[]
-  user      User           @relation(fields: [user_email], references: [email])
+  templates MovementToTemplate[]
+  user      User                 @relation(fields: [user_email], references: [email])
 
   @@map("movements")
 }
 
-// The Template table stores information about lifting templates, which are pre-defined sets of movements and rep/weight schemes.
+// The Template table stores information about lifting templates, which are pre-defined sets of
+// movements and rep/weight schemes.
 // Each template has a name and an optional description.
 model Template {
   id          Int     @id @default(autoincrement())
@@ -92,10 +96,25 @@ model Template {
   description String? @db.Text
   user_email  String
 
-  movements Movement[]
-  user      User       @relation(fields: [user_email], references: [email])
+  movements MovementToTemplate[]
+  user      User                 @relation(fields: [user_email], references: [email])
 
   @@map("templates")
+}
+
+// Holds the M:M relationships between what Movements are part of which Templates.
+// It is made an explicit relationship to also hold the `position` property, which indicates the
+// order in which the Movements should appear in the Template.
+model MovementToTemplate {
+  movement_id Int
+  template_id Int
+  position    Int
+
+  movement Movement @relation(fields: [movement_id], references: [id])
+  template Template @relation(fields: [template_id], references: [id])
+
+  @@id([movement_id, template_id])
+  @@map("movements_to_templates")
 }
 
 // The LiftingSession table stores information about weightlifting sessions.
@@ -113,8 +132,11 @@ model LiftingSession {
   @@map("lifting_sessions")
 }
 
-// The LiftingSet table stores information about individual sets performed during a lifting session. Each set has a start time, an end time, a movement, a number of reps, a weight, and an optional note.
-// The movement field is used to associate the set with a specific movement, and the session field is used to associate the set with a specific lifting session.
+// The LiftingSet table stores information about individual sets performed during a lifting
+// session. Each set has a start time, an end time, a movement, a number of reps, a weight,
+// and an optional note.
+// The movement field is used to associate the set with a specific movement, and the session
+// field is used to associate the set with a specific lifting session.
 model LiftingSet {
   id          Int      @id @default(autoincrement())
   movement    Movement @relation(fields: [movement_id], references: [id])
@@ -128,8 +150,8 @@ model LiftingSet {
   @@map("lifting_sets")
 }
 
-// Notes made for a movement on a specific date. It could be notes on how to improve the movement form,
-// reminders for next sessions such as increase weight, etc.
+// Notes made for a movement on a specific date. It could be notes on how to improve the movement
+// form, reminders for next sessions such as increase weight, etc.
 model MovementNote {
   id    Int      @id @default(autoincrement())
   notes String   @db.Text

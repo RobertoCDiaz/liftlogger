@@ -12,8 +12,28 @@
     padding: 2em
 
     .header
-      @include styles.flex(column)
+      display: grid
+      grid-template-columns: 1fr max-content
+      grid-template-rows: max-content 1fr
+      grid-template-areas: "titleInput delete" "descriptionInput descriptionInput"
+      align-items: center
       gap: 1em
+
+      .delete-button
+        @include styles.transition
+        grid-area: delete
+        cursor: pointer
+
+        &:hover
+          color: red
+
+      #titleInput
+        grid-area: titleInput
+
+      #descriptionInput
+        grid-area: descriptionInput
+        align-self: stretch
+        min-height: 5em
 
     .page-content
       flex-grow: 1

@@ -8,14 +8,12 @@
   gap: .5em
   cursor: pointer
 
-  &.selected
+  &:hover
+    background-color: styles.$lighter-gray
     border-left: 5px solid styles.$primary-color
 
     .name
       color: styles.$primary-color
-
-  &:hover
-    background-color: styles.$light-gray
 
   .name
     font-size: 1.1rem

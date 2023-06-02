@@ -2,17 +2,26 @@
 
 <div class="content">
   <div class="header">
+    <span
+      class="material-icons delete-button"
+      *ngIf="this.state.updateState.isUpdate"
+      (click)="triggerDeleteEvent()"
+    >
+      delete
+    </span>
     <app-creator-input
       id="titleInput"
       placeholder="{{ inputTitle }}..."
       (valueChanged)="onTitleChanged($event)"
       [isTitle]="true"
+      [value]="this.state.getFormValues().title!"
     />
     <app-creator-input
       id="descriptionInput"
       placeholder="Description..."
       (valueChanged)="onDescriptionChanged($event)"
       [isTextArea]="true"
+      [value]="this.state.getFormValues().description!"
     />
   </div>
   <div class="page-content">
@@ -21,13 +30,13 @@
   <div class="footer">
     <app-button type="no-border" (onClicked)="onCancelClicked()"> Cancel </app-button>
     <app-button
-      id="createButton"
+      id="actionButton"
       type="primary"
       class="action"
-      (onClicked)="onCreateClicked()"
-      [disabled]="!createEnabled"
+      (onClicked)="triggerPageAction()"
+      [disabled]="!createEnabled && !this.state.updateState.isUpdate"
     >
-      Create
+      {{ this.state.updateState.isUpdate ? 'Update' : 'Create' }}
     </app-button>
   </div>
 </div>

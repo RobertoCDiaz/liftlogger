@@ -16,7 +16,7 @@ const weightingsFixture: Weighting[] = [
     metabolism: 1567.56,
     visceral_fat: 9.01,
     ignored: false,
-    user_email: 'robertocdiazsanchez@gmail.com',
+    user_email: 'testing@test.com',
   },
   {
     id: 2,
@@ -29,7 +29,7 @@ const weightingsFixture: Weighting[] = [
     metabolism: 1571,
     visceral_fat: 9.13,
     ignored: false,
-    user_email: 'robertocdiazsanchez@gmail.com',
+    user_email: 'testing@test.com',
   },
   {
     id: 3,
@@ -42,7 +42,7 @@ const weightingsFixture: Weighting[] = [
     metabolism: 1592.29,
     visceral_fat: 9.47,
     ignored: false,
-    user_email: 'robertocdiazsanchez@gmail.com',
+    user_email: 'testing@test.com',
   },
   {
     id: 4,
@@ -55,7 +55,7 @@ const weightingsFixture: Weighting[] = [
     metabolism: 1561.66,
     visceral_fat: 8.23,
     ignored: false,
-    user_email: 'robertocdiazsanchez@gmail.com',
+    user_email: 'testing@test.com',
   },
   {
     id: 5,
@@ -68,6 +68,6 @@ const weightingsFixture: Weighting[] = [
     metabolism: 1576.22,
     visceral_fat: 8.57,
     ignored: false,
-    user_email: 'robertocdiazsanchez@gmail.com',
+    user_email: 'testing@test.com',
   },
 ];

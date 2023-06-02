@@ -8,7 +8,7 @@
 </div>
 
 <ng-template #groupsList>
-  <div class="groups-list">
+  <div class="groups-list" [ngClass]="{ picker: isPicker }">
     <app-movements-picker-group-item *ngFor="let group of filteredGroups" [group]="group">
     </app-movements-picker-group-item>
   </div>

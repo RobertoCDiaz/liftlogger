@@ -9,7 +9,7 @@
 </ng-template>
 
 <ng-template #divContainer>
-  <div class="item" (click)="handleMovementSelected()">
+  <div class="item" (click)="handleMovementSelected()" matRipple>
     <ng-container *ngTemplateOutlet="componentContent"></ng-container>
   </div>
 </ng-template>

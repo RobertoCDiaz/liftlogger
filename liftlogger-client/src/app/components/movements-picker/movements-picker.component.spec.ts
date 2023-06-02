@@ -7,7 +7,7 @@ import { AppModule } from 'src/app/app.module';
 import { GroupsService } from 'src/app/services/groups.service';
 import { of } from 'rxjs';
 import { getMuscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
-import { getComponents } from 'src/app/helpers/testing.helper';
+import { getComponents, getElement } from 'src/app/helpers/testing.helper';
 import { MovementsPickerGroupItemComponent } from '../movements-picker-group-item/movements-picker-group-item.component';
 
 describe('MovementsPickerComponent', () => {
@@ -99,6 +99,23 @@ describe('MovementsPickerComponent', () => {
 
       expect(spy).toHaveBeenCalled();
       expect(component.filteredGroups).toEqual(filteredGroups);
+    });
+  });
+
+  describe('.isPicker', () => {
+    it('should control if UI is adapted to a dialog', () => {
+      const testGroups = getMuscleGroupsFixture();
+      component.filteredGroups = testGroups;
+
+      const listEl: HTMLDivElement = getElement(fixture, 'div.groups-list');
+
+      component.isPicker = true;
+      fixture.detectChanges();
+      expect(listEl.classList).toContain('picker');
+
+      component.isPicker = false;
+      fixture.detectChanges();
+      expect(listEl.classList).not.toContain('picker');
     });
   });
 });

@@ -1,4 +1,5 @@
 import { MuscleGroup, MuscleGroupForMovement } from './MuscleGroupModel';
+import { Template } from './TemplateModel';
 
 /**
  * Represent a Movement entity from DB.
@@ -46,4 +47,36 @@ export type MovementCreationParams = Omit<Movement, 'id' | 'user_email' | 'group
 export type MovementCreationRequestParams = {
   movement: MovementCreationParams;
   muscleGroups: MuscleGroupForMovement[];
+};
+
+/**
+ * Holds the M:M relationships between what Movements are part of which Templates.
+ * It is made an explicit relationship to also hold the `position` property, which indicates the
+ * order in which the Movements should appear in the Template.
+ */
+export type MovementToTemplateModel = {
+  /**
+   * Identifier for the Movement entity in the relationship.
+   */
+  movement_id: number;
+
+  /**
+   * Identifier for the Template entity in the relationship.
+   */
+  template_id: number;
+
+  /**
+   * Which position should the Movement have inside the Template
+   */
+  position: number;
+
+  /**
+   * Movement entity of the relationship.
+   */
+  movement?: Movement;
+
+  /**
+   * Template entity of the relationship.
+   */
+  template?: Template;
 };

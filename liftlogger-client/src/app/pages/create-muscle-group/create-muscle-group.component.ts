@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CreatorForm } from 'src/app/components/creator-page/creator-page.component';
+import { Component, inject } from '@angular/core';
+import { CreatorPageState } from 'src/app/components/creator-page/creator-page.component';
 import { MuscleGroup } from 'src/app/models/MuscleGroupModel';
 import { GroupsService } from 'src/app/services/groups.service';
 
@@ -12,21 +11,15 @@ import { GroupsService } from 'src/app/services/groups.service';
   selector: 'app-create-muscle-group',
   templateUrl: './create-muscle-group.component.html',
   styleUrls: ['./create-muscle-group.component.sass'],
+  providers: [CreatorPageState],
 })
 export class CreateMuscleGroupComponent {
+  creatorPageState: CreatorPageState = inject(CreatorPageState);
+
   /**
    * Currently selected group as parent group for the new group.
    */
   parentGroup: MuscleGroup;
-
-  /**
-   * Stores the data to create a new Muscle Group. Its name is stored as
-   * the `title` property, and its description is `description`.
-   */
-  groupForm: CreatorForm = new FormGroup({
-    title: new FormControl<string | null>(null, { validators: Validators.required }),
-    description: new FormControl<string | null>(null, { validators: Validators.required }),
-  });
 
   constructor(private groupsService: GroupsService, private location: Location) {}
 
@@ -44,26 +37,21 @@ export class CreateMuscleGroupComponent {
    * it redirects the user one page back in history.
    */
   onCreateClicked() {
-    if (this.groupForm.invalid) {
+    if (!this.creatorPageState.isFormValid(true)) {
       alert('You have missing properties');
       return;
     }
 
+    const formValues = this.creatorPageState.getFormValues();
+
     this.groupsService
       .createGroup({
-        name: this.groupForm.value.title!,
-        description: this.groupForm.value.description!,
+        name: formValues.title!,
+        description: formValues.description!,
         parent_group_id: this.parentGroup?.id ?? undefined, //defining a parent group is not necessary
       })
-      .subscribe(resultGroup => {
+      .subscribe(_ => {
         this.location.back();
       });
-  }
-
-  /**
-   * Updates Muscle Group information.
-   */
-  handleFormChanged(form: CreatorForm) {
-    this.groupForm = form;
   }
 }

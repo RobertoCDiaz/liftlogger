@@ -95,6 +95,13 @@ export class MovementsPickerComponent implements OnInit {
    */
   @Input() disableHref: boolean = false;
 
+  /**
+   * Whether the UI should be adapted to be inside a dialog or not.
+   *
+   * @default false
+   */
+  @Input() isPicker: boolean = false;
+
   ngOnInit() {
     // retrieves groups from server
     this.groupsService.getUserGroups(true).subscribe(groups => {

@@ -1,4 +1,14 @@
-<div class="items">
-  <app-template-movement-item *ngFor="let mov of movements; index as i" />
-</div>
-<app-button (click)="addMovement()" icon="add" type="no-border"> Add movements </app-button>
+<ng-container *ngIf="(state.getMovements() | async)!.length > 0; else noItems">
+  <div class="items" cdkDropList (cdkDropListDropped)="handleItemDropped($event)">
+    <app-template-movement-item *ngFor="let mov of state.getMovements() | async" [movement]="mov" />
+  </div>
+</ng-container>
+<ng-template #noItems>
+  <div class="no-items">
+    <span class="material-symbols-outlined icon"> playlist_remove </span>
+    <p class="text">No movements have been added yet!</p>
+  </div>
+</ng-template>
+<app-button icon="add" type="no-border" (onClicked)="openMovementPicker()">
+  Add movements
+</app-button>
