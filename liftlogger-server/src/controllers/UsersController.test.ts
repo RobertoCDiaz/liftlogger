@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { usersFixture } from '../fixtures/UserFixtures';
+import { getUsersFixture } from '../fixtures/UserFixtures';
 import PrismaUtils from '../utils/PrismaUtils';
 import UserController from './UsersController';
 
@@ -13,7 +13,7 @@ describe('UsersController', () => {
 
   describe('get()', () => {
     it('should return the correct user given an email', async () => {
-      const expectedUser = usersFixture[0];
+      const expectedUser = getUsersFixture()[0];
       const result = await controller.get(expectedUser.email);
 
       expect(result).toEqual(expectedUser);

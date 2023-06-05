@@ -3,8 +3,8 @@ import { WeightingCreationParams } from '../models/WeightingModel';
 import PrismaUtils from '../utils/PrismaUtils';
 import { WeightingController } from './WeightingController';
 
-const prismaInstance = PrismaUtils.getPrismaTestingInstance();
-const controller = new WeightingController(prismaInstance);
+const prisma = PrismaUtils.getPrismaTestingInstance();
+const controller = new WeightingController(prisma);
 
 describe('WeightingController', () => {
   afterAll(() => {
@@ -40,7 +40,7 @@ describe('WeightingController', () => {
 
         expect(result.weight).toBe(entry.weight);
 
-        await prismaInstance.weighting.delete({ where: { id: result.id } });
+        await prisma.weighting.delete({ where: { id: result.id } });
       }
     });
   });

@@ -1,4 +1,4 @@
-import { muscleGroupsFixture } from '../fixtures/MuscleGroupFixtures';
+import { getMuscleGroupsFixture } from '../fixtures/MuscleGroupFixtures';
 import { MuscleGroupCreationParams, MuscleGroupMetadata } from '../models/MuscleGroupModel';
 import PrismaUtils from '../utils/PrismaUtils';
 import MuscleGroupController from './MuscleGroupsController';
@@ -74,7 +74,7 @@ describe('MuscleGroupController', () => {
     it('should return the correct muscle group for a given id', async () => {
       const result = await controller.getMuscleGroup(1, 'testing@test.com');
 
-      expect(result).toEqual(muscleGroupsFixture[0]);
+      expect(result).toEqual(getMuscleGroupsFixture()[0]);
     });
 
     it('should NOT include movements if flag is set to false', async () => {
@@ -144,7 +144,7 @@ describe('MuscleGroupController', () => {
 
   describe('getMuscleGroupMetadata', () => {
     it("should correctly fetch a group's metadata", async () => {
-      const testGroup = muscleGroupsFixture[0];
+      const testGroup = getMuscleGroupsFixture()[0];
       const expectedCount = 16;
       const expectedDate = new Date('2023-01-02T15:46:12.167Z');
 

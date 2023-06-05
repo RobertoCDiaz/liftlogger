@@ -1,6 +1,6 @@
 import MovementsController from './MovementsController';
 import PrismaUtils from '../utils/PrismaUtils';
-import { movementsFixture } from '../fixtures/MovementFixtures';
+import { getMovementsFixture, groupsForMovementsFixture } from '../fixtures/MovementFixtures';
 import { MovementCreationParams } from '../models/MovementModel';
 import { MuscleGroupForMovementModel } from '../models/MuscleGroupModel';
 
@@ -21,13 +21,13 @@ describe('MovementsController', () => {
 
     it('should get the correct movement for a specific id and user email', async () => {
       let result = await controller.getMovement(1, 'testing@test.com');
-      expect(result).toEqual(movementsFixture[0]);
+      expect(result).toEqual(getMovementsFixture()[0]);
 
       result = await controller.getMovement(9, 'testing@test.com');
-      expect(result).toEqual(movementsFixture[8]);
+      expect(result).toEqual(getMovementsFixture()[8]);
 
       result = await controller.getMovement(21, 'testing@test.com');
-      expect(result).toEqual(movementsFixture[20]);
+      expect(result).toEqual(getMovementsFixture()[20]);
     });
   });
 
