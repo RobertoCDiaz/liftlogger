@@ -1,7 +1,7 @@
 import MovementNotesController from '../controllers/MovementNotesController';
 import MovementsController from '../controllers/MovementsController';
-import { movementsFixture } from '../fixtures/MovementFixtures';
-import { usersFixture } from '../fixtures/UserFixtures';
+import { getMovementsFixture } from '../fixtures/MovementFixtures';
+import { getUsersFixture } from '../fixtures/UserFixtures';
 import { emailRequestMock } from '../mocks/request.mock';
 import { MovementCreationRequestParams } from '../models/MovementModel';
 import { MovementRoutes } from './MovementsRoutes';
@@ -12,8 +12,8 @@ describe('MovementRoutes', () => {
   let movementsController: MovementsController;
   let notesController: MovementNotesController;
 
-  const testUser = usersFixture[0];
-  const testMovements = movementsFixture.filter(m => m.user_email === testUser.email);
+  const testUser = getUsersFixture()[0];
+  const testMovements = getMovementsFixture().filter(m => m.user_email === testUser.email);
 
   beforeEach(() => {
     routesController = new MovementRoutes();

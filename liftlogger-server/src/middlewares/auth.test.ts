@@ -1,4 +1,4 @@
-import { usersFixture } from '../fixtures/UserFixtures';
+import { getUsersFixture } from '../fixtures/UserFixtures';
 import { authRequestMock, noAuthRequestMock } from '../mocks/request.mock';
 import { userResponseMock } from '../mocks/userinfo.mock';
 import { AuthService } from '../services/AuthService';
@@ -11,7 +11,7 @@ describe('Auth Middleware', () => {
     let res: express.Response;
     const next = jest.fn();
 
-    const testUser = usersFixture[0];
+    const testUser = getUsersFixture()[0];
 
     beforeEach(() => {
       req = authRequestMock();

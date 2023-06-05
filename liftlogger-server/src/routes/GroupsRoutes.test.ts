@@ -1,6 +1,6 @@
 import MuscleGroupController from '../controllers/MuscleGroupsController';
-import { muscleGroupsFixture } from '../fixtures/MuscleGroupFixtures';
-import { usersFixture } from '../fixtures/UserFixtures';
+import { getMuscleGroupsFixture } from '../fixtures/MuscleGroupFixtures';
+import { getUsersFixture } from '../fixtures/UserFixtures';
 import { emailRequestMock } from '../mocks/request.mock';
 import { userResponseMock } from '../mocks/userinfo.mock';
 import { GroupsRoutes } from './GroupsRoutes';
@@ -10,7 +10,7 @@ describe('GroupsRoutes', () => {
 
   let muscleGroupController: MuscleGroupController;
 
-  const testUser = usersFixture[0];
+  const testUser = getUsersFixture()[0];
 
   beforeEach(() => {
     routesController = new GroupsRoutes();
@@ -24,14 +24,14 @@ describe('GroupsRoutes', () => {
     beforeEach(() => {
       spy = jest
         .spyOn(muscleGroupController, 'getMuscleGroupsFromUser')
-        .mockResolvedValue(muscleGroupsFixture);
+        .mockResolvedValue(getMuscleGroupsFixture());
     });
 
     it('should ask controller for user groups and return its response', async () => {
       const result = await routesController.getGroups(undefined, undefined, emailRequestMock);
 
       expect(spy).toHaveBeenCalled();
-      expect(result).toEqual(muscleGroupsFixture);
+      expect(result).toEqual(getMuscleGroupsFixture());
     });
 
     it('should ask to include movements if specified', async () => {
@@ -61,7 +61,7 @@ describe('GroupsRoutes', () => {
 
   describe('getGroup()', () => {
     it('should ask controller for a group and return its response', async () => {
-      const testGroup = muscleGroupsFixture[0];
+      const testGroup = getMuscleGroupsFixture()[0];
       const spy = jest.spyOn(muscleGroupController, 'getMuscleGroup').mockResolvedValue(testGroup);
 
       const result = await routesController.getGroup(
@@ -78,7 +78,7 @@ describe('GroupsRoutes', () => {
 
   describe('createGroup()', () => {
     it('should call controller to create a new group and return it', async () => {
-      const testGroup = muscleGroupsFixture[1];
+      const testGroup = getMuscleGroupsFixture()[1];
 
       const spy = jest.spyOn(muscleGroupController, 'createGroup').mockResolvedValue(testGroup);
 

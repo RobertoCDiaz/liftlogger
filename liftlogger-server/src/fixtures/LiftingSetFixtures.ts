@@ -1,6 +1,10 @@
 import { LiftingSet } from '@prisma/client';
 
-export const liftingSetsFixture: LiftingSet[] = [
+export function getLiftingSetsFixture(): LiftingSet[] {
+  return JSON.parse(JSON.stringify(liftingSetsFixture));
+}
+
+const liftingSetsFixture: LiftingSet[] = [
   {
     id: 1,
     movement_id: 10,

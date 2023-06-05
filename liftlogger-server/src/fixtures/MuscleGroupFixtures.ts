@@ -1,6 +1,10 @@
 import { MuscleGroup } from '@prisma/client';
 
-export const muscleGroupsFixture: MuscleGroup[] = [
+export function getMuscleGroupsFixture(): MuscleGroup[] {
+  return JSON.parse(JSON.stringify(muscleGroupsFixture));
+}
+
+const muscleGroupsFixture: MuscleGroup[] = [
   {
     id: 1,
     name: 'Chest',

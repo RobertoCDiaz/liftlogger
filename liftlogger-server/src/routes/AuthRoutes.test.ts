@@ -1,14 +1,14 @@
 import { User } from '@prisma/client';
 import UserController from '../controllers/UsersController';
 import { AuthRoutes } from './AuthRoutes';
-import { usersFixture } from '../fixtures/UserFixtures';
+import { getUsersFixture } from '../fixtures/UserFixtures';
 
 describe('AuthRoutes', () => {
   let routesController: AuthRoutes;
 
   let userController: UserController;
 
-  const testUser: User = usersFixture[0];
+  const testUser: User = getUsersFixture()[0];
 
   beforeEach(() => {
     routesController = new AuthRoutes();

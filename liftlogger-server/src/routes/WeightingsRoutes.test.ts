@@ -4,14 +4,14 @@ import { WeightingController } from '../controllers/WeightingController';
 import { weightingFixtures } from '../fixtures/WeightingFixtures';
 import { emailRequestMock } from '../mocks/request.mock';
 import { WeightingCreationRequestParams } from '../models/WeightingModel';
-import { usersFixture } from '../fixtures/UserFixtures';
+import { getUsersFixture } from '../fixtures/UserFixtures';
 
 describe('WeightingRoutes', () => {
   let routesController: WeightingRoutes;
 
   let weightingController: WeightingController;
 
-  const testUser = usersFixture[0];
+  const testUser = getUsersFixture()[0];
 
   beforeEach(() => {
     routesController = new WeightingRoutes();

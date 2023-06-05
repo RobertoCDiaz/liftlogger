@@ -1,6 +1,10 @@
 import { User } from '@prisma/client';
 
-export const usersFixture: User[] = [
+export function getUsersFixture(): User[] {
+  return JSON.parse(JSON.stringify(usersFixture));
+}
+
+const usersFixture: User[] = [
   {
     email: 'testing@test.com',
   },
