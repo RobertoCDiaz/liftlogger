@@ -28,6 +28,11 @@ const routes: Routes = [
   { path: 'templates', component: TemplatesLibraryComponent, canActivate: [AuthGuard] },
   { path: 'templates/create', component: CreateTemplateComponent, canActivate: [AuthGuard] },
   { path: 'templates/update/:id', component: CreateTemplateComponent, canActivate: [AuthGuard] },
+  {
+    path: 'workout',
+    loadChildren: () => import('./modules/workout/workout.module').then(m => m.WorkoutModule),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
