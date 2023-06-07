@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { GlobalModule } from './modules/global/global.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,7 +23,6 @@ import { MenuButtonComponent } from './components/menu-button/menu-button.compon
 import { AddWeightingComponent } from './pages/add-weighting/add-weighting.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { WeightscaleDataInputComponent } from './components/weightscale-data-input/weightscale-data-input.component';
-import { ButtonComponent } from './components/button/button.component';
 import { CreateTemplateComponent } from './pages/create-template/create-template.component';
 import { TemplateMovementItemComponent } from './components/template-movement-item/template-movement-item.component';
 import {
@@ -40,7 +40,6 @@ import { MainSidenavComponent } from './components/main-sidenav/main-sidenav.com
 import { AppBarComponent } from './components/app-bar/app-bar.component';
 import { DrawerPageComponent } from './components/drawer-page/drawer-page.component';
 import { MovementsLibraryComponent } from './pages/movements-library/movements-library.component';
-import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { MovementsPickerGroupItemComponent } from './components/movements-picker-group-item/movements-picker-group-item.component';
 import { MovementsPickerMovementItemComponent } from './components/movements-picker-movement-item/movements-picker-movement-item.component';
 import { MovementsPickerComponent } from './components/movements-picker/movements-picker.component';
@@ -64,7 +63,6 @@ import { environment } from 'src/environment/environment';
     AddWeightingComponent,
     PageHeaderComponent,
     WeightscaleDataInputComponent,
-    ButtonComponent,
     CreateTemplateComponent,
     TemplateMovementItemComponent,
     TemplateMovementsListComponent,
@@ -79,7 +77,6 @@ import { environment } from 'src/environment/environment';
     AppBarComponent,
     DrawerPageComponent,
     MovementsLibraryComponent,
-    SearchBarComponent,
     MovementsPickerGroupItemComponent,
     MovementsPickerMovementItemComponent,
     MovementsPickerComponent,
@@ -95,6 +92,7 @@ import { environment } from 'src/environment/environment';
     MovementsPickerDialog,
   ],
   imports: [
+    GlobalModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
