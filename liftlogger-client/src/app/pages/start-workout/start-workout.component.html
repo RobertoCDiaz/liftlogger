@@ -1,1 +1,26 @@
-<p>start-workout works!</p>
+<h1 class="page-title">Start Workout Session</h1>
+
+<div class="content">
+  <section class="start-from from-template">
+    <p class="title">Start from template</p>
+    <app-search-bar></app-search-bar>
+  </section>
+
+  <section class="start-from from-movement">
+    <p class="title">Start from movement</p>
+    <div class="movement-picker">
+      <span class="material-icons">sports_gymnastics</span>
+      <span class="label">Pick a movement...</span>
+      <!-- <span class="movement">Dumbbell Press</span> -->
+    </div>
+  </section>
+
+  <section class="start-from">
+    <p class="title">Pick a different discipline</p>
+  </section>
+</div>
+
+<div class="options">
+  <app-button type="primary" icon="play_arrow">Start Workout</app-button>
+  <a routerLink="/dashboard">Go back</a>
+</div>
