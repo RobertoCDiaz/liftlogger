@@ -160,4 +160,22 @@ describe('TemplatesService', () => {
       expect(result).toEqual(new Set(['Chest', 'Back']));
     });
   });
+
+  describe('searchInTemplates()', () => {
+    it('should properly filter templates', () => {
+      const testTemplates = getTemplatesFixture();
+      const inputs: { query: string; expectedResult: number }[] = [
+        { query: '', expectedResult: testTemplates.length },
+        { query: 'ist', expectedResult: 2 },
+        { query: 'Orchestrator', expectedResult: 2 },
+        { query: 'Manager', expectedResult: 1 },
+      ];
+
+      for (let input of inputs) {
+        const result = service.searchInTemplates(testTemplates, input.query);
+
+        expect(result).toHaveSize(input.expectedResult);
+      }
+    });
+  });
 });

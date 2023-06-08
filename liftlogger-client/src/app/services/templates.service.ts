@@ -98,4 +98,19 @@ export class TemplatesService {
 
     return result;
   }
+
+  /**
+   * Given a list of Templates, it searches for a given string in their names or descriptions.
+   *
+   * @param templates List of Templates
+   * @param query Query string
+   * @returns Filtered Templates
+   */
+  searchInTemplates(templates: Template[], query: string): Template[] {
+    return templates.filter(
+      t =>
+        t.name.toLowerCase().includes(query.toLowerCase()) ||
+        t.description?.toLowerCase().includes(query.toLocaleLowerCase()),
+    );
+  }
 }
