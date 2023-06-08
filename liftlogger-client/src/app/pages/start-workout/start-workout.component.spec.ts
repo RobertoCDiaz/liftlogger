@@ -33,6 +33,16 @@ describe('StartWorkoutComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should set selected item to template when templateClicked event is triggered', () => {
+    const testId: number = 2;
+
+    component.selectedItem$.pipe(skip(1)).subscribe(result => {
+      expect(result).toEqual({ type: 'template', template_id: testId });
+    });
+
+    component.templateClicked.next(testId);
+  });
+
   describe('ngAfterViewInit()', () => {
     it('should update templates to display based on template search query', () => {
       spyOn(component.templateSearchBar.queryChanged, 'asObservable').and.returnValue(

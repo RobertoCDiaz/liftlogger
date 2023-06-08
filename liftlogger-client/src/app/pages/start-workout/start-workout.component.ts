@@ -1,8 +1,30 @@
-import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
-import { Observable, combineLatest, map, startWith } from 'rxjs';
+import { AfterViewInit, Component, EventEmitter, ViewChild, inject } from '@angular/core';
+import { Observable, combineLatest, map, merge, startWith, switchMap } from 'rxjs';
 import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
 import { Template } from 'src/app/models/TemplateModel';
 import { TemplatesService } from 'src/app/services/templates.service';
+
+/**
+ * Shape of the current selection.
+ */
+type SelectedItem =
+  | {
+      /**
+       * No item is selected.
+       */
+      type: 'none';
+    }
+  | {
+      /**
+       * A Template is currently selected.
+       */
+      type: 'template';
+
+      /**
+       * Selected Template identifier.
+       */
+      template_id: number;
+    };
 
 /**
  * Starting page for a new workout session. It offers the possibility to start a new Weightlifting
@@ -15,6 +37,23 @@ import { TemplatesService } from 'src/app/services/templates.service';
 })
 export class StartWorkoutComponent implements AfterViewInit {
   templatesService: TemplatesService = inject(TemplatesService);
+
+  /**
+   * Event to be fired up when a Template item is clicked.
+   * The value to be emitted must be the clicked Template identifier.
+   */
+  templateClicked: EventEmitter<number> = new EventEmitter<number>();
+
+  /**
+   * Holds a "pointer" to know which item is currently selected.
+   * It starts with nothing selected by default.
+   */
+  selectedItem$: Observable<SelectedItem> = merge(
+    // if a template is clicked, then set selected item to the clicked template
+    this.templateClicked
+      .asObservable()
+      .pipe<SelectedItem>(map(templateId => ({ type: 'template', template_id: templateId }))),
+  ).pipe(startWith({ type: 'none' } satisfies SelectedItem));
 
   /**
    * SearchBar that will set the query to search Templates.

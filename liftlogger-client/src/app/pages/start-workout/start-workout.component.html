@@ -1,60 +1,70 @@
-<h1 class="page-title">Start Workout Session</h1>
+<ng-container *ngIf="selectedItem$ | async as selectedItem">
+  <h1 class="page-title">Start Workout Session</h1>
 
-<div class="content">
-  <section class="start-from from-template">
-    <p class="title">Start from template</p>
-    <app-search-bar #templateSearchBar></app-search-bar>
-    <div class="templates-container">
-      <div
-        class="templates-list"
-        *ngIf="filteredTemplates$ | async as templates; else loadingTemplates"
-      >
-        <div class="template-item" *ngFor="let template of templates">
-          <div class="header">
-            <span class="name">{{ template.name }} </span>
-            <a class="open" [routerLink]="'/templates/update/' + template.id">
-              <span class="material-icons">open_in_new</span>
-            </a>
-            <div class="last-trained">
-              <span>last trained</span>
-              <span class="date">03-feb-2023</span>
+  <div class="content">
+    <section class="start-from from-template">
+      <p class="title">Start from template</p>
+      <app-search-bar #templateSearchBar></app-search-bar>
+      <div class="templates-container">
+        <div
+          class="templates-list"
+          *ngIf="filteredTemplates$ | async as templates; else loadingTemplates"
+        >
+          <div
+            class="template-item"
+            *ngFor="let template of templates"
+            (click)="templateClicked.emit(template.id)"
+            [ngClass]="{
+              selected: selectedItem.type === 'template' && selectedItem.template_id === template.id
+            }"
+          >
+            <div class="header">
+              <span class="name">{{ template.name }} </span>
+              <a class="open" [routerLink]="'/templates/update/' + template.id">
+                <span class="material-icons">open_in_new</span>
+              </a>
+              <div class="last-trained">
+                <span>last trained</span>
+                <span class="date">03-feb-2023</span>
+              </div>
             </div>
-          </div>
-          <div class="template-content">
-            <span class="description">
-              {{ template.description ?? 'No description provided' }}
-            </span>
-            <ul class="movements-list">
-              <li *ngFor="let mov of template.movements">{{ mov.movement?.name }}</li>
-              <!-- <li class="extra" *ngIf="(template.movements?.length ?? 0) > 4">
-                and {{ (template.movements?.length ?? 0) - 4 }} more...
-              </li> -->
-            </ul>
+            <div class="template-content">
+              <span class="description">
+                {{ template.description ?? 'No description provided' }}
+              </span>
+              <ul class="movements-list">
+                <li *ngFor="let mov of template.movements">{{ mov.movement?.name }}</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="start-from from-movement">
-    <p class="title">Start from movement</p>
-    <div class="movement-picker">
-      <span class="material-icons">sports_gymnastics</span>
-      <span class="label">Pick a movement...</span>
-      <!-- <span class="movement">Dumbbell Press</span> -->
-    </div>
-  </section>
+    <section class="start-from from-movement">
+      <p class="title">Start from movement</p>
+      <div
+        class="movement-picker"
+      >
+        <span class="material-icons">sports_gymnastics</span>
+        <span class="label">Pick a movement...</span>
+        <span class="movement">Dumbbell Press</span>
+      </div>
+    </section>
 
-  <!-- WIP -->
-  <!-- <section class="start-from">
-    <p class="title">Pick a different discipline</p>
-  </section> -->
-</div>
+    <!-- WIP -->
+    <!-- <section class="start-from">
+      <p class="title">Pick a different discipline</p>
+    </section> -->
+  </div>
 
-<div class="options">
-  <app-button type="primary" icon="play_arrow">Start Workout</app-button>
-  <a routerLink="/dashboard">Go back</a>
-</div>
+  <div class="options">
+    <app-button type="primary" icon="play_arrow" [disabled]="selectedItem.type === 'none'"
+      >Start Workout</app-button
+    >
+    <a routerLink="/dashboard">Go back</a>
+  </div>
+</ng-container>
 
 <!-- Placeholders -->
 <ng-template #loadingTemplates>
