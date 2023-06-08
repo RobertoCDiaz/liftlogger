@@ -8,7 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRippleModule } from '@angular/material/core';
@@ -43,7 +42,6 @@ import { MovementsLibraryComponent } from './pages/movements-library/movements-l
 import { MovementsPickerGroupItemComponent } from './components/movements-picker-group-item/movements-picker-group-item.component';
 import { MovementsPickerMovementItemComponent } from './components/movements-picker-movement-item/movements-picker-movement-item.component';
 import { MovementsPickerComponent } from './components/movements-picker/movements-picker.component';
-import { ContentLoaderComponent } from './components/content-loader/content-loader.component';
 import { MovementJournalEntryComponent } from './components/movement-journal-entry/movement-journal-entry.component';
 import { GraphComponent } from './components/graph/graph.component';
 import { MovementDetailsComponent } from './pages/movement-details/movement-details.component';
@@ -80,7 +78,6 @@ import { environment } from 'src/environment/environment';
     MovementsPickerGroupItemComponent,
     MovementsPickerMovementItemComponent,
     MovementsPickerComponent,
-    ContentLoaderComponent,
     MovementJournalEntryComponent,
     GraphComponent,
     MovementDetailsComponent,
@@ -100,7 +97,6 @@ import { environment } from 'src/environment/environment';
     HttpClientModule,
     MatSidenavModule,
     MatDividerModule,
-    NgxSkeletonLoaderModule,
     ReactiveFormsModule,
     DragDropModule,
     MatDialogModule,
