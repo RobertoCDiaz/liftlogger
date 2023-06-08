@@ -1,4 +1,5 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
+import { Location } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, catchError, map, of, switchMap, take } from 'rxjs';
@@ -82,6 +83,7 @@ export class CreateTemplateComponent implements OnInit {
   state: CreateTemplateComponentState = inject(CreateTemplateComponentState);
   templatesService: TemplatesService = inject(TemplatesService);
   router: Router = inject(Router);
+  location: Location = inject(Location);
   route: ActivatedRoute = inject(ActivatedRoute);
   creatorPageState: CreatorPageState = inject(CreatorPageState);
 
@@ -102,13 +104,13 @@ export class CreateTemplateComponent implements OnInit {
             return this.templatesService.getTemplate(id);
           }),
           catchError(_ => {
-            this.router.navigate(['/templates']);
+            this.location.back();
             return of(null);
           }),
         )
         .subscribe(template => {
           if (!template) {
-            this.router.navigate(['/templates']);
+            this.location.back();
             return;
           }
 
@@ -147,7 +149,7 @@ export class CreateTemplateComponent implements OnInit {
       this.templatesService.createTemplate(template, ids).subscribe({
         next: template => {
           alert(`Template ${template.name} successfully created!`);
-          this.router.navigate(['/templates']);
+          this.location.back();
         },
         error: err => {
           alert(err.message);
@@ -175,7 +177,7 @@ export class CreateTemplateComponent implements OnInit {
       this.templatesService.updateTemplate(templateId, data, ids).subscribe({
         next: template => {
           alert(template.name + ' successfully updated!');
-          this.router.navigate(['/templates']);
+          this.location.back();
         },
         error: err => {
           alert(err.message);
@@ -199,7 +201,7 @@ export class CreateTemplateComponent implements OnInit {
     this.templatesService.deleteTemplate(id).subscribe({
       next: _ => {
         alert('Template was succesfully deleted');
-        this.router.navigate(['/templates']);
+        this.location.back();
       },
       error: err => {
         alert(err.message);

@@ -13,6 +13,7 @@ import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { getTemplatesFixture } from 'src/app/fixtures/templates.fixture';
 import { Template } from 'src/app/models/TemplateModel';
 import { getComponent } from 'src/app/helpers/testing.helper';
+import { Location } from '@angular/common';
 
 describe('CreateTemplateComponentState', () => {
   let state: CreateTemplateComponentState;
@@ -97,6 +98,7 @@ describe('CreateTemplateComponent', () => {
 
   let templateService: TemplatesService;
   let router: Router;
+  let location: Location;
   let activatedRoute: ActivatedRoute;
 
   let alertSpy: jasmine.Spy;
@@ -116,10 +118,11 @@ describe('CreateTemplateComponent', () => {
     creatorPageState = fixture.debugElement.injector.get(CreatorPageState);
     templateService = TestBed.inject(TemplatesService);
     router = TestBed.inject(Router);
+    location = TestBed.inject(Location);
     activatedRoute = TestBed.inject(ActivatedRoute);
 
     alertSpy = spyOn(window, 'alert');
-    navigateSpy = spyOn(router, 'navigate');
+    navigateSpy = spyOn(location, 'back');
   });
 
   it('should create', () => {
