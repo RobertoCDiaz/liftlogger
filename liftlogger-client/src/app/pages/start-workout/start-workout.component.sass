@@ -6,14 +6,14 @@
   grid-template-rows: max-content 1fr max-content
   height: 100vh
   box-sizing: border-box
-  padding: 4em 2em
-  gap: 4em
+  gap: 1em
 
   >.page-title
     grid-area: page-title
     font-weight: normal
     font-size: 2rem
     text-align: center
+    padding: 2em 1em 0 1em
 
   >.content
     @include styles.flex(column)
@@ -25,9 +25,96 @@
     section
       @include styles.flex(column)
       gap: .5em
+      align-items: stretch
+
+      @include styles.isLarge
+        >*
+          align-self: center
+          min-width: 25em
+
+          @include styles.isXL
+            min-width: 45em
+
+      &:not(.from-template)
+        padding: 0 1em
 
       .title
         text-align: center
+
+    .from-template
+      >:not(.templates-container)
+        margin: 0 1em
+
+      .templates-container
+        @include styles.flex(column)
+        width: 100vw
+        box-sizing: border-box
+        overflow-x: scroll
+        padding: 1em
+
+        .templates-list
+          display: flex
+          gap: 1em
+          margin: 0 auto
+
+          .template-item
+            @include styles.shadow
+            @include styles.transition
+            flex: 0 0 auto
+            border-radius: .25em
+            overflow: hidden
+            cursor: pointer
+            width: 18em
+            align-self: start
+
+            &:hover
+              background-color: styles.$lighter-gray
+
+            &.selected .header
+              background-color: styles.$primary-color
+
+            .header
+              @include styles.flex(row)
+              align-items: center
+              padding: .5em 1em
+              background: styles.$dark-gray
+              gap: .5em
+
+              *
+                color: white
+
+              .name
+                font-weight: bold
+                font-size: 1.1rem
+
+              .last-trained
+                @include styles.flex(column)
+
+                span
+                  text-align: center
+                  font-size: .8rem
+
+              .open
+                flex-grow: 1
+                align-self: center
+                span
+                  font-size: 1rem
+
+            .template-content
+              @include styles.flex(column)
+              padding: .5em 1em
+              gap: 1em
+
+              .description
+                @include styles.line-clamp(3)
+
+                color: styles.$dark-gray
+
+              .movements-list
+                padding: 0 1em
+
+                .extra
+                  color: styles.$dark-gray
 
     .from-movement
       .movement-picker
@@ -51,6 +138,7 @@
 
   >.options
     @include styles.flex(column)
+    padding: 0 1em 2em 1em
     gap: 1em
     align-items: center
     grid-area: options

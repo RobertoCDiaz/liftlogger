@@ -3,7 +3,37 @@
 <div class="content">
   <section class="start-from from-template">
     <p class="title">Start from template</p>
-    <app-search-bar></app-search-bar>
+    <app-search-bar #templateSearchBar></app-search-bar>
+    <div class="templates-container">
+      <div
+        class="templates-list"
+        *ngIf="filteredTemplates$ | async as templates; else loadingTemplates"
+      >
+        <div class="template-item" *ngFor="let template of templates">
+          <div class="header">
+            <span class="name">{{ template.name }} </span>
+            <a class="open" [routerLink]="'/templates/update/' + template.id">
+              <span class="material-icons">open_in_new</span>
+            </a>
+            <div class="last-trained">
+              <span>last trained</span>
+              <span class="date">03-feb-2023</span>
+            </div>
+          </div>
+          <div class="template-content">
+            <span class="description">
+              {{ template.description ?? 'No description provided' }}
+            </span>
+            <ul class="movements-list">
+              <li *ngFor="let mov of template.movements">{{ mov.movement?.name }}</li>
+              <!-- <li class="extra" *ngIf="(template.movements?.length ?? 0) > 4">
+                and {{ (template.movements?.length ?? 0) - 4 }} more...
+              </li> -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="start-from from-movement">
@@ -15,12 +45,48 @@
     </div>
   </section>
 
-  <section class="start-from">
+  <!-- WIP -->
+  <!-- <section class="start-from">
     <p class="title">Pick a different discipline</p>
-  </section>
+  </section> -->
 </div>
 
 <div class="options">
   <app-button type="primary" icon="play_arrow">Start Workout</app-button>
   <a routerLink="/dashboard">Go back</a>
 </div>
+
+<!-- Placeholders -->
+<ng-template #loadingTemplates>
+  <div class="templates-list">
+    <div class="template-item" *ngFor="let template of [1, 2, 3, 4, 5, 6]">
+      <div class="header">
+        <app-content-loader class="name"></app-content-loader>
+        <div class="last-trained">
+          <span>last trained</span>
+          <app-content-loader class="date" [fontSize]="0.5"></app-content-loader>
+        </div>
+      </div>
+      <div class="template-content">
+        <app-content-loader class="description" [lineCount]="1"> </app-content-loader>
+        <ul class="movements-list">
+          <li>
+            <app-content-loader></app-content-loader>
+          </li>
+          <li>
+            <app-content-loader></app-content-loader>
+          </li>
+          <li>
+            <app-content-loader></app-content-loader>
+          </li>
+          <li>
+            <app-content-loader></app-content-loader>
+          </li>
+          <li>
+            <app-content-loader></app-content-loader>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</ng-template>
