@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { GlobalModule } from './modules/global/global.module';
+import { MovementsModule } from './modules/movements/movements.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatDividerModule } from '@angular/material/divider';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -24,24 +22,14 @@ import { PageHeaderComponent } from './components/page-header/page-header.compon
 import { WeightscaleDataInputComponent } from './components/weightscale-data-input/weightscale-data-input.component';
 import { CreateTemplateComponent } from './pages/create-template/create-template.component';
 import { TemplateMovementItemComponent } from './components/template-movement-item/template-movement-item.component';
-import {
-  MovementsPickerDialog,
-  TemplateMovementsListComponent,
-} from './components/template-movements-list/template-movements-list.component';
+import { TemplateMovementsListComponent } from './components/template-movements-list/template-movements-list.component';
 import { CreateMovementComponent } from './pages/create-movement/create-movement.component';
 import { CreatorInputComponent } from './components/creator-input/creator-input.component';
 import { CreatorPageComponent } from './components/creator-page/creator-page.component';
 import { MuscularGroupSelectorComponent } from './components/muscular-group-selector/muscular-group-selector.component';
-import { ItemComponent } from './components/muscular-group-selector/item/item.component';
 import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-muscle-group.component';
 import { LandingComponent } from './pages/landing/landing.component';
-import { MainSidenavComponent } from './components/main-sidenav/main-sidenav.component';
-import { AppBarComponent } from './components/app-bar/app-bar.component';
-import { DrawerPageComponent } from './components/drawer-page/drawer-page.component';
 import { MovementsLibraryComponent } from './pages/movements-library/movements-library.component';
-import { MovementsPickerGroupItemComponent } from './components/movements-picker-group-item/movements-picker-group-item.component';
-import { MovementsPickerMovementItemComponent } from './components/movements-picker-movement-item/movements-picker-movement-item.component';
-import { MovementsPickerComponent } from './components/movements-picker/movements-picker.component';
 import { MovementJournalEntryComponent } from './components/movement-journal-entry/movement-journal-entry.component';
 import { GraphComponent } from './components/graph/graph.component';
 import { MovementDetailsComponent } from './pages/movement-details/movement-details.component';
@@ -68,16 +56,9 @@ import { environment } from 'src/environment/environment';
     CreatorInputComponent,
     CreatorPageComponent,
     MuscularGroupSelectorComponent,
-    ItemComponent,
     CreateMuscleGroupComponent,
     LandingComponent,
-    MainSidenavComponent,
-    AppBarComponent,
-    DrawerPageComponent,
     MovementsLibraryComponent,
-    MovementsPickerGroupItemComponent,
-    MovementsPickerMovementItemComponent,
-    MovementsPickerComponent,
     MovementJournalEntryComponent,
     GraphComponent,
     MovementDetailsComponent,
@@ -86,20 +67,17 @@ import { environment } from 'src/environment/environment';
     MusclegroupsLibraryComponent,
     MusclegroupsDetailsComponent,
     TemplatesLibraryComponent,
-    MovementsPickerDialog,
   ],
   imports: [
     GlobalModule,
+    MovementsModule, // TODO: Delete circular module dependency
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    MatSidenavModule,
-    MatDividerModule,
     ReactiveFormsModule,
     DragDropModule,
-    MatDialogModule,
     MatRippleModule,
     MatSnackBarModule,
     MatInputModule,
