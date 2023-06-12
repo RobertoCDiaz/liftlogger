@@ -5,11 +5,17 @@
     <section class="start-from from-template">
       <p class="title">Start from template</p>
       <app-search-bar #templateSearchBar></app-search-bar>
-      <div class="templates-container">
-        <div
-          class="templates-list"
-          *ngIf="filteredTemplates$ | async as templates; else loadingTemplates"
-        >
+      <div
+        class="templates-container"
+        *ngIf="filteredTemplates$ | async as templates; else loadingTemplates"
+      >
+        <ng-template #noTemplates>
+          <div class="templates-list-empty">
+            <span class="material-icons">playlist_remove</span>
+            <p>No templates!</p>
+          </div>
+        </ng-template>
+        <div class="templates-list" *ngIf="templates.length > 0; else noTemplates">
           <div
             class="template-item"
             *ngFor="let template of templates"
@@ -45,17 +51,20 @@
       <p class="title">Start from movement</p>
       <div
         class="movement-picker"
+        (click)="openMovementsPicker()"
+        [ngClass]="{
+          selected: selectedItem.type === 'movement'
+        }"
       >
         <span class="material-icons">sports_gymnastics</span>
-        <span class="label">Pick a movement...</span>
-        <span class="movement">Dumbbell Press</span>
+        <span class="label">{{
+          selectedItem.type === 'movement' ? 'Starting movement' : 'Pick a movement...'
+        }}</span>
+        <span class="movement" *ngIf="selectedItem.type === 'movement'">{{
+          selectedItem.movement.name
+        }}</span>
       </div>
     </section>
-
-    <!-- WIP -->
-    <!-- <section class="start-from">
-      <p class="title">Pick a different discipline</p>
-    </section> -->
   </div>
 
   <div class="options">
@@ -68,34 +77,36 @@
 
 <!-- Placeholders -->
 <ng-template #loadingTemplates>
-  <div class="templates-list">
-    <div class="template-item" *ngFor="let template of [1, 2, 3, 4, 5, 6]">
-      <div class="header">
-        <app-content-loader class="name"></app-content-loader>
-        <div class="last-trained">
-          <span>last trained</span>
-          <app-content-loader class="date" [fontSize]="0.5"></app-content-loader>
+  <div class="templates-container">
+    <div class="templates-list">
+      <div class="template-item" *ngFor="let template of [1, 2, 3, 4, 5, 6]">
+        <div class="header">
+          <app-content-loader class="name"></app-content-loader>
+          <div class="last-trained">
+            <span>last trained</span>
+            <app-content-loader class="date" [fontSize]="0.5"></app-content-loader>
+          </div>
         </div>
-      </div>
-      <div class="template-content">
-        <app-content-loader class="description" [lineCount]="1"> </app-content-loader>
-        <ul class="movements-list">
-          <li>
-            <app-content-loader></app-content-loader>
-          </li>
-          <li>
-            <app-content-loader></app-content-loader>
-          </li>
-          <li>
-            <app-content-loader></app-content-loader>
-          </li>
-          <li>
-            <app-content-loader></app-content-loader>
-          </li>
-          <li>
-            <app-content-loader></app-content-loader>
-          </li>
-        </ul>
+        <div class="template-content">
+          <app-content-loader class="description" [lineCount]="1"> </app-content-loader>
+          <ul class="movements-list">
+            <li>
+              <app-content-loader></app-content-loader>
+            </li>
+            <li>
+              <app-content-loader></app-content-loader>
+            </li>
+            <li>
+              <app-content-loader></app-content-loader>
+            </li>
+            <li>
+              <app-content-loader></app-content-loader>
+            </li>
+            <li>
+              <app-content-loader></app-content-loader>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

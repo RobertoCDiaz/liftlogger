@@ -17,7 +17,7 @@
 
   >.content
     @include styles.flex(column)
-    gap: 3em
+    gap: 2em
     align-items: stretch
     justify-content: center
     grid-area: content
@@ -36,21 +36,31 @@
             min-width: 45em
 
       &:not(.from-template)
-        padding: 0 1em
+        padding: 0 2em
 
       .title
         text-align: center
 
     .from-template
       >:not(.templates-container)
-        margin: 0 1em
+        margin: 0 2em
 
       .templates-container
         @include styles.flex(column)
         width: 100vw
         box-sizing: border-box
         overflow-x: scroll
-        padding: 1em
+        padding: 2em
+
+        .templates-list-empty
+          @include styles.flex(column)
+          align-items: center
+
+          *
+            color: styles.$dark-gray
+
+          span
+            font-size: 5rem
 
         .templates-list
           display: flex
@@ -60,6 +70,7 @@
           .template-item
             @include styles.shadow
             @include styles.transition
+            @include styles.no-selection
             flex: 0 0 auto
             border-radius: .25em
             overflow: hidden
@@ -120,6 +131,7 @@
       .movement-picker
         @include styles.shadow
         @include styles.transition
+        @include styles.no-selection
         padding: .75em
         column-gap: 1em
         row-gap: 0
@@ -130,11 +142,24 @@
         align-items: center
         cursor: pointer
 
-        // :first-child
-        //   grid-row: span 2
+        &.selected
+          background-color: styles.$primary-color
+
+          *
+            color: styles.$white
+
+          &:hover
+            background-color: styles.$primary-light-color
+
+          :first-child
+            grid-row: span 2
+
+          .label
+            // font-size: 0.8rem
+            font-weight: bold
 
         &:hover
-          background-color: styles.$light-gray
+          background-color: styles.$lighter-gray
 
   >.options
     @include styles.flex(column)

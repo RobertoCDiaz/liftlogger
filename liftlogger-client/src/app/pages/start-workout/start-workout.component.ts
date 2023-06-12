@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, EventEmitter, ViewChild, inject } from '@angular/core';
-import { Observable, combineLatest, map, merge, startWith, switchMap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable, combineLatest, map, merge, startWith } from 'rxjs';
 import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
+import { MovementsPickerDialog } from 'src/app/dialogs/movements-picker-dialog/movements-picker-dialog.component';
+import { Movement } from 'src/app/models/MovementModel';
 import { Template } from 'src/app/models/TemplateModel';
 import { TemplatesService } from 'src/app/services/templates.service';
 
@@ -24,6 +27,17 @@ type SelectedItem =
        * Selected Template identifier.
        */
       template_id: number;
+    }
+  | {
+      /**
+       * A Movement is currently selected.
+       */
+      type: 'movement';
+
+      /**
+       * Selected Movement.
+       */
+      movement: Movement;
     };
 
 /**
@@ -37,12 +51,19 @@ type SelectedItem =
 })
 export class StartWorkoutComponent implements AfterViewInit {
   templatesService: TemplatesService = inject(TemplatesService);
+  dialog: MatDialog = inject(MatDialog);
 
   /**
    * Event to be fired up when a Template item is clicked.
    * The value to be emitted must be the clicked Template identifier.
    */
   templateClicked: EventEmitter<number> = new EventEmitter<number>();
+
+  /**
+   * Event to be fired up when a Movement is picked.
+   * The value to be emitted must be the picked Movement identifier.
+   */
+  movementPicked: EventEmitter<Movement> = new EventEmitter<Movement>();
 
   /**
    * Holds a "pointer" to know which item is currently selected.
@@ -53,6 +74,10 @@ export class StartWorkoutComponent implements AfterViewInit {
     this.templateClicked
       .asObservable()
       .pipe<SelectedItem>(map(templateId => ({ type: 'template', template_id: templateId }))),
+    // if a movement is picked, then set selected item to the clicked movement
+    this.movementPicked
+      .asObservable()
+      .pipe<SelectedItem>(map(mov => ({ type: 'movement', movement: mov }))),
   ).pipe(startWith({ type: 'none' } satisfies SelectedItem));
 
   /**
@@ -74,5 +99,20 @@ export class StartWorkoutComponent implements AfterViewInit {
         return this.templatesService.searchInTemplates(templates, query);
       }),
     );
+  }
+
+  /**
+   * Opens a MovementsPickerDialog instance so that when a movement is picked, it fires up the
+   * `movementPicked` event with the selected movement.
+   */
+  openMovementsPicker() {
+    const pickerDialog = MovementsPickerDialog.open(this.dialog, { singleSelection: true });
+    pickerDialog.afterClosed().subscribe(movement => {
+      if (!movement) {
+        return;
+      }
+
+      this.movementPicked.emit(movement);
+    });
   }
 }
