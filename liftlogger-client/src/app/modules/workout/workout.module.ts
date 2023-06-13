@@ -4,19 +4,24 @@ import { StartWorkoutComponent } from '../../pages/start-workout/start-workout.c
 import { RouterModule } from '@angular/router';
 import { GlobalModule } from '../global/global.module';
 import { MovementsCommonModule } from '../movements-common/movements-common.module';
+import { WorkoutWeightliftingComponent } from '../../pages/workout-weightlifting/workout-weightlifting.component';
+
+const components = [StartWorkoutComponent, WorkoutWeightliftingComponent];
 
 /**
  * Implementation of the Workout feature.
  */
 @NgModule({
-  declarations: [StartWorkoutComponent],
+  declarations: components,
   imports: [
     CommonModule,
     GlobalModule,
     MovementsCommonModule,
     RouterModule.forChild([
       { path: '', component: StartWorkoutComponent, title: 'Start new workout' },
+      { path: 'weightlifting', component: WorkoutWeightliftingComponent, title: 'Weightlifting' },
     ]),
   ],
+  exports: components,
 })
 export class WorkoutModule {}
