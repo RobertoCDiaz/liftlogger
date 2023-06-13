@@ -13,31 +13,24 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { WorkoutModule } from './modules/workout/workout.module';
+import { MusclegroupsModule } from './modules/musclegroups/musclegroups.module';
+import { MusclegroupsCommonModule } from './modules/musclegroups-common/musclegroups-common.module';
+import { MovementsCommonModule } from './modules/movements-common/movements-common.module';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './pages/main/main.component';
 import { MenuButtonComponent } from './components/menu-button/menu-button.component';
 import { AddWeightingComponent } from './pages/add-weighting/add-weighting.component';
-import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { WeightscaleDataInputComponent } from './components/weightscale-data-input/weightscale-data-input.component';
 import { CreateTemplateComponent } from './pages/create-template/create-template.component';
 import { TemplateMovementItemComponent } from './components/template-movement-item/template-movement-item.component';
 import { TemplateMovementsListComponent } from './components/template-movements-list/template-movements-list.component';
-import { CreateMovementComponent } from './pages/create-movement/create-movement.component';
-import { CreatorInputComponent } from './components/creator-input/creator-input.component';
-import { CreatorPageComponent } from './components/creator-page/creator-page.component';
-import { MuscularGroupSelectorComponent } from './components/muscular-group-selector/muscular-group-selector.component';
-import { CreateMuscleGroupComponent } from './pages/create-muscle-group/create-muscle-group.component';
 import { LandingComponent } from './pages/landing/landing.component';
-import { MovementsLibraryComponent } from './pages/movements-library/movements-library.component';
-import { MovementJournalEntryComponent } from './components/movement-journal-entry/movement-journal-entry.component';
-import { GraphComponent } from './components/graph/graph.component';
-import { MovementDetailsComponent } from './pages/movement-details/movement-details.component';
-import { MovementJournalComponent } from './pages/movement-journal/movement-journal.component';
-import { CalendarComponent } from './components/calendar/calendar.component';
-import { MusclegroupsLibraryComponent } from './pages/musclegroups-library/musclegroups-library.component';
-import { MusclegroupsDetailsComponent } from './pages/musclegroups-details/musclegroups-details.component';
 import { TemplatesLibraryComponent } from './pages/templates-library/templates-library.component';
+
+import { HttpService } from './services/http.service';
 
 import { environment } from 'src/environment/environment';
 
@@ -47,32 +40,17 @@ import { environment } from 'src/environment/environment';
     MainComponent,
     MenuButtonComponent,
     AddWeightingComponent,
-    PageHeaderComponent,
     WeightscaleDataInputComponent,
     CreateTemplateComponent,
     TemplateMovementItemComponent,
     TemplateMovementsListComponent,
-    CreateMovementComponent,
-    CreatorInputComponent,
-    CreatorPageComponent,
-    MuscularGroupSelectorComponent,
-    CreateMuscleGroupComponent,
     LandingComponent,
-    MovementsLibraryComponent,
-    MovementJournalEntryComponent,
-    GraphComponent,
-    MovementDetailsComponent,
-    MovementJournalComponent,
-    CalendarComponent,
-    MusclegroupsLibraryComponent,
-    MusclegroupsDetailsComponent,
     TemplatesLibraryComponent,
   ],
   imports: [
-    GlobalModule,
-    MovementsModule, // TODO: Delete circular module dependency
-    BrowserModule,
     AppRoutingModule,
+    GlobalModule,
+    BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
@@ -83,6 +61,7 @@ import { environment } from 'src/environment/environment';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatDialogModule,
     AuthModule.forRoot({
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,
@@ -91,8 +70,14 @@ import { environment } from 'src/environment/environment';
         audience: environment.auth0Audience,
       },
     }),
+    // temporal modules // TODO: Remove and fix tests
+    WorkoutModule,
+    MovementsModule,
+    MusclegroupsModule,
+    MusclegroupsCommonModule,
+    MovementsCommonModule,
   ],
-  providers: [],
+  providers: [HttpService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

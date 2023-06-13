@@ -10,6 +10,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { DrawerPageComponent } from 'src/app/components/drawer-page/drawer-page.component';
 import { MainSidenavComponent } from 'src/app/components/main-sidenav/main-sidenav.component';
 import { AppBarComponent } from 'src/app/components/app-bar/app-bar.component';
+import { CreatorPageComponent } from 'src/app/components/creator-page/creator-page.component';
+import { PageHeaderComponent } from 'src/app/components/page-header/page-header.component';
+import { CreatorInputComponent } from 'src/app/components/creator-input/creator-input.component';
+import { GraphComponent } from 'src/app/components/graph/graph.component';
+import { CalendarComponent } from 'src/app/components/calendar/calendar.component';
 
 const components = [
   ButtonComponent,
@@ -18,6 +23,11 @@ const components = [
   DrawerPageComponent,
   MainSidenavComponent,
   AppBarComponent,
+  CreatorPageComponent,
+  CreatorInputComponent,
+  PageHeaderComponent,
+  GraphComponent,
+  CalendarComponent,
 ];
 
 /**

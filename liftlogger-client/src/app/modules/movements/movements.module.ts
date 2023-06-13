@@ -1,20 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MovementsPickerDialog } from 'src/app/dialogs/movements-picker-dialog/movements-picker-dialog.component';
-import { MovementsPickerComponent } from 'src/app/components/movements-picker/movements-picker.component';
 import { GlobalModule } from '../global/global.module';
-import { MovementsPickerGroupItemComponent } from 'src/app/components/movements-picker-group-item/movements-picker-group-item.component';
-import { MovementsPickerMovementItemComponent } from 'src/app/components/movements-picker-movement-item/movements-picker-movement-item.component';
-import { ItemComponent } from 'src/app/components/muscular-group-selector/item/item.component';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MovementsCommonModule } from '../movements-common/movements-common.module';
+import { MovementsLibraryComponent } from 'src/app/pages/movements-library/movements-library.component';
+import { MusclegroupsCommonModule } from '../musclegroups-common/musclegroups-common.module';
+import { CreateMovementComponent } from 'src/app/pages/create-movement/create-movement.component';
+import { RouterModule } from '@angular/router';
+import { MovementDetailsComponent } from 'src/app/pages/movement-details/movement-details.component';
+import { MovementJournalComponent } from 'src/app/pages/movement-journal/movement-journal.component';
+import { MovementJournalEntryComponent } from 'src/app/components/movement-journal-entry/movement-journal-entry.component';
 
 const components = [
-  MovementsPickerComponent,
-  MovementsPickerDialog,
-  MovementsPickerGroupItemComponent,
-  MovementsPickerMovementItemComponent,
-  ItemComponent,
+  MovementsLibraryComponent,
+  CreateMovementComponent,
+  MovementDetailsComponent,
+  MovementJournalComponent,
+  MovementJournalEntryComponent,
 ];
 
 /**
@@ -22,7 +23,18 @@ const components = [
  */
 @NgModule({
   declarations: components,
-  imports: [CommonModule, GlobalModule, MatDividerModule, MatDialogModule],
+  imports: [
+    CommonModule,
+    GlobalModule,
+    MovementsCommonModule,
+    MusclegroupsCommonModule,
+    RouterModule.forChild([
+      { path: '', component: MovementsLibraryComponent, title: 'My Movements' },
+      { path: 'create', component: CreateMovementComponent, title: 'Create New Movement' },
+      { path: ':id', component: MovementDetailsComponent, title: 'Movement Details' },
+      { path: ':id/journal', component: MovementJournalComponent, title: 'Movement Journal' },
+    ]),
+  ],
   exports: components,
 })
 export class MovementsModule {}

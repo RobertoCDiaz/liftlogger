@@ -7,6 +7,7 @@ import { AppModule } from 'src/app/app.module';
 import { GroupsService } from 'src/app/services/groups.service';
 import { getMuscleGroupsFixture } from 'src/app/fixtures/muscle-groups.fixture';
 import { of } from 'rxjs';
+import { MusclegroupsModule } from 'src/app/modules/musclegroups/musclegroups.module';
 
 describe('MusclegroupsLibraryComponent', () => {
   let component: MusclegroupsLibraryComponent;
@@ -18,7 +19,7 @@ describe('MusclegroupsLibraryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MusclegroupsLibraryComponent],
-      imports: [AppModule],
+      imports: [AppModule, MusclegroupsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MusclegroupsLibraryComponent);

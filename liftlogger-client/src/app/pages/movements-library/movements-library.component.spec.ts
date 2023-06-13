@@ -5,6 +5,7 @@ import { DrawerPageComponent } from 'src/app/components/drawer-page/drawer-page.
 import { MovementsPickerComponent } from 'src/app/components/movements-picker/movements-picker.component';
 import { AppModule } from 'src/app/app.module';
 import { getElement } from 'src/app/helpers/testing.helper';
+import { MovementsModule } from 'src/app/modules/movements/movements.module';
 
 describe('MovementsLibraryComponent', () => {
   let component: MovementsLibraryComponent;
@@ -13,7 +14,7 @@ describe('MovementsLibraryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MovementsLibraryComponent, DrawerPageComponent, MovementsPickerComponent],
-      imports: [AppModule],
+      imports: [AppModule, MovementsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MovementsLibraryComponent);

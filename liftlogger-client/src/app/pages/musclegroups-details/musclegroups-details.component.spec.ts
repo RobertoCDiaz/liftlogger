@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MusclegroupsDetailsComponent } from './musclegroups-details.component';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
@@ -8,6 +8,7 @@ import { getMetadataFixture, getMuscleGroupsFixture } from 'src/app/fixtures/mus
 import { AppModule } from 'src/app/app.module';
 import { MuscleGroup, WithMuscleGroupMetadata } from 'src/app/models/MuscleGroupModel';
 import * as moment from 'moment';
+import { MusclegroupsModule } from 'src/app/modules/musclegroups/musclegroups.module';
 
 describe('MusclegroupsDetailsComponent', () => {
   let component: MusclegroupsDetailsComponent;
@@ -24,7 +25,7 @@ describe('MusclegroupsDetailsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MusclegroupsDetailsComponent],
-      imports: [AppModule],
+      imports: [MusclegroupsModule, AppModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MusclegroupsDetailsComponent);
