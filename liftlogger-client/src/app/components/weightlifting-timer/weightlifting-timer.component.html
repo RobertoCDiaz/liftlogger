@@ -1,0 +1,26 @@
+<ng-container>
+  <p class="title">
+    {{ (timerState$ | async) === 'not-started' ? 'Start Workout' : 'Weightlifting' }}
+  </p>
+  <p class="time">{{ (formattedTime$ | async) ?? '00:00' }}</p>
+  <div class="options" [ngSwitch]="timerState$ | async">
+    <ng-container *ngSwitchCase="'not-started'">
+      <span id="startButton" class="material-icons option" (click)="startClicked.emit()"
+        >play_arrow</span
+      >
+    </ng-container>
+    <ng-container *ngSwitchCase="'going'">
+      <span id="pauseButton" class="material-icons option" (click)="pauseClicked.emit()"
+        >pause</span
+      >
+    </ng-container>
+    <ng-container *ngSwitchCase="'paused'">
+      <span id="unpauseButton" class="material-icons option" (click)="unpauseClicked.emit()"
+        >play_arrow</span
+      >
+      <span id="stopButton" class="material-icons option danger" (click)="stopClicked.emit()"
+        >stop</span
+      >
+    </ng-container>
+  </div>
+</ng-container>

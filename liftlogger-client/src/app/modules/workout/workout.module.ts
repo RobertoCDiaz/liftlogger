@@ -5,8 +5,13 @@ import { RouterModule } from '@angular/router';
 import { GlobalModule } from '../global/global.module';
 import { MovementsCommonModule } from '../movements-common/movements-common.module';
 import { WorkoutWeightliftingComponent } from '../../pages/workout-weightlifting/workout-weightlifting.component';
+import { WeightliftingTimerComponent } from 'src/app/components/weightlifting-timer/weightlifting-timer.component';
 
-const components = [StartWorkoutComponent, WorkoutWeightliftingComponent];
+const components = [
+  StartWorkoutComponent,
+  WorkoutWeightliftingComponent,
+  WeightliftingTimerComponent,
+];
 
 /**
  * Implementation of the Workout feature.
