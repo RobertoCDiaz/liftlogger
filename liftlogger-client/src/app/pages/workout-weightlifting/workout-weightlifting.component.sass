@@ -1,5 +1,74 @@
 @use '../../../styles'
 
 :host
-  padding: 4em
   @include styles.flex(column)
+  padding: 4em
+  gap: 4em
+
+  .current-movement-container
+    @include styles.flex(column)
+    gap: 1em
+
+    .current-movement-showcase
+      @include styles.flex(column)
+      align-items: center
+
+      .movement-name
+        font-size: 1.5rem
+        font-weight: bold
+
+    .sets-container
+      @include styles.flex(column)
+      gap: .5em
+      align-items: center
+
+      .set
+        @include styles.flex(row)
+        gap: 2em
+        padding: .5em
+
+        .rep
+          @include styles.flex(row)
+          align-items: center
+          gap: .5em
+
+          .rep-button
+            cursor: pointer
+
+          .reps-count
+            font-size: 1.6rem
+            font-weight: bold
+
+        .weight
+          @include styles.flex(row)
+          gap: .25em
+          align-items: center
+
+          input
+            @include styles.transition
+            all: unset
+            border-bottom: 1px solid styles.$dark-gray
+            font-weight: bold
+            font-size: 1.6rem
+            text-align: center
+            width: 3em
+            box-sizing: border-box
+
+            &:focus
+              background-color: styles.$lighter-gray
+
+    .options
+      @include styles.flex(column)
+      align-items: center
+      gap: .25em
+
+  input
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button
+      -webkit-appearance: none
+      margin: 0
+    &::-moz-number-spin-box
+      -webkit-appearance: none
+      -moz-appearance: textfield
+      appearance: textfield
+      margin: 0

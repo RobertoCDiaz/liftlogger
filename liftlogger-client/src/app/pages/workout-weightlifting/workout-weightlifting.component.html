@@ -1,1 +1,26 @@
 <app-weightlifting-timer #timer></app-weightlifting-timer>
+
+<div class="current-movement-container">
+  <div class="current-movement-showcase">
+    <p>Current movement</p>
+    <p class="movement-name">Incline Dumbbell Press</p>
+  </div>
+  <div class="sets-container">
+    <div class="set" *ngFor="let r of [1, 2, 3]">
+      <div class="rep">
+        <span class="material-icons rep-button">remove</span>
+        <span class="reps-count">12</span>
+        <span class="reps-label">reps</span>
+        <span class="material-icons rep-button">add</span>
+      </div>
+      <div class="weight">
+        <input value="22.5" type="number" />
+        <span class="weight-label">kg</span>
+      </div>
+    </div>
+  </div>
+  <div class="options">
+    <app-button icon="add" type="no-border">Add series</app-button>
+    <app-button icon="skip_next" type="no-border">Next movement</app-button>
+  </div>
+</div>
