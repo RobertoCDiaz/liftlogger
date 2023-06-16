@@ -51,7 +51,7 @@ export class ButtonComponent {
   /**
    * Fires up when the button is clicked.
    */
-  @Output() onClicked = new EventEmitter();
+  @Output() onClicked = new EventEmitter<void>();
 
   /**
    * Emits the `onClicked` button only if the button is enabled.

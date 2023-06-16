@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, EventEmitter, ViewChild, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, combineLatest, map, merge, startWith } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, combineLatest, map, merge, startWith, tap, withLatestFrom } from 'rxjs';
+import { ButtonComponent } from 'src/app/components/button/button.component';
 import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
 import { MovementsPickerDialog } from 'src/app/dialogs/movements-picker-dialog/movements-picker-dialog.component';
 import { Movement } from 'src/app/models/MovementModel';
@@ -52,6 +54,7 @@ type SelectedItem =
 export class StartWorkoutComponent implements AfterViewInit {
   templatesService: TemplatesService = inject(TemplatesService);
   dialog: MatDialog = inject(MatDialog);
+  router: Router = inject(Router);
 
   /**
    * Event to be fired up when a Template item is clicked.
@@ -86,9 +89,19 @@ export class StartWorkoutComponent implements AfterViewInit {
   @ViewChild('templateSearchBar') templateSearchBar: SearchBarComponent;
 
   /**
+   * Start Button Component instance.
+   */
+  @ViewChild('startButton') startButton: ButtonComponent;
+
+  /**
    * Templates to display. They will be filtered using the template search bar query.
    */
   filteredTemplates$: Observable<Template[]>;
+
+  /**
+   * Fires up when the start button is clicked, and navigates to the appropriate page.
+   */
+  startWorkoutEvent$: Observable<any>;
 
   ngAfterViewInit(): void {
     this.filteredTemplates$ = combineLatest([
@@ -97,6 +110,31 @@ export class StartWorkoutComponent implements AfterViewInit {
     ]).pipe(
       map(([templates, query]) => {
         return this.templatesService.searchInTemplates(templates, query);
+      }),
+    );
+
+    this.startWorkoutEvent$ = this.startButton.onClicked.asObservable().pipe(
+      withLatestFrom(this.selectedItem$),
+      tap(([_, selectedItem]) => {
+        if (selectedItem.type === 'none') {
+          alert('Please select an item');
+          return;
+        }
+
+        if (selectedItem.type === 'template') {
+          this.router.navigate(['weightlifting'], { queryParams: selectedItem });
+          return;
+        }
+
+        if (selectedItem.type === 'movement') {
+          this.router.navigate(['weightlifting'], {
+            queryParams: {
+              type: selectedItem.type,
+              movement_id: selectedItem.movement.id,
+            },
+          });
+          return;
+        }
       }),
     );
   }

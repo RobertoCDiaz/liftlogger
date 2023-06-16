@@ -68,9 +68,16 @@
   </div>
 
   <div class="options">
-    <app-button type="primary" icon="play_arrow" [disabled]="selectedItem.type === 'none'"
-      >Start Workout</app-button
+    <ng-container *ngIf="startWorkoutEvent$ | async"></ng-container>
+    <app-button
+      id="startButton"
+      type="primary"
+      icon="play_arrow"
+      [disabled]="selectedItem.type === 'none'"
+      #startButton
     >
+      Start Workout
+    </app-button>
     <a routerLink="/dashboard">Go back</a>
   </div>
 </ng-container>
