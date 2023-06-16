@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as moment from 'moment';
-import { Observable, interval, map, merge, scan, startWith, tap, withLatestFrom } from 'rxjs';
+import { Observable, interval, map, merge, scan, startWith, withLatestFrom } from 'rxjs';
 
 /**
  * Defines the different possible states for a timer.
  */
-type TimerState = 'paused' | 'going' | 'finished' | 'not-started';
+export type TimerState = 'paused' | 'going' | 'finished' | 'not-started';
 
 /**
  * Contains information on a timer that already finished.
@@ -35,7 +35,7 @@ export type FinishedTime = {
   templateUrl: './weightlifting-timer.component.html',
   styleUrls: ['./weightlifting-timer.component.sass'],
 })
-export class WeightliftingTimerComponent {
+export class WeightliftingTimerComponent implements OnInit {
   /**
    * Event emitter for the start button click.
    */
@@ -93,44 +93,50 @@ export class WeightliftingTimerComponent {
    */
   time$: Observable<number> = interval(1000).pipe(
     withLatestFrom(this.timerState$),
-    scan((acc, [_, currentState]) => {
-      if (currentState !== 'going') {
-        return acc;
+    scan((currentTime, [_, timerState]) => {
+      if (timerState !== 'going') {
+        return currentTime;
       }
 
-      return acc + 1;
+      return currentTime + 1;
     }, 0),
   );
 
   /**
    * Observable representing the formatted time in the format "HH:mm:ss" or "mm:ss".
    */
-  formattedTime$: Observable<string> = this.time$.pipe(
-    map(time => {
-      const duration = moment.duration(time, 'seconds');
-
-      return moment
-        .utc(duration.asMilliseconds())
-        .format(duration.hours() > 0 ? 'HH:mm:ss' : 'mm:ss');
-    }),
-  );
+  formattedTime$: Observable<string>;
 
   /**
    * Observable that emits the time value when the timer stops.
    * Emits `undefined` if the timer is not yet finished.
    */
-  @Output() onTimerStop$: Observable<FinishedTime | undefined> = this.timerState$.pipe(
-    withLatestFrom(this.time$),
-    map(([timerState, time]) => {
-      if (timerState !== 'finished') {
-        return;
-      }
+  @Output() onTimerStop$: Observable<FinishedTime | undefined>;
 
-      return {
-        startTime: this.startTime,
-        endTime: this.endTime,
-        totalTime: time,
-      } satisfies FinishedTime;
-    }),
-  );
+  ngOnInit(): void {
+    this.formattedTime$ = this.time$.pipe(
+      map(time => {
+        const duration = moment.duration(time, 'seconds');
+
+        return moment
+          .utc(duration.asMilliseconds())
+          .format(duration.hours() > 0 ? 'HH:mm:ss' : 'mm:ss');
+      }),
+    );
+
+    this.onTimerStop$ = this.timerState$.pipe(
+      withLatestFrom(this.time$),
+      map(([timerState, time]) => {
+        if (timerState !== 'finished') {
+          return;
+        }
+
+        return {
+          startTime: this.startTime,
+          endTime: this.endTime,
+          totalTime: time,
+        } satisfies FinishedTime;
+      }),
+    );
+  }
 }
