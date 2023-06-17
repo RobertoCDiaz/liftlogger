@@ -30,8 +30,15 @@ export class MovementRoutes extends Controller {
   public async getMovement(
     @Path() id: number,
     @Request() req: express.Request,
-  ): Promise<Movement | null | undefined> {
-    return this.movementsController.getMovement(id, req.user_email);
+  ): Promise<Movement | undefined> {
+    const movement = await this.movementsController.getMovement(id, req.user_email);
+
+    if (!movement) {
+      this.setStatus(404);
+      return;
+    }
+
+    return movement;
   }
 
   /**
@@ -42,9 +49,7 @@ export class MovementRoutes extends Controller {
    */
   @Get('')
   @Middlewares([authenticationMiddleware])
-  public async getUserMovements(
-    @Request() req: express.Request,
-  ): Promise<Movement[] | null | undefined> {
+  public async getUserMovements(@Request() req: express.Request): Promise<Movement[]> {
     return this.movementsController.getMovementsFromUser(req.user_email);
   }
 
@@ -60,7 +65,7 @@ export class MovementRoutes extends Controller {
   public async createMovement(
     @Body() body: MovementCreationRequestParams,
     @Request() req: express.Request,
-  ): Promise<Movement | undefined> {
+  ): Promise<Movement> {
     const movementCreationData = {
       ...body.movement,
       user_email: req.user_email,

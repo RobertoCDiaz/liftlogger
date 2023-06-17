@@ -32,6 +32,15 @@ describe('MovementRoutes', () => {
       expect(spy).toHaveBeenCalledWith(testMovement.id, testUser.email);
       expect(result).toEqual(testMovement);
     });
+
+    it('should return undefined and 404 if not movement found', async () => {
+      const spy = jest.spyOn(movementsController, 'getMovement').mockResolvedValue(null);
+
+      const result = await routesController.getMovement(451, emailRequestMock);
+
+      expect(routesController.getStatus()).toBe(404);
+      expect(result).toBeUndefined();
+    });
   });
 
   describe('getUserMovements()', () => {

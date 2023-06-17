@@ -25,10 +25,15 @@ export class TemplateRoutes extends Controller {
   async getTemplate(
     @Path() id: number,
     @Request() req: express.Request,
-  ): Promise<Template | null | undefined> {
-    const templates = await this.templatesController.getTemplate(id, req.user_email);
+  ): Promise<Template | undefined> {
+    const template = await this.templatesController.getTemplate(id, req.user_email);
 
-    return templates;
+    if (!template) {
+      this.setStatus(404);
+      return;
+    }
+
+    return template;
   }
 
   /**
@@ -39,9 +44,7 @@ export class TemplateRoutes extends Controller {
    */
   @Get('')
   @Middlewares([authenticationMiddleware])
-  async getTemplatesFromUser(
-    @Request() req: express.Request,
-  ): Promise<Template[] | null | undefined> {
+  async getTemplatesFromUser(@Request() req: express.Request): Promise<Template[] | undefined> {
     const templates = await this.templatesController.getTemplates(req.user_email);
 
     return templates;
@@ -59,7 +62,7 @@ export class TemplateRoutes extends Controller {
   async createTemplate(
     @Body() body: TemplateCreationRequestParams,
     @Request() req: express.Request,
-  ): Promise<Template | null | undefined> {
+  ): Promise<Template> {
     return await this.templatesController.create(
       { ...body.template, user_email: req.user_email },
       body.movements_ids,

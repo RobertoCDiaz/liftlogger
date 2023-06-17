@@ -22,6 +22,15 @@ describe('TemplateRoutes', () => {
       expect(spy).toHaveBeenCalledWith(1, emailRequestMock.user_email);
       expect(result).toEqual(testTemplate);
     });
+
+    it('should return undefined and 404 if no template found', async () => {
+      jest.spyOn(templateController, 'getTemplate').mockResolvedValue(null);
+
+      const result = await routesController.getTemplate(1234, emailRequestMock);
+
+      expect(routesController.getStatus()).toBe(404);
+      expect(result).toBeUndefined();
+    });
   });
 
   describe('getTemplatesFromUser()', () => {
