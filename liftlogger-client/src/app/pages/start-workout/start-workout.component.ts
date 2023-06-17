@@ -8,6 +8,7 @@ import { MovementsPickerDialog } from 'src/app/dialogs/movements-picker-dialog/m
 import { Movement } from 'src/app/models/MovementModel';
 import { Template } from 'src/app/models/TemplateModel';
 import { TemplatesService } from 'src/app/services/templates.service';
+import { StartFrom } from '../workout-weightlifting/workout-weightlifting.component';
 
 /**
  * Shape of the current selection.
@@ -122,16 +123,21 @@ export class StartWorkoutComponent implements AfterViewInit {
         }
 
         if (selectedItem.type === 'template') {
-          this.router.navigate(['weightlifting'], { queryParams: selectedItem });
+          this.router.navigate(['/workout/weightlifting'], {
+            queryParams: {
+              type: selectedItem.type,
+              id: selectedItem.template_id,
+            } satisfies StartFrom,
+          });
           return;
         }
 
         if (selectedItem.type === 'movement') {
-          this.router.navigate(['weightlifting'], {
+          this.router.navigate(['/workout/weightlifting'], {
             queryParams: {
               type: selectedItem.type,
-              movement_id: selectedItem.movement.id,
-            },
+              id: selectedItem.movement.id,
+            } satisfies StartFrom,
           });
           return;
         }

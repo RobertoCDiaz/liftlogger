@@ -116,8 +116,8 @@ describe('StartWorkoutComponent', () => {
         startButton.onClicked.next();
 
         expect(alertSpy).not.toHaveBeenCalled();
-        expect(navigateSpy).toHaveBeenCalledWith(['weightlifting'], {
-          queryParams: { type: 'template', template_id: testId },
+        expect(navigateSpy).toHaveBeenCalledWith(['/workout/weightlifting'], {
+          queryParams: { type: 'template', id: testId },
         });
       });
 
@@ -134,8 +134,8 @@ describe('StartWorkoutComponent', () => {
         startButton.onClicked.next();
 
         expect(alertSpy).not.toHaveBeenCalled();
-        expect(navigateSpy).toHaveBeenCalledWith(['weightlifting'], {
-          queryParams: { type: 'movement', movement_id: testId },
+        expect(navigateSpy).toHaveBeenCalledWith(['/workout/weightlifting'], {
+          queryParams: { type: 'movement', id: testId },
         });
       });
     });
