@@ -13,21 +13,27 @@ describe('MovementsController', () => {
   });
 
   describe('getMovement', () => {
-    it('should throw an error when movement is not found', async () => {
-      const promise = controller.getMovement(99, 'testing@test.com');
+    it('should return null when movement is not found', async () => {
+      const promise = await controller.getMovement(99, 'testing@test.com');
 
-      await expect(promise).rejects.toThrow();
+      await expect(promise).toBeNull();
     });
 
     it('should get the correct movement for a specific id and user email', async () => {
       let result = await controller.getMovement(1, 'testing@test.com');
-      expect(result).toEqual(getMovementsFixture()[0]);
+      expect(result?.id).toEqual(getMovementsFixture()[0].id);
 
       result = await controller.getMovement(9, 'testing@test.com');
-      expect(result).toEqual(getMovementsFixture()[8]);
+      expect(result?.id).toEqual(getMovementsFixture()[8].id);
 
       result = await controller.getMovement(21, 'testing@test.com');
-      expect(result).toEqual(getMovementsFixture()[20]);
+      expect(result?.id).toEqual(getMovementsFixture()[20].id);
+    });
+
+    it('should include groups', async () => {
+      let result = await controller.getMovement(1, 'testing@test.com');
+
+      expect(result).toHaveProperty('groups');
     });
   });
 

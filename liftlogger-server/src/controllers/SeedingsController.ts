@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
 import { liftingSessionsFixture } from '../fixtures/LiftingSessionFixtures';
-import { liftingSetsFixture } from '../fixtures/LiftingSetFixtures';
-import { groupsForMovementsFixture, movementsFixture } from '../fixtures/MovementFixtures';
-import { muscleGroupsFixture } from '../fixtures/MuscleGroupFixtures';
-import { usersFixture } from '../fixtures/UserFixtures';
+import { getLiftingSetsFixture } from '../fixtures/LiftingSetFixtures';
+import { groupsForMovementsFixture, getMovementsFixture } from '../fixtures/MovementFixtures';
+import { getMuscleGroupsFixture } from '../fixtures/MuscleGroupFixtures';
+import { getUsersFixture } from '../fixtures/UserFixtures';
 import { MuscleGroupCreationParams } from '../models/MuscleGroupModel';
 import MovementNotesController from './MovementNotesController';
 import MovementsController from './MovementsController';
@@ -22,7 +22,7 @@ export default class SeedingsController {
    * @param userEmail User to add groups to
    */
   async defaultUserSeeding(userEmail: string) {
-    const muscleGroups: MuscleGroupCreationParams[] = muscleGroupsFixture
+    const muscleGroups: MuscleGroupCreationParams[] = getMovementsFixture()
       .filter(mg => mg.user_email === 'testing@test.com')
       .map(fixture => ({
         name: fixture.name,
@@ -54,11 +54,11 @@ export default class SeedingsController {
     this.prisma
       .$transaction([
         // insert test users
-        this.prisma.user.createMany({ data: usersFixture }),
+        this.prisma.user.createMany({ data: getUsersFixture() }),
         // insert test musclegroups
-        this.prisma.muscleGroup.createMany({ data: muscleGroupsFixture }),
+        this.prisma.muscleGroup.createMany({ data: getMuscleGroupsFixture() }),
         // insert test movements along with their musclegroups relations
-        ...movementsFixture.map(movement =>
+        ...getMovementsFixture().map(movement =>
           this.prisma.movement.create({
             data: {
               ...movement,
@@ -72,7 +72,7 @@ export default class SeedingsController {
         this.prisma.weighting.createMany({ data: weightingFixtures }),
         // insert test sessions and sets
         this.prisma.liftingSession.createMany({ data: liftingSessionsFixture }),
-        this.prisma.liftingSet.createMany({ data: liftingSetsFixture }),
+        this.prisma.liftingSet.createMany({ data: getLiftingSetsFixture() }),
         // insert movement notes
         this.prisma.movementNote.createMany({ data: getNotesFixture() }),
         // insert templates and their movements

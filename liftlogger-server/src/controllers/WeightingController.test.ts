@@ -8,7 +8,7 @@ const controller = new WeightingController(prisma);
 
 describe('WeightingController', () => {
   afterAll(() => {
-    prismaInstance.$disconnect();
+    prisma.$disconnect();
   });
 
   describe('getEntries()', () => {

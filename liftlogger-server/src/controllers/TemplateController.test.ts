@@ -18,7 +18,7 @@ describe('TemplateController', () => {
   });
 
   afterAll(() => {
-    prismaInstance.$disconnect();
+    prisma.$disconnect();
   });
 
   describe('getTemplates()', () => {

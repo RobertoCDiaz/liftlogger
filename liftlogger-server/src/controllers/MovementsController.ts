@@ -14,15 +14,16 @@ export default class MovementsController {
    * @param userEmail Owner's email.
    * @returns The fetched movement, or nothing if no match was found.
    */
-  async getMovement(movementId: number, userEmail: string): Promise<Movement> {
-    const movements = await this.prisma.movement.findFirstOrThrow({
+  async getMovement(movementId: number, userEmail: string): Promise<Movement | null> {
+    return await this.prisma.movement.findFirst({
       where: {
         id: movementId,
         user_email: userEmail,
       },
+      include: {
+        groups: true,
+      },
     });
-
-    return movements;
   }
 
   /**

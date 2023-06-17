@@ -21,7 +21,11 @@ export default class TemplateController {
       include: {
         movements: {
           include: {
-            movement: true,
+            movement: {
+              include: {
+                groups: true,
+              },
+            },
           },
           orderBy: {
             position: 'asc',
