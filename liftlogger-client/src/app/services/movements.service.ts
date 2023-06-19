@@ -43,6 +43,20 @@ export class MovementsService {
   }
 
   /**
+   * Given a Movement, it gets a list of just the names of it's MuscleGroups.
+   *
+   * @param movement Movement object
+   * @returns List of names
+   */
+  getGroupNames(movement: Movement): string[] {
+    if (!movement.groups) {
+      return [];
+    }
+
+    return movement.groups.map(g => g.name);
+  }
+
+  /**
    * Makes a petition to the server to create a new Movement.
    *
    * @param movement Movement to create

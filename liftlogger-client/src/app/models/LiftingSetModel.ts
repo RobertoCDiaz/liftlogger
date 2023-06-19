@@ -40,3 +40,11 @@ export type LiftingSet = {
    */
   movement?: Movement;
 };
+
+/**
+ * Data required to create a new LiftingSet.
+ */
+export type LiftingSetCreationParams = Omit<
+  LiftingSet,
+  'id' | 'session_id' | 'session' | 'movement'
+>;

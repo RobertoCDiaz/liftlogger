@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import { getMovementsFixture } from '../fixtures/movements.fixture';
 import { getEntriesFixture } from '../fixtures/movements-journals.fixture';
 import { getMuscleGroupsFixture } from '../fixtures/muscle-groups.fixture';
+import { Movement } from '../models/MovementModel';
 
 describe('MovementsService', () => {
   let service: MovementsService;
@@ -98,6 +99,25 @@ describe('MovementsService', () => {
 
         expect(movement).toEqual(testMovement);
       });
+    });
+  });
+
+  describe('getGroupNames()', () => {
+    it('should properly get the group names of a movement', () => {
+      const movementWithGroups = getMovementsFixture()[1];
+      const expectedNames = ['Chest', 'Back'];
+
+      const result = service.getGroupNames(movementWithGroups);
+
+      expect(result).toEqual(expectedNames);
+    });
+
+    it('should return empty array if movement has no groups', () => {
+      const movementWithNoGroups = {} as Movement;
+
+      const result = service.getGroupNames(movementWithNoGroups);
+
+      expect(result).toEqual([]);
     });
   });
 });

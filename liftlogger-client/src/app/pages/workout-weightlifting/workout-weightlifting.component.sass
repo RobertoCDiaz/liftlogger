@@ -5,6 +5,56 @@
   padding: 4em
   gap: 4em
 
+  .movement-picker
+    @include styles.flex(column)
+    gap: 1em
+
+    .current-template
+      @include styles.flex(column)
+      align-items: center
+
+      .template-name
+        font-weight: bold
+        font-size: 1.5rem
+
+    .movements-list
+      @include styles.flex(column)
+
+      .movement-item
+        @include styles.transition
+        display: grid
+        grid-template-columns: max-content 1fr
+        align-items: center
+        justify-content: stretch
+        padding: .5em .25em
+        column-gap: .5em
+        border-radius: .25em
+        cursor: pointer
+
+        .pick-button
+          @include styles.no-selection
+          grid-row: span 2
+
+        .movement-name
+          font-size: 1.1rem
+
+        .movement-groups
+          font-size: 0.8rem
+
+        &:hover
+          background-color: styles.$lighter-gray
+
+        &.done
+          *
+            color: styles.$dark-gray
+
+          .movement-name,.movement-groups
+            text-decoration: line-through
+
+    .options
+      @include styles.flex(column)
+      align-items: center
+
   .current-movement-container
     @include styles.flex(column)
     gap: 1em
@@ -16,6 +66,7 @@
       .movement-name
         font-size: 1.5rem
         font-weight: bold
+        text-align: center
 
     .sets-container
       @include styles.flex(column)
@@ -26,6 +77,7 @@
         @include styles.flex(row)
         gap: 2em
         padding: .5em
+        align-items: center
 
         .rep
           @include styles.flex(row)
@@ -33,6 +85,7 @@
           gap: .5em
 
           .rep-button
+            @include styles.no-selection
             cursor: pointer
 
           .reps-count

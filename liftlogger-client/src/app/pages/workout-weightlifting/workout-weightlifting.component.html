@@ -1,26 +1,93 @@
 <app-weightlifting-timer #timer></app-weightlifting-timer>
 
-<div class="current-movement-container">
-  <div class="current-movement-showcase">
-    <p>Current movement</p>
-    <p class="movement-name">Incline Dumbbell Press</p>
+<ng-container *ngIf="vm$ | async as vm">
+  <div [ngSwitch]="vm.weightliftingState.state">
+    <ng-container *ngSwitchCase="'working-out'">
+      <ng-container *ngTemplateOutlet="workingOut"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'picking-movement'">
+      <ng-container *ngTemplateOutlet="pickingMovement"></ng-container>
+    </ng-container>
   </div>
-  <div class="sets-container">
-    <div class="set" *ngFor="let r of [1, 2, 3]">
-      <div class="rep">
-        <span class="material-icons rep-button">remove</span>
-        <span class="reps-count">12</span>
-        <span class="reps-label">reps</span>
-        <span class="material-icons rep-button">add</span>
+
+  <ng-template #pickingMovement>
+    <div class="movement-picker">
+      <div class="current-template" *ngIf="vm.template">
+        <p>Current template</p>
+        <p class="template-name">{{ vm.template.name }}</p>
       </div>
-      <div class="weight">
-        <input value="22.5" type="number" />
-        <span class="weight-label">kg</span>
+      <div class="movements-list">
+        <div
+          class="movement-item"
+          *ngFor="let movement of vm.movements"
+          (click)="movementPickedEvent$.emit(movement)"
+          [ngClass]="{ done: vm.movementsInSets.includes(movement.id) }"
+        >
+          <span class="material-icons pick-button">play_arrow</span>
+          <span class="movement-name">{{ movement.name }}</span>
+          <span class="movement-groups">{{
+            movementsService.getGroupNames(movement).join(', ')
+          }}</span>
+        </div>
+      </div>
+      <div class="options">
+        <app-button icon="add" type="no-border">Add another movement</app-button>
       </div>
     </div>
-  </div>
-  <div class="options">
-    <app-button icon="add" type="no-border">Add series</app-button>
-    <app-button icon="skip_next" type="no-border">Next movement</app-button>
-  </div>
-</div>
+  </ng-template>
+
+  <ng-template #workingOut>
+    <div class="current-movement-container" *ngIf="vm.weightliftingState.state == 'working-out'">
+      <div class="current-movement-showcase">
+        <p>Current movement</p>
+        <p class="movement-name">{{ vm.weightliftingState.currentMovement.name }}</p>
+      </div>
+      <div class="sets-container">
+        <div class="set" *ngFor="let set of vm.sets">
+          <div class="rep">
+            <span
+              class="material-icons rep-button remove"
+              (click)="repsToEvent$.emit({ set: set, delta: -1 })"
+              (dblclick)="repsToEvent$.emit({ set: set, delta: -5 })"
+              >remove</span
+            >
+            <span class="reps-count">{{ set.reps }}</span>
+            <span class="reps-label">reps</span>
+            <span
+              class="material-icons rep-button add"
+              (click)="repsToEvent$.emit({ set: set, delta: 1 })"
+              (dblclick)="repsToEvent$.emit({ set: set, delta: 5 })"
+              >add</span
+            >
+          </div>
+          <div class="weight">
+            <input
+              [value]="set.weight"
+              type="number"
+              (change)="setWeightToSetEvent$.emit({ set: set, weight: $event })"
+            />
+            <span class="weight-label">kg</span>
+          </div>
+        </div>
+      </div>
+      <div class="options">
+        <app-button
+          id="addSeriesBtn"
+          icon="add"
+          type="no-border"
+          (onClicked)="addSetEvent$.emit(vm.weightliftingState.currentMovement)"
+        >
+          Add series
+        </app-button>
+        <app-button
+          id="nextMovementBtn"
+          icon="skip_next"
+          type="no-border"
+          (onClicked)="pickMovementEvent$.emit()"
+        >
+          Next movement
+        </app-button>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
