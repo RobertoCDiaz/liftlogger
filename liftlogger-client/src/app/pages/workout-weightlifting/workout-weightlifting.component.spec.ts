@@ -1,4 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  discardPeriodicTasks,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 
 import { StartFrom, WorkoutWeightliftingComponent } from './workout-weightlifting.component';
 import { AppModule } from 'src/app/app.module';
@@ -7,7 +13,7 @@ import { TemplatesService } from 'src/app/services/templates.service';
 import { MovementsService } from 'src/app/services/movements.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
-import { subscribeSpyTo } from '@hirez_io/observer-spy';
+import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 import { getTemplatesFixture } from 'src/app/fixtures/templates.fixture';
 import { Template } from 'src/app/models/TemplateModel';
 import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
@@ -230,6 +236,87 @@ describe('WorkoutWeightliftingComponent', () => {
       component.pickMovementEvent$.next();
 
       expect(spy.getLastValue()).toEqual({ state: 'picking-movement' });
+    });
+  });
+
+  describe('sets$', () => {
+    it('should start off as an empty array', () => {
+      const spy = subscribeSpyTo(component.sets$);
+
+      expect(spy.getLastValue()).toEqual([]);
+    });
+
+    it('should add a set on addSetEvent$ trigger', () => {
+      const spy = subscribeSpyTo(component.sets$);
+      const testMovement = getMovementsFixture()[0];
+
+      component.addSetEvent$.emit(testMovement);
+
+      expect(spy.getLastValue()).toHaveSize(1);
+      expect(spy.getLastValue()).toEqual([{ movement_id: testMovement.id, reps: 1, weight: 1 }]);
+    });
+
+    it('should properly change reps of a set when repsToEvent$ trigger', () => {
+      const spy = subscribeSpyTo(component.sets$);
+      const testMovement = getMovementsFixture()[0];
+
+      component.addSetEvent$.emit(testMovement);
+
+      expect(spy.getLastValue()).toHaveSize(1);
+      expect(spy.getLastValue()).toEqual([{ movement_id: testMovement.id, reps: 1, weight: 1 }]);
+
+      const testSet = spy.getLastValue()![0];
+
+      component.repsToEvent$.emit({ set: testSet, delta: 3 });
+
+      expect(spy.getLastValue()).toEqual([{ movement_id: testMovement.id, reps: 4, weight: 1 }]);
+    });
+
+    it('should properly set the weight of a set when setWeightToSetEvent$ trigger', () => {
+      const spy = subscribeSpyTo(component.sets$);
+      const testMovement = getMovementsFixture()[0];
+
+      component.addSetEvent$.emit(testMovement);
+
+      expect(spy.getLastValue()).toHaveSize(1);
+      expect(spy.getLastValue()).toEqual([{ movement_id: testMovement.id, reps: 1, weight: 1 }]);
+
+      const testSet = spy.getLastValue()![0];
+
+      component.setWeightToSetEvent$.emit({
+        set: testSet,
+        weight: { target: { value: '123' } as HTMLInputElement } as unknown as Event,
+      });
+
+      expect(spy.getLastValue()).toEqual([{ movement_id: testMovement.id, reps: 1, weight: 123 }]);
+    });
+
+    it('should add a set based on similar sets if a set from the same movement already exist', () => {
+      const spy = subscribeSpyTo(component.sets$);
+      const testMovement = getMovementsFixture()[0];
+
+      component.addSetEvent$.emit(testMovement);
+
+      expect(spy.getLastValue()).toHaveSize(1);
+      expect(spy.getLastValue()).toEqual([{ movement_id: testMovement.id, reps: 1, weight: 1 }]);
+
+      const testSet = spy.getLastValue()![0];
+
+      component.repsToEvent$.emit({ set: testSet, delta: 3 });
+      component.setWeightToSetEvent$.emit({
+        set: testSet,
+        weight: { target: { value: '22.5' } as HTMLInputElement } as unknown as Event,
+      });
+
+      expect(spy.getLastValue()).toEqual([{ movement_id: testMovement.id, reps: 4, weight: 22.5 }]);
+
+      component.addSetEvent$.emit(testMovement);
+      expect(spy.getLastValue()).toHaveSize(2);
+      expect(spy.getLastValue()![1]).toEqual({
+        movement_id: testMovement.id,
+        reps: 4,
+        weight: 22.5,
+      });
     });
   });
 
@@ -476,9 +563,33 @@ describe('WorkoutWeightliftingComponent', () => {
       expect(spy.getValuesLength()).toBe(1);
       expect(spy.getLastValue()).toEqual({ set: testSet, delta: 5 });
     });
-    /*
-    Test setting the weight value for a set:
-        Emit the setWeightToSetEvent$ with the correct set and weight value when the weight input is changed.
-    */
+
+    it('should properly emit setWeightToSetEvent$ when a set weight is changed', () => {
+      const testMovement = getMovementsFixture()[0];
+      const testWeight = 123;
+      const testSets: LiftingSetCreationParams[] = [
+        { movement_id: testMovement.id, reps: 8, weight: 22.5 },
+        { movement_id: testMovement.id, reps: 7, weight: 22.5 },
+        { movement_id: testMovement.id, reps: 10, weight: 22 },
+      ];
+
+      // @ts-ignore: ViewModel type is not accesible, so we cant 'as' mock here.
+      component.vm$ = of({
+        weightliftingState: { state: 'working-out', currentMovement: testMovement },
+        sets: testSets,
+      });
+
+      const spy = subscribeSpyTo(component.setWeightToSetEvent$);
+
+      const idx = 2;
+      const testSet = testSets[idx];
+      const testInput = getComponents(fixture, '.sets-container input')[idx];
+
+      const mockChangeEvent = { target: { value: testWeight } } as unknown as Event;
+      testInput.triggerEventHandler('change', mockChangeEvent);
+
+      expect(spy.getValuesLength()).toBe(1);
+      expect(spy.getLastValue()).toEqual({ set: testSet, weight: mockChangeEvent });
+    });
   });
 });

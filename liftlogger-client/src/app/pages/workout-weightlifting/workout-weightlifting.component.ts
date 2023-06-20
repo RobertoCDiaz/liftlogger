@@ -8,6 +8,7 @@ import {
   merge,
   of,
   scan,
+  share,
   startWith,
   switchMap,
 } from 'rxjs';
@@ -54,6 +55,64 @@ type WeightliftingState =
       state: 'picking-movement';
     };
 
+/**
+ * Defines an operation made on a Set.
+ */
+export type SetOperation =
+  | {
+      /**
+       * Create a new Set.
+       */
+      action: 'create_set';
+
+      /**
+       * Movement the new Set will belong to.
+       */
+      movement: Movement;
+    }
+  | (SetChangeRepOperationData & {
+      /**
+       * Change the number of repetitions of a set relative to current reps.
+       */
+      action: 'change_reps';
+    })
+  | (SetChangeWeightOperationData & {
+      /**
+       * Update the weight of a set.
+       */
+      action: 'set_weight';
+    });
+
+/**
+ * Data required to perform a Change Reps operation on a set.
+ */
+type SetChangeRepOperationData = {
+  /**
+   * Set to be updated.
+   */
+  set: LiftingSetCreationParams;
+
+  /**
+   * Amount to be change. Positive values will increment current reps, negative will decrement.
+   */
+  delta: number;
+};
+
+/**
+ * Data required to perform a Set Weight operation on a set.
+ */
+type SetChangeWeightOperationData = {
+  /**
+   * Set to be updated.
+   */
+  set: LiftingSetCreationParams;
+
+  /**
+   * New weight value.
+   */
+  weight: number;
+};
+
 @Component({
   selector: 'app-workout-weightlifting',
   templateUrl: './workout-weightlifting.component.html',
@@ -68,6 +127,40 @@ export class WorkoutWeightliftingComponent {
    * Timer component.
    */
   @ViewChild('timer') timer: WeightliftingTimerComponent;
+
+  /**
+   * Event to be fired up when the user wants to open the Movement selection state.
+   */
+  pickMovementEvent$: EventEmitter<void> = new EventEmitter();
+
+  /**
+   * Event to be fired up when a user picks a Movement to perform. It emits the actual Movement
+   * picked.
+   */
+  movementPickedEvent$: EventEmitter<Movement> = new EventEmitter();
+
+  /**
+   * Event to be fired to create a add a new Set. It must emit the Movement that new set will
+   * belong to.
+   */
+  addSetEvent$: EventEmitter<Movement> = new EventEmitter();
+
+  /**
+   * Event to be fired when the amount of repetitions of a set is to be changed.
+   * It will emit a SetChangeRepOperationData, which indicate on what Set the changes will be made
+   * and the change to make.
+   *
+   * @see {@link SetChangeRepOperationData}
+   */
+  repsToEvent$: EventEmitter<SetChangeRepOperationData> = new EventEmitter();
+
+  /**
+   * Event to be fired when a change of weight is to be made on a Set.
+   * It must emit an object containing the Set to change, as well as the `change` Event
+   * from the weight input containing the new weight value.
+   */
+  setWeightToSetEvent$: EventEmitter<{ set: LiftingSetCreationParams; weight: Event }> =
+    new EventEmitter();
 
   /**
    * Stores the starting option to this weighlifting session.
@@ -135,17 +228,6 @@ export class WorkoutWeightliftingComponent {
   );
 
   /**
-   * Event to be fired up when the user wants to open the Movement selection state.
-   */
-  pickMovementEvent$: EventEmitter<void> = new EventEmitter();
-
-  /**
-   * Event to be fired up when a user picks a Movement to perform. It emits the actual Movement
-   * picked.
-   */
-  movementPickedEvent$: EventEmitter<Movement> = new EventEmitter();
-
-  /**
    * Stores the current state of this weightlifting sessiong.
    */
   weightliftingState$: Observable<WeightliftingState> = merge(
@@ -165,11 +247,10 @@ export class WorkoutWeightliftingComponent {
     startWith({ state: 'picking-movement' } as WeightliftingState),
   );
 
-  addSetEvent$: EventEmitter<Movement> = new EventEmitter();
-  repsToEvent$: EventEmitter<SetChangeRepOperationData> = new EventEmitter();
-  setWeightToSetEvent$: EventEmitter<{ set: LiftingSetCreationParams; weight: Event }> =
-    new EventEmitter();
-
+  /**
+   * Stores the list of Sets of the current weightlifting session. It automatically reacts to changes
+   * on Add and Update operations on the Sets.
+   */
   sets$: Observable<LiftingSetCreationParams[]> = merge(
     this.addSetEvent$.pipe(
       map<Movement, SetOperation>(movement => ({
@@ -227,18 +308,13 @@ export class WorkoutWeightliftingComponent {
         return allSets;
       }, [] as LiftingSetCreationParams[]),
     )
-    .pipe(startWith([] as LiftingSetCreationParams[]));
+    .pipe(share(), startWith([] as LiftingSetCreationParams[]));
 
   /**
    * View Model for the page. Stores whatever information is to be displayed in the template, so
    * only one subscription has to be made.
    */
-  vm$: Observable<ViewModel> = combineLatest([
-    this.template$,
-    this.movements$,
-    this.weightliftingState$,
-    this.sets$,
-  ]).pipe(
+  vm$ = combineLatest([this.template$, this.movements$, this.weightliftingState$, this.sets$]).pipe(
     map(([template, movements, weightliftingState, sets]) => {
       // We only want to display sets of current movement.
       const displaySets: LiftingSetCreationParams[] =
@@ -257,73 +333,7 @@ export class WorkoutWeightliftingComponent {
         weightliftingState,
         movementsInSets,
         sets: displaySets,
-      } satisfies ViewModel;
+      };
     }),
   );
 }
-
-/**
- * Defines an operation made on a set.
- */
-export type SetOperation =
-  | {
-      /**
-       * Create a new Set.
-       */
-      action: 'create_set';
-
-      /**
-       * Movement the new Set will belong to.
-       */
-      movement: Movement;
-    }
-  | (SetChangeRepOperationData & {
-      /**
-       * Change the number of repetitions of a set relative to current reps.
-       */
-      action: 'change_reps';
-    })
-  | (SetSetWeightOperationData & {
-      /**
-       * Update the weight of a set.
-       */
-      action: 'set_weight';
-    });
-
-/**
- * Data required to perform a Change Reps operation on a set.
- */
-type SetChangeRepOperationData = {
-  /**
-   * Set to be updated.
-   */
-  set: LiftingSetCreationParams;
-
-  /**
-   * Amount to be change. Positive values will increment current reps, negative will decrement.
-   */
-  delta: number;
-};
-
-/**
- * Data required to perform a Set Weight operation on a set.
- */
-type SetSetWeightOperationData = {
-  /**
-   * Set to be updated.
-   */
-  set: LiftingSetCreationParams;
-
-  /**
-   * New weight value.
-   */
-  weight: number;
-};
-
-type ViewModel = {
-  template: Template | null;
-  movements: Movement[];
-  weightliftingState: WeightliftingState;
-  sets: LiftingSetCreationParams[];
-  movementsInSets: number[];
-};
