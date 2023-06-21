@@ -6,6 +6,7 @@ import { GlobalModule } from '../global/global.module';
 import { MovementsCommonModule } from '../movements-common/movements-common.module';
 import { WorkoutWeightliftingComponent } from '../../pages/workout-weightlifting/workout-weightlifting.component';
 import { WeightliftingTimerComponent } from 'src/app/components/weightlifting-timer/weightlifting-timer.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const components = [
   StartWorkoutComponent,
@@ -22,6 +23,7 @@ const components = [
     CommonModule,
     GlobalModule,
     MovementsCommonModule,
+    MatExpansionModule,
     RouterModule.forChild([
       { path: '', component: StartWorkoutComponent, title: 'Start new workout' },
       { path: 'weightlifting', component: WorkoutWeightliftingComponent, title: 'Weightlifting' },
