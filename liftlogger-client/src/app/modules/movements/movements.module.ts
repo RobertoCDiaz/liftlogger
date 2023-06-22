@@ -8,14 +8,12 @@ import { CreateMovementComponent } from 'src/app/pages/create-movement/create-mo
 import { RouterModule } from '@angular/router';
 import { MovementDetailsComponent } from 'src/app/pages/movement-details/movement-details.component';
 import { MovementJournalComponent } from 'src/app/pages/movement-journal/movement-journal.component';
-import { MovementJournalEntryComponent } from 'src/app/components/movement-journal-entry/movement-journal-entry.component';
 
 const components = [
   MovementsLibraryComponent,
   CreateMovementComponent,
   MovementDetailsComponent,
   MovementJournalComponent,
-  MovementJournalEntryComponent,
 ];
 
 /**

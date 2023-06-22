@@ -7,12 +7,14 @@ import { MovementsPickerMovementItemComponent } from 'src/app/components/movemen
 import { GlobalModule } from '../global/global.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MovementJournalEntryComponent } from 'src/app/components/movement-journal-entry/movement-journal-entry.component';
 
 const components = [
   MovementsPickerComponent,
   MovementsPickerGroupItemComponent,
   MovementsPickerMovementItemComponent,
   MovementsPickerDialog,
+  MovementJournalEntryComponent,
 ];
 
 /**

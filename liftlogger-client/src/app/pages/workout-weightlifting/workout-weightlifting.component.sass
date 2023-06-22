@@ -16,7 +16,8 @@ html,body
 
   @include styles.isLarge
     padding: 4em 10vw
-    grid-template-columns: 1fr 2fr
+    column-gap: 2em
+    grid-template-columns: 3fr 4fr
     grid-template-rows: max-content 1fr
     grid-template-areas: "timer toggles" "current toggles"
 
@@ -140,3 +141,9 @@ html,body
 
   .toggles
     grid-area: toggles
+
+    .note,.message
+      color: styles.$dark-gray
+
+    .message
+      font-style: italic

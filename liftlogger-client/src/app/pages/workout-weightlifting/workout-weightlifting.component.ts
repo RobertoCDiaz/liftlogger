@@ -1,5 +1,5 @@
 import { Component, EventEmitter, ViewChild, inject } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
   Observable,
   catchError,
@@ -14,8 +14,10 @@ import {
 } from 'rxjs';
 import { WeightliftingTimerComponent } from 'src/app/components/weightlifting-timer/weightlifting-timer.component';
 import { LiftingSetCreationParams } from 'src/app/models/LiftingSetModel';
+import { MovementJournalEntry } from 'src/app/models/MovementJournalEntry';
 import { Movement } from 'src/app/models/MovementModel';
 import { Template } from 'src/app/models/TemplateModel';
+import { MovementJournalsService } from 'src/app/services/movement-journals.service';
 import { MovementsService } from 'src/app/services/movements.service';
 import { TemplatesService } from 'src/app/services/templates.service';
 
@@ -121,6 +123,7 @@ type SetChangeWeightOperationData = {
 export class WorkoutWeightliftingComponent {
   templatesService: TemplatesService = inject(TemplatesService);
   movementsService: MovementsService = inject(MovementsService);
+  journalsService: MovementJournalsService = inject(MovementJournalsService);
   route: ActivatedRoute = inject(ActivatedRoute);
 
   /**
@@ -243,6 +246,7 @@ export class WorkoutWeightliftingComponent {
       })),
     ),
   ).pipe(
+    share(),
     map<WeightliftingState, WeightliftingState>(state => state),
     startWith({ state: 'picking-movement' } as WeightliftingState),
   );
@@ -311,11 +315,32 @@ export class WorkoutWeightliftingComponent {
     .pipe(share(), startWith([] as LiftingSetCreationParams[]));
 
   /**
+   * For the current picked Movement, it retrieves its MovementJournal.
+   * Returns `null` not in 'working-out' state.
+   */
+  currentMovementJournal$: Observable<MovementJournalEntry[] | null> =
+    this.weightliftingState$.pipe(
+      switchMap(state => {
+        if (state.state === 'picking-movement') {
+          return of(null);
+        }
+
+        return this.movementsService.getMovementJournal(state.currentMovement.id, true);
+      }),
+    );
+
+  /**
    * View Model for the page. Stores whatever information is to be displayed in the template, so
    * only one subscription has to be made.
    */
-  vm$ = combineLatest([this.template$, this.movements$, this.weightliftingState$, this.sets$]).pipe(
-    map(([template, movements, weightliftingState, sets]) => {
+  vm$ = combineLatest([
+    this.template$,
+    this.movements$,
+    this.weightliftingState$,
+    this.sets$,
+    this.currentMovementJournal$,
+  ]).pipe(
+    map(([template, movements, weightliftingState, sets, currentMovementJournal]) => {
       // We only want to display sets of current movement.
       const displaySets: LiftingSetCreationParams[] =
         weightliftingState.state === 'working-out'
@@ -327,12 +352,25 @@ export class WorkoutWeightliftingComponent {
         .filter(movement => sets.map(set => set.movement_id).includes(movement.id))
         .map(m => m.id);
 
+      // We are just interested in the best and last sessions for this Movement.
+      const journal: {
+        lastSession: MovementJournalEntry;
+        bestSession: MovementJournalEntry;
+      } | null =
+        currentMovementJournal && currentMovementJournal.length > 0
+          ? {
+              lastSession: this.journalsService.getLastSession(currentMovementJournal),
+              bestSession: this.journalsService.getBestSession(currentMovementJournal),
+            }
+          : null;
+
       return {
         template,
         movements,
         weightliftingState,
         movementsInSets,
         sets: displaySets,
+        journal,
       };
     }),
   );

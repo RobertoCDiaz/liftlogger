@@ -26,6 +26,10 @@ import {
 } from 'src/app/helpers/testing.helper';
 import { ButtonComponent } from 'src/app/components/button/button.component';
 import { LiftingSetCreationParams } from 'src/app/models/LiftingSetModel';
+import { MovementJournalsService } from 'src/app/services/movement-journals.service';
+import { getEntriesFixture } from 'src/app/fixtures/movements-journals.fixture';
+import { MovementJournalEntryComponent } from 'src/app/components/movement-journal-entry/movement-journal-entry.component';
+import { MovementJournalEntry } from 'src/app/models/MovementJournalEntry';
 
 describe('WorkoutWeightliftingComponent', () => {
   let component: WorkoutWeightliftingComponent;
@@ -33,6 +37,7 @@ describe('WorkoutWeightliftingComponent', () => {
 
   let templatesService: TemplatesService;
   let movementsService: MovementsService;
+  let journalService: MovementJournalsService;
   let route: ActivatedRoute;
 
   beforeEach(async () => {
@@ -47,6 +52,7 @@ describe('WorkoutWeightliftingComponent', () => {
 
     templatesService = TestBed.inject(TemplatesService);
     movementsService = TestBed.inject(MovementsService);
+    journalService = TestBed.inject(MovementJournalsService);
     route = TestBed.inject(ActivatedRoute);
   });
 
@@ -320,6 +326,19 @@ describe('WorkoutWeightliftingComponent', () => {
     });
   });
 
+  describe('currentMovementJournal$', () => {
+    it('should get journal for active movement', () => {
+      const spy = subscribeSpyTo(component.currentMovementJournal$);
+      const testMovement = getMovementsFixture()[0];
+      const testJournal = getEntriesFixture();
+      spyOn(movementsService, 'getMovementJournal').and.returnValue(of(testJournal));
+
+      component.movementPickedEvent$.emit(testMovement);
+
+      expect(spy.getLastValue()).toEqual(testJournal);
+    });
+  });
+
   describe('HTML View', () => {
     it('should display current movement info when working-out state is set', () => {
       const testMovement = { name: 'test name' } as Movement;
@@ -590,6 +609,75 @@ describe('WorkoutWeightliftingComponent', () => {
 
       expect(spy.getValuesLength()).toBe(1);
       expect(spy.getLastValue()).toEqual({ set: testSet, weight: mockChangeEvent });
+    });
+
+    it('should render session notes if picking-movement', () => {
+      component.pickMovementEvent$.emit();
+
+      const prevSessNotesEl = getElement(fixture, '#previous-session-notes');
+      const lastSessEl = getElement(fixture, '#last-session-toggle');
+      const bestSessEl = getElement(fixture, '#best-session-toggle');
+
+      expect(prevSessNotesEl).toBeTruthy();
+      expect(lastSessEl).toBeFalsy();
+      expect(bestSessEl).toBeFalsy();
+    });
+
+    it('should properly pass last session to render if theres one', () => {
+      const testMovement = getMovementsFixture()[0];
+      const testJournal = getEntriesFixture();
+      const testSession = getEntriesFixture()[0];
+      spyOn(movementsService, 'getMovementJournal').and.returnValue(of(testJournal));
+      spyOn(journalService, 'getLastSession').and.returnValue(testSession);
+
+      component.movementPickedEvent$.emit(testMovement);
+
+      const lastSessionEntryComponent: MovementJournalEntryComponent = getComponent(
+        fixture,
+        '#last-session-toggle app-movement-journal-entry',
+      ).componentInstance;
+
+      expect(lastSessionEntryComponent.entry).toEqual(testSession);
+    });
+
+    it('should properly render best session if theres one', () => {
+      const testMovement = getMovementsFixture()[0];
+      const testJournal = getEntriesFixture();
+      const testSession = getEntriesFixture()[0];
+      spyOn(movementsService, 'getMovementJournal').and.returnValue(of(testJournal));
+      spyOn(journalService, 'getBestSession').and.returnValue(testSession);
+
+      component.movementPickedEvent$.emit(testMovement);
+
+      const bestSessionEntryComponent: MovementJournalEntryComponent = getComponent(
+        fixture,
+        '#best-session-toggle app-movement-journal-entry',
+      ).componentInstance;
+
+      expect(bestSessionEntryComponent.entry).toEqual(testSession);
+    });
+
+    it('should not render movement sessions if not trained yet', () => {
+      const testMovement = getMovementsFixture()[0];
+      spyOn(movementsService, 'getMovementJournal').and.returnValue(of([]));
+
+      component.movementPickedEvent$.emit(testMovement);
+
+      const lastSessionEntryEl = getElement(
+        fixture,
+        '#last-session-toggle app-movement-journal-entry',
+      );
+      const bestSessionEntryEl = getElement(
+        fixture,
+        '#last-session-toggle app-movement-journal-entry',
+      );
+      const lastSessionMessage = getElement(fixture, '#best-session-toggle p.message');
+      const bestSessionMessage = getElement(fixture, '#best-session-toggle p.message');
+
+      expect(lastSessionEntryEl).toBeFalsy();
+      expect(bestSessionEntryEl).toBeFalsy();
+      expect(lastSessionMessage).toBeTruthy();
+      expect(bestSessionMessage).toBeTruthy();
     });
   });
 });

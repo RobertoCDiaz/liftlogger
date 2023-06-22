@@ -10,6 +10,57 @@
     </ng-container>
   </div>
 
+  <div class="toggles">
+    <mat-accordion>
+      <ng-container
+        *ngIf="vm.weightliftingState.state === 'picking-movement'; else movementToggles"
+      >
+        <mat-expansion-panel id="previous-session-notes">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Previous sessions notes</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Previous session toggle content</p>
+        </mat-expansion-panel>
+      </ng-container>
+
+      <ng-template #movementToggles>
+        <mat-expansion-panel id="last-session-toggle">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Last Session</mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-movement-journal-entry
+            *ngIf="vm.journal; else noJournalMessage"
+            [entry]="vm.journal.lastSession"
+          >
+          </app-movement-journal-entry>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel id="best-session-toggle">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Best Session</mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-movement-journal-entry
+            *ngIf="vm.journal; else noJournalMessage"
+            [entry]="vm.journal.bestSession"
+          >
+          </app-movement-journal-entry>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Movement notes</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Movement notes toggle content</p>
+        </mat-expansion-panel>
+
+        <!-- No MovementJournal for movement placeholder message -->
+        <ng-template #noJournalMessage>
+          <p class="message">You haven't trained this movement yet!</p>
+        </ng-template>
+      </ng-template>
+    </mat-accordion>
+  </div>
+
   <ng-template #pickingMovement>
     <div class="movement-picker">
       <div class="current-template" *ngIf="vm.template">
@@ -91,28 +142,3 @@
     </div>
   </ng-template>
 </ng-container>
-
-<div class="toggles">
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>Last Session</mat-panel-title>
-      </mat-expansion-panel-header>
-      <p>Last session toggle content</p>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>Best Session</mat-panel-title>
-      </mat-expansion-panel-header>
-      <p>Best session toggle content</p>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>Movement notes</mat-panel-title>
-      </mat-expansion-panel-header>
-      <p>Movement notes toggle content</p>
-    </mat-expansion-panel>
-  </mat-accordion>
-</div>
