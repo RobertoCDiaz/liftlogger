@@ -124,9 +124,14 @@ export class MainSidenavComponent {
   }
 
   // TODO: Delete
+  seedTestData() {
+    this.http.post('seeding/test', {}).subscribe(_ => {});
+  }
+
+  // TODO: Delete
   seedData() {
     this.http.post('seeding/default', {}).subscribe(result => {
-      this.http.post('seeding/test', {}).subscribe(res2 => {});
+      this.http.post('seeding/fake', {}).subscribe(res2 => {});
     });
   }
 }
