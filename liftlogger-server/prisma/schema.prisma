@@ -153,12 +153,12 @@ model LiftingSet {
 // Notes made for a movement on a specific date. It could be notes on how to improve the movement
 // form, reminders for next sessions such as increase weight, etc.
 model MovementNote {
-  id    Int      @id @default(autoincrement())
-  notes String   @db.Text
-  date  DateTime
-
+  id          Int      @id @default(autoincrement())
+  notes       String   @db.Text
+  date        DateTime @default(now())
   movement_id Int
-  movement    Movement @relation(fields: [movement_id], references: [id])
+
+  movement Movement @relation(fields: [movement_id], references: [id])
 
   @@map("movement_notes")
 }
