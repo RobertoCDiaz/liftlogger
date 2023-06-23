@@ -14,7 +14,7 @@ export default class MovementNotesController {
   async createNoteForMovement(
     note: MovementNoteCreationParams,
     movementId: number,
-  ): Promise<MovementNote | null | undefined> {
+  ): Promise<MovementNote> {
     return await this.prisma.movementNote.create({
       data: {
         ...note,
@@ -29,10 +29,14 @@ export default class MovementNotesController {
    * @param movementId Movement identifier whose notes are to be listed
    * @returns List of MovementNotes
    */
-  async getMovementNotes(movementId: number): Promise<MovementNote[] | null | undefined> {
+  async getMovementNotes(movementId: number, from?: Date, to?: Date): Promise<MovementNote[]> {
     return await this.prisma.movementNote.findMany({
       where: {
         movement_id: movementId,
+        date: {
+          gte: from ?? new Date(0),
+          lte: to ?? new Date(),
+        },
       },
       orderBy: {
         date: 'desc',

@@ -1,6 +1,6 @@
 import { MovementNote } from '@prisma/client';
 
-export function getNotesFixture(): MovementNote[] {
+export function getMovementNotesFixture(): MovementNote[] {
   return JSON.parse(JSON.stringify(notesFixture));
 }
 
