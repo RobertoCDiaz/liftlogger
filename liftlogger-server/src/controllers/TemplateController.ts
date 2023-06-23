@@ -143,6 +143,7 @@ export default class TemplateController {
       return false;
     }
 
+    await this.prisma.movementToTemplate.deleteMany({ where: { template_id: id } });
     await this.prisma.template.delete({ where: { id } });
     return true;
   }
