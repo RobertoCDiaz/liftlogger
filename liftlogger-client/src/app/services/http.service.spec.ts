@@ -41,13 +41,31 @@ describe('HttpService', () => {
       });
     });
 
-    it('should get access token and use it in request along with the server url', (done: DoneFn) => {
+    it('should get access token and use it in a get request along with the server url', (done: DoneFn) => {
       const spy = spyOn(http, 'get').and.returnValue(of(testReturn));
       const testHeader = new HttpHeaders().set('Authorization', 'Bearer ' + testToken);
       spyOn(authService, 'getAccessTokenSilently').and.returnValue(of(testToken));
 
       service.get<string>('test').subscribe(value => {
         expect(spy).toHaveBeenCalledWith(url + 'test', { headers: testHeader });
+
+        done();
+      });
+    });
+
+    it('should properly pass query params to request', (done: DoneFn) => {
+      const spy = spyOn(http, 'get').and.returnValue(of(testReturn));
+      const testHeader = new HttpHeaders().set('Authorization', 'Bearer ' + testToken);
+      const testParams = {
+        id: 1,
+        name: 'another param',
+        value: 2.44,
+        flag: true,
+      };
+      spyOn(authService, 'getAccessTokenSilently').and.returnValue(of(testToken));
+
+      service.get<string>('test', testParams).subscribe(value => {
+        expect(spy).toHaveBeenCalledWith(url + 'test', { headers: testHeader, params: testParams });
 
         done();
       });
@@ -83,6 +101,27 @@ describe('HttpService', () => {
         done();
       });
     });
+
+    it('should properly pass query params to request', (done: DoneFn) => {
+      const spy = spyOn(http, 'post').and.returnValue(of(testReturn));
+      const testHeader = new HttpHeaders().set('Authorization', 'Bearer ' + testToken);
+      const testParams = {
+        id: 1,
+        name: 'another param',
+        value: 2.44,
+        flag: true,
+      };
+      spyOn(authService, 'getAccessTokenSilently').and.returnValue(of(testToken));
+
+      service.post<number, string>('test', testBody, testParams).subscribe(value => {
+        expect(spy).toHaveBeenCalledWith(url + 'test', testBody, {
+          headers: testHeader,
+          params: testParams,
+        });
+
+        done();
+      });
+    });
   });
 
   describe('put()', () => {
@@ -114,6 +153,27 @@ describe('HttpService', () => {
         done();
       });
     });
+
+    it('should properly pass query params to request', (done: DoneFn) => {
+      const spy = spyOn(http, 'put').and.returnValue(of(testReturn));
+      const testHeader = new HttpHeaders().set('Authorization', 'Bearer ' + testToken);
+      const testParams = {
+        id: 1,
+        name: 'another param',
+        value: 2.44,
+        flag: true,
+      };
+      spyOn(authService, 'getAccessTokenSilently').and.returnValue(of(testToken));
+
+      service.put<number, string>('test', testBody, testParams).subscribe(value => {
+        expect(spy).toHaveBeenCalledWith(url + 'test', testBody, {
+          headers: testHeader,
+          params: testParams,
+        });
+
+        done();
+      });
+    });
   });
 
   describe('delete()', () => {
@@ -140,6 +200,27 @@ describe('HttpService', () => {
 
       service.delete<string>('test').subscribe(_ => {
         expect(spy).toHaveBeenCalledWith(url + 'test', { headers: testHeader });
+
+        done();
+      });
+    });
+
+    it('should properly pass query params to request', (done: DoneFn) => {
+      const spy = spyOn(http, 'delete').and.returnValue(of(testReturn));
+      const testHeader = new HttpHeaders().set('Authorization', 'Bearer ' + testToken);
+      const testParams = {
+        id: 1,
+        name: 'another param',
+        value: 2.44,
+        flag: true,
+      };
+      spyOn(authService, 'getAccessTokenSilently').and.returnValue(of(testToken));
+
+      service.delete<string>('test', testParams).subscribe(value => {
+        expect(spy).toHaveBeenCalledWith(url + 'test', {
+          headers: testHeader,
+          params: testParams,
+        });
 
         done();
       });
