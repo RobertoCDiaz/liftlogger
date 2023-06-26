@@ -88,7 +88,22 @@ describe('MovementRoutes', () => {
 
       await routesController.getMovementNotes(testMovement.id, emailRequestMock);
 
-      expect(spy).toHaveBeenCalledWith(testMovement.id);
+      expect(spy).toHaveBeenCalledWith(testMovement.id, undefined, undefined);
+    });
+
+    it('should properly pass period arguments to controller call', async () => {
+      const testMovement = testMovements[0];
+      const testFrom = '2023-01-01';
+      const testTo = '2023-05-31';
+      const testFromDate = new Date(testFrom);
+      const testToDate = new Date(testTo);
+      const spy = jest.spyOn(notesController, 'getMovementNotes').mockResolvedValue([]);
+
+      jest.spyOn(movementsController, 'getMovement').mockResolvedValue(testMovement);
+
+      await routesController.getMovementNotes(testMovement.id, emailRequestMock, testFrom, testTo);
+
+      expect(spy).toHaveBeenCalledWith(testMovement.id, testFromDate, testToDate);
     });
   });
 

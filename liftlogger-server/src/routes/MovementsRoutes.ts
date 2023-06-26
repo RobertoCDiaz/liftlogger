@@ -86,6 +86,8 @@ export class MovementRoutes extends Controller {
   public async getMovementNotes(
     @Path() id: number,
     @Request() req: express.Request,
+    @Query() from?: string,
+    @Query() to?: string,
   ): Promise<MovementNote[] | null | undefined> {
     const movement = await this.movementsController.getMovement(id, req.user_email);
 
@@ -94,7 +96,11 @@ export class MovementRoutes extends Controller {
       return;
     }
 
-    return await this.notesController.getMovementNotes(movement.id);
+    return await this.notesController.getMovementNotes(
+      movement.id,
+      from ? new Date(from) : undefined,
+      to ? new Date(to) : undefined,
+    );
   }
 
   /**
