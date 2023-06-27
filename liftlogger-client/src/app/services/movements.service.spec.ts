@@ -8,6 +8,8 @@ import { getMovementsFixture } from '../fixtures/movements.fixture';
 import { getEntriesFixture } from '../fixtures/movements-journals.fixture';
 import { getMuscleGroupsFixture } from '../fixtures/muscle-groups.fixture';
 import { Movement } from '../models/MovementModel';
+import { MovementNote } from '../models/MovementNoteModel';
+import * as moment from 'moment';
 
 describe('MovementsService', () => {
   let service: MovementsService;
@@ -118,6 +120,47 @@ describe('MovementsService', () => {
       const result = service.getGroupNames(movementWithNoGroups);
 
       expect(result).toEqual([]);
+    });
+  });
+
+  describe('getMovementNotes()', () => {
+    it('should get the last 3 months notes of a movement by default', () => {
+      const testId = 2;
+      const mockNotes: MovementNote[] = [
+        { id: 1, date: new Date('2023-01-01'), movement_id: testId, notes: 'Just a note' },
+        { id: 2, date: new Date('2023-01-03'), movement_id: testId, notes: 'Another note' },
+      ];
+      const spy = spyOn(http, 'get').and.returnValue(of(mockNotes));
+
+      const from: string = moment().subtract(3, 'months').format('Y-MM-DD');
+      const to: string = moment(new Date()).format('Y-MM-DD');
+
+      service.getMovementNotes(testId).subscribe(result => {
+        expect(result).toEqual(mockNotes);
+        expect(spy).toHaveBeenCalledWith('movements/' + testId + '/notes', { from, to });
+      });
+    });
+
+    it('should get the notes from a period of a movement', () => {
+      const testId = 2;
+      const mockNotes: MovementNote[] = [
+        { id: 1, date: new Date('2023-01-01'), movement_id: testId, notes: 'Just a note' },
+        { id: 2, date: new Date('2023-01-03'), movement_id: testId, notes: 'Another note' },
+      ];
+      const spy = spyOn(http, 'get').and.returnValue(of(mockNotes));
+
+      const fromStr = '2023-01-01';
+      const toStr = '2023-02-28';
+      const from: Date = new Date(fromStr);
+      const to: Date = new Date(toStr);
+
+      service.getMovementNotes(testId, from, to).subscribe(result => {
+        expect(result).toEqual(mockNotes);
+        expect(spy).toHaveBeenCalledWith('movements/' + testId + '/notes', {
+          from: fromStr,
+          to: toStr,
+        });
+      });
     });
   });
 });

@@ -8,6 +8,8 @@ import {
 } from '../models/MovementModel';
 import { MovementJournalEntry } from '../models/MovementJournalEntry';
 import { HttpService } from './http.service';
+import { MovementNote } from '../models/MovementNoteModel';
+import * as moment from 'moment';
 
 /**
  * Collection of methods and operations to help in the Movements handling.
@@ -70,6 +72,25 @@ export class MovementsService {
         group_id: group.id,
         is_primary: group.isPrimary ?? false,
       })),
+    });
+  }
+
+  /**
+   * Retrieves the list of Notes made to a specific Movement.
+   *
+   * @param movementId Identifier for the Movement
+   * @param from First date of the period to retrieve notes (inclusive). Defaults to 3 months ago
+   * @param to Last date of the period to retrieve notes (inclusive). Defaults to current date
+   * @returns List of MovementNotes
+   */
+  getMovementNotes(
+    movementId: number,
+    from: Date = moment().subtract(3, 'months').toDate(),
+    to: Date = new Date(),
+  ): Observable<MovementNote[]> {
+    return this.http.get<MovementNote[]>(`movements/${movementId}/notes`, {
+      from: moment(from).format('Y-MM-DD'),
+      to: moment(to).format('Y-MM-DD'),
     });
   }
 }
