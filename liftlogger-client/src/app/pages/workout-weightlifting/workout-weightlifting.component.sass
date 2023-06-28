@@ -142,8 +142,20 @@ html,body
   .toggles
     grid-area: toggles
 
-    .note,.message
-      color: styles.$dark-gray
+    .notes-showcase
+      @include styles.flex(column)
+      border-left: 3px solid styles.$primary-color
+      padding-left: 1em
+      gap: 1em
+
+      .date-container
+        @include styles.flex(row)
+        align-items: center
+        gap: .25em
+
+        .arrow
+          cursor: pointer
 
     .message
+      color: styles.$dark-gray
       font-style: italic
