@@ -46,20 +46,32 @@
           </app-movement-journal-entry>
         </mat-expansion-panel>
 
-        <mat-expansion-panel>
+        <mat-expansion-panel *ngIf="vm.notes && vm.notes.currentNote">
           <mat-expansion-panel-header>
             <mat-panel-title>Movement notes</mat-panel-title>
           </mat-expansion-panel-header>
           <div class="notes-showcase">
             <p class="note-content">
-              facilis asperiores tenetur perspiciatis blanditiis est reprehenderit voluptate quo
-              mollitia commodi incidunt placeat sunt rem molestias optio aspernatur consequuntur
-              velit explicabo similique ipsa ut minus quae porro nostrum illo perspiciatis
+              {{ vm.notes.currentNote.notes }}
             </p>
             <div class="date-container">
-              <span class="material-icons arrow">chevron_left</span>
-              <p class="note-date">Jun 16th, 2023 @ 11:51am</p>
-              <span class="material-icons arrow">navigate_next</span>
+              <span
+                class="material-icons arrow prev"
+                (click)="prevNoteEvent.emit()"
+                [ngClass]="{ disabled: vm.notes.noteIdx === vm.notes.list!.length - 1 }"
+              >
+                chevron_left
+              </span>
+              <p class="note-date">
+                {{ vm.notes.currentNote.date | date : 'MMM dd, YYYY @ hh:mma' }}
+              </p>
+              <span
+                class="material-icons arrow next"
+                (click)="nextNoteEvent.emit()"
+                [ngClass]="{ disabled: vm.notes.noteIdx === 0 }"
+              >
+                navigate_next
+              </span>
             </div>
           </div>
         </mat-expansion-panel>

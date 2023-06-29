@@ -1,10 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-  discardPeriodicTasks,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StartFrom, WorkoutWeightliftingComponent } from './workout-weightlifting.component';
 import { AppModule } from 'src/app/app.module';
@@ -13,7 +7,7 @@ import { TemplatesService } from 'src/app/services/templates.service';
 import { MovementsService } from 'src/app/services/movements.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
-import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
+import { subscribeSpyTo } from '@hirez_io/observer-spy';
 import { getTemplatesFixture } from 'src/app/fixtures/templates.fixture';
 import { Template } from 'src/app/models/TemplateModel';
 import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
@@ -29,7 +23,7 @@ import { LiftingSetCreationParams } from 'src/app/models/LiftingSetModel';
 import { MovementJournalsService } from 'src/app/services/movement-journals.service';
 import { getEntriesFixture } from 'src/app/fixtures/movements-journals.fixture';
 import { MovementJournalEntryComponent } from 'src/app/components/movement-journal-entry/movement-journal-entry.component';
-import { MovementJournalEntry } from 'src/app/models/MovementJournalEntry';
+import { getMovementNotesFixture } from 'src/app/fixtures/movements-notes.fixture';
 
 describe('WorkoutWeightliftingComponent', () => {
   let component: WorkoutWeightliftingComponent;
@@ -338,6 +332,26 @@ describe('WorkoutWeightliftingComponent', () => {
       expect(spy.getLastValue()).toEqual(testJournal);
     });
   });
+
+  // describe('currentMovementNotesList$', () => {
+  //   it('should stream empty list if picking-movement', () => {});
+  //   it('should stream notes for picked movement in descending order', () => {});
+  // });
+
+  // describe('currentMovementNoteIdx$', () => {
+  //   it('should start with 0', () => {});
+  //   it('should decrement index when increment index when prevNoteEvent fired', () => {});
+  //   it('should decrement index when decrement index when nextNoteEvent fired', () => {});
+  //   it('should reset index when weightlifting state changes', () => {});
+  //   it('should not increment index if out of bounds', () => {});
+  //   it('should not decrement index if out of bounds', () => {});
+  // });
+
+  // describe('currentMovementNote$', () => {
+  //   it('should be null if picking-movement', () => {});
+  //   it('should be null if notes length is 0', () => {});
+  //   it('should be note in index === currentIdx if movement is picked', () => {});
+  // });
 
   describe('HTML View', () => {
     it('should display current movement info when working-out state is set', () => {
@@ -678,6 +692,146 @@ describe('WorkoutWeightliftingComponent', () => {
       expect(bestSessionEntryEl).toBeFalsy();
       expect(lastSessionMessage).toBeTruthy();
       expect(bestSessionMessage).toBeTruthy();
+    });
+
+    it('should properly display current movement note', () => {
+      const notesMock = getMovementNotesFixture();
+      const noteMock = { ...notesMock[0], date: new Date('2023-01-03T13:55') };
+      const movementMock = getMovementsFixture()[0];
+      // @ts-ignore: ViewModel type is not accesible, so we cant 'as' mock here.
+      component.vm$ = of({
+        weightliftingState: { state: 'working-out', currentMovement: movementMock as Movement },
+        notes: {
+          currentNote: noteMock,
+          list: notesMock,
+          noteIdx: 0,
+        },
+      });
+
+      const notesShowcase = getElement(fixture, '.notes-showcase');
+      const notesContent: HTMLParagraphElement = getElement(
+        fixture,
+        '.notes-showcase .note-content',
+      );
+      const dateEl: HTMLParagraphElement = getElement(fixture, '.notes-showcase .note-date');
+
+      expect(notesShowcase).toBeTruthy();
+      expect(notesContent.textContent?.trim()).toBe(noteMock.notes);
+      expect(dateEl.textContent?.trim()).toBe('Jan 03, 2023 @ 01:55PM');
+    });
+
+    it('should not display movement notes if picking-movemnt', () => {
+      // @ts-ignore: ViewModel type is not accesible, so we cant 'as' mock here.
+      component.vm$ = of({
+        weightliftingState: { state: 'picking-movement' },
+      });
+
+      const notesShowcase = getElement(fixture, '.notes-showcase');
+
+      expect(notesShowcase).toBeFalsy();
+    });
+
+    it('should add disabled class to prev note button if max index reached', () => {
+      const notesMock = getMovementNotesFixture();
+      const noteMock = notesMock[0];
+      // @ts-ignore: ViewModel type is not accesible, so we cant 'as' mock here.
+      component.vm$ = of({
+        weightliftingState: {
+          state: 'working-out',
+          currentMovement: {} as Movement,
+        },
+        notes: {
+          currentNote: noteMock,
+          list: notesMock,
+          noteIdx: notesMock.length - 1,
+        },
+      });
+
+      const prevButton: HTMLSpanElement = getElement(fixture, '.notes-showcase .arrow.prev');
+
+      expect(Array.from(prevButton.classList)).toContain('disabled');
+    });
+
+    it('should not add disabled class to prev note button if max index not reached', () => {
+      const notesMock = getMovementNotesFixture();
+      const noteMock = notesMock[0];
+      // @ts-ignore: ViewModel type is not accesible, so we cant 'as' mock here.
+      component.vm$ = of({
+        weightliftingState: {
+          state: 'working-out',
+          currentMovement: {} as Movement,
+        },
+        notes: {
+          currentNote: noteMock,
+          list: notesMock,
+          noteIdx: notesMock.length - 2,
+        },
+      });
+
+      const prevButton: HTMLSpanElement = getElement(fixture, '.notes-showcase .arrow.prev');
+
+      expect(Array.from(prevButton.classList)).not.toContain('disabled');
+    });
+
+    it('should add disabled class to next note button if 0 index reached', () => {
+      const notesMock = getMovementNotesFixture();
+      const noteMock = notesMock[0];
+      // @ts-ignore: ViewModel type is not accesible, so we cant 'as' mock here.
+      component.vm$ = of({
+        weightliftingState: {
+          state: 'working-out',
+          currentMovement: {} as Movement,
+        },
+        notes: {
+          currentNote: noteMock,
+          list: notesMock,
+          noteIdx: 0,
+        },
+      });
+
+      const nextButton: HTMLSpanElement = getElement(fixture, '.notes-showcase .arrow.next');
+
+      expect(Array.from(nextButton.classList)).toContain('disabled');
+    });
+
+    it('should not add disabled class to next note button if 0 index not reached', () => {
+      const notesMock = getMovementNotesFixture();
+      const noteMock = notesMock[0];
+      // @ts-ignore: ViewModel type is not accesible, so we cant 'as' mock here.
+      component.vm$ = of({
+        weightliftingState: {
+          state: 'working-out',
+          currentMovement: {} as Movement,
+        },
+        notes: {
+          currentNote: noteMock,
+          list: notesMock,
+          noteIdx: 1,
+        },
+      });
+
+      const nextButton: HTMLSpanElement = getElement(fixture, '.notes-showcase .arrow.next');
+
+      expect(Array.from(nextButton.classList)).not.toContain('disabled');
+    });
+
+    it('should not render movement notes toggle if current movement has no notes', () => {
+      // @ts-ignore: ViewModel type is not accesible, so we cant 'as' mock here.
+      component.vm$ = of({
+        weightliftingState: {
+          state: 'working-out',
+          currentMovement: {} as Movement,
+        },
+        notes: {
+          currentNote: null,
+          list: [],
+          noteIdx: 0,
+        },
+      });
+
+      const notesShowcase = getElement(fixture, '.notes-showcase');
+
+      expect(notesShowcase).toBeFalsy();
     });
   });
 });

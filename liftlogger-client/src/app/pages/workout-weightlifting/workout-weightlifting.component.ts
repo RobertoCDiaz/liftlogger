@@ -11,11 +11,13 @@ import {
   share,
   startWith,
   switchMap,
+  withLatestFrom,
 } from 'rxjs';
 import { WeightliftingTimerComponent } from 'src/app/components/weightlifting-timer/weightlifting-timer.component';
 import { LiftingSetCreationParams } from 'src/app/models/LiftingSetModel';
 import { MovementJournalEntry } from 'src/app/models/MovementJournalEntry';
 import { Movement } from 'src/app/models/MovementModel';
+import { MovementNote } from 'src/app/models/MovementNoteModel';
 import { Template } from 'src/app/models/TemplateModel';
 import { MovementJournalsService } from 'src/app/services/movement-journals.service';
 import { MovementsService } from 'src/app/services/movements.service';
@@ -164,6 +166,16 @@ export class WorkoutWeightliftingComponent {
    */
   setWeightToSetEvent$: EventEmitter<{ set: LiftingSetCreationParams; weight: Event }> =
     new EventEmitter();
+
+  /**
+   * Fires up to indicate that the previous MovementNote must be displayed.
+   */
+  prevNoteEvent: EventEmitter<void> = new EventEmitter();
+
+  /**
+   * Fires up to indicate that the next MovementNote must be displayed.
+   */
+  nextNoteEvent: EventEmitter<void> = new EventEmitter();
 
   /**
    * Stores the starting option to this weighlifting session.
@@ -330,6 +342,66 @@ export class WorkoutWeightliftingComponent {
     );
 
   /**
+   * Stores the current picked Movement's Notes, sorted by date in descending order (newest to
+   * oldest).
+   */
+  currentMovementNotesList$: Observable<MovementNote[]> = this.weightliftingState$.pipe(
+    switchMap(state => {
+      if (state.state === 'picking-movement') {
+        return of([]);
+      }
+
+      return this.movementsService
+        .getMovementNotes(state.currentMovement.id)
+        .pipe(map(notes => notes.sort((a, b) => (a.date > b.date ? -1 : 1))));
+    }),
+    share(),
+    startWith([]),
+  );
+
+  /**
+   * Stores the index of the MovementNote to display. It automatically reacts to next/prev actions.
+   */
+  currentMovementNoteIdx$: Observable<number> = merge(
+    // because the list is ordered in as descending order, prev button actually increments idx
+    this.prevNoteEvent.pipe(map(_ => 1)),
+    // because the list is ordered in as descending order, next button actually decrements idx
+    this.nextNoteEvent.pipe(map(_ => -1)),
+    // we want to listen to current weighlifting state so we can reset the idx, 0 is just arbitrary
+    this.weightliftingState$.pipe(map(_ => 0)),
+  ).pipe(
+    withLatestFrom(this.currentMovementNotesList$),
+    scan((idx, [delta, notes]) => {
+      if (!notes || delta === 0) {
+        return 0;
+      }
+
+      if ((delta === 1 && idx === notes.length - 1) || (delta === -1 && idx === 0)) {
+        return idx;
+      }
+
+      return idx + delta;
+    }, 0),
+    startWith(0),
+  );
+
+  /**
+   * Current MovementNote to be displayed.
+   */
+  currentMovementNote$: Observable<MovementNote | null> = combineLatest([
+    this.currentMovementNoteIdx$,
+    this.currentMovementNotesList$,
+  ]).pipe(
+    map(([idx, notes]) => {
+      if (notes.length === 0) {
+        return null;
+      }
+
+      return notes[idx];
+    }),
+  );
+
+  /**
    * View Model for the page. Stores whatever information is to be displayed in the template, so
    * only one subscription has to be made.
    */
@@ -339,39 +411,67 @@ export class WorkoutWeightliftingComponent {
     this.weightliftingState$,
     this.sets$,
     this.currentMovementJournal$,
+    this.currentMovementNotesList$,
+    this.currentMovementNoteIdx$,
+    this.currentMovementNote$,
   ]).pipe(
-    map(([template, movements, weightliftingState, sets, currentMovementJournal]) => {
-      // We only want to display sets of current movement.
-      const displaySets: LiftingSetCreationParams[] =
-        weightliftingState.state === 'working-out'
-          ? sets.filter(set => set.movement_id === weightliftingState.currentMovement.id)
-          : [];
-
-      // List of Movements ids that already have one set done
-      const movementsInSets: number[] = movements
-        .filter(movement => sets.map(set => set.movement_id).includes(movement.id))
-        .map(m => m.id);
-
-      // We are just interested in the best and last sessions for this Movement.
-      const journal: {
-        lastSession: MovementJournalEntry;
-        bestSession: MovementJournalEntry;
-      } | null =
-        currentMovementJournal && currentMovementJournal.length > 0
-          ? {
-              lastSession: this.journalsService.getLastSession(currentMovementJournal),
-              bestSession: this.journalsService.getBestSession(currentMovementJournal),
-            }
-          : null;
-
-      return {
+    map(
+      ([
         template,
         movements,
         weightliftingState,
-        movementsInSets,
-        sets: displaySets,
-        journal,
-      };
-    }),
+        sets,
+        currentMovementJournal,
+        movementNotesList,
+        currentMovementNoteIdx,
+        currentMovementNote,
+      ]) => {
+        // We only want to display sets of current movement.
+        const displaySets: LiftingSetCreationParams[] =
+          weightliftingState.state === 'working-out'
+            ? sets.filter(set => set.movement_id === weightliftingState.currentMovement.id)
+            : [];
+
+        // List of Movements ids that already have one set done
+        const movementsInSets: number[] = movements
+          .filter(movement => sets.map(set => set.movement_id).includes(movement.id))
+          .map(m => m.id);
+
+        // We are just interested in the best and last sessions for this Movement.
+        const journal: {
+          lastSession: MovementJournalEntry;
+          bestSession: MovementJournalEntry;
+        } | null =
+          currentMovementJournal && currentMovementJournal.length > 0
+            ? {
+                lastSession: this.journalsService.getLastSession(currentMovementJournal),
+                bestSession: this.journalsService.getBestSession(currentMovementJournal),
+              }
+            : null;
+
+        // Group all MovementNotes related data together
+        const notes: {
+          list: MovementNote[];
+          currentNote: MovementNote | null;
+          noteIdx: number;
+        } | null = movementNotesList
+          ? {
+              list: movementNotesList,
+              currentNote: currentMovementNote,
+              noteIdx: currentMovementNoteIdx,
+            }
+          : null;
+
+        return {
+          template,
+          movements,
+          weightliftingState,
+          movementsInSets,
+          sets: displaySets,
+          journal,
+          notes,
+        };
+      },
+    ),
   );
 }

@@ -154,7 +154,12 @@ html,body
         gap: .25em
 
         .arrow
+          @include styles.no-selection
           cursor: pointer
+
+          &.disabled
+            cursor: not-allowed
+            color: styles.$light-gray
 
     .message
       color: styles.$dark-gray
