@@ -333,10 +333,17 @@ describe('WorkoutWeightliftingComponent', () => {
     });
   });
 
-  // describe('currentMovementNotesList$', () => {
-  //   it('should stream empty list if picking-movement', () => {});
-  //   it('should stream notes for picked movement in descending order', () => {});
-  // });
+  describe('currentMovementNotesList$', () => {
+    it('should stream empty list if picking-movement', () => {
+      const spy = subscribeSpyTo(component.currentMovementNotesList$);
+
+      component.pickMovementEvent$.emit();
+
+      expect(spy.getLastValue()).toEqual([]);
+    });
+
+    // it('should stream notes for picked movement in descending order', () => {});
+  });
 
   // describe('currentMovementNoteIdx$', () => {
   //   it('should start with 0', () => {});
