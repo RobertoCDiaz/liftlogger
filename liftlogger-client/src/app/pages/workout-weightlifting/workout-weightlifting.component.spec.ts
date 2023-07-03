@@ -7,7 +7,7 @@ import { TemplatesService } from 'src/app/services/templates.service';
 import { MovementsService } from 'src/app/services/movements.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
-import { subscribeSpyTo } from '@hirez_io/observer-spy';
+import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 import { getTemplatesFixture } from 'src/app/fixtures/templates.fixture';
 import { Template } from 'src/app/models/TemplateModel';
 import { getMovementsFixture } from 'src/app/fixtures/movements.fixture';
@@ -24,6 +24,7 @@ import { MovementJournalsService } from 'src/app/services/movement-journals.serv
 import { getEntriesFixture } from 'src/app/fixtures/movements-journals.fixture';
 import { MovementJournalEntryComponent } from 'src/app/components/movement-journal-entry/movement-journal-entry.component';
 import { getMovementNotesFixture } from 'src/app/fixtures/movements-notes.fixture';
+import { MovementNote } from 'src/app/models/MovementNoteModel';
 
 describe('WorkoutWeightliftingComponent', () => {
   let component: WorkoutWeightliftingComponent;
@@ -342,23 +343,142 @@ describe('WorkoutWeightliftingComponent', () => {
       expect(spy.getLastValue()).toEqual([]);
     });
 
-    // it('should stream notes for picked movement in descending order', () => {});
+    it('should stream notes for picked movement in descending order', () => {
+      const testMovement = getMovementsFixture()[0];
+      const testNotes = getMovementNotesFixture();
+      const spy = subscribeSpyTo(component.currentMovementNotesList$);
+      const getNotesSpy = spyOn(movementsService, 'getMovementNotes').and.returnValue(
+        of(testNotes),
+      );
+
+      component.movementPickedEvent$.emit(testMovement);
+
+      const result = spy.getLastValue();
+
+      expect(getNotesSpy).toHaveBeenCalledWith(testMovement.id);
+      expect(result).toBeTruthy();
+      expect(result).toHaveSize(testNotes.length);
+
+      for (let i = 0; i < result!.length - 1; ++i) {
+        expect(result![i].date >= result![i + 1].date).toBeTrue();
+      }
+    });
   });
 
-  // describe('currentMovementNoteIdx$', () => {
-  //   it('should start with 0', () => {});
-  //   it('should decrement index when increment index when prevNoteEvent fired', () => {});
-  //   it('should decrement index when decrement index when nextNoteEvent fired', () => {});
-  //   it('should reset index when weightlifting state changes', () => {});
-  //   it('should not increment index if out of bounds', () => {});
-  //   it('should not decrement index if out of bounds', () => {});
-  // });
+  describe('currentMovementNoteIdx$', () => {
+    let spy: SubscriberSpy<number>;
 
-  // describe('currentMovementNote$', () => {
-  //   it('should be null if picking-movement', () => {});
-  //   it('should be null if notes length is 0', () => {});
-  //   it('should be note in index === currentIdx if movement is picked', () => {});
-  // });
+    beforeEach(() => {
+      spy = subscribeSpyTo(component.currentMovementNoteIdx$);
+    });
+
+    it('should start with 0', () => {
+      expect(spy.getLastValue()).toBe(0);
+    });
+
+    it('should increment index when prevNoteEvent fired', () => {
+      expect(spy.getLastValue()).toBe(0);
+
+      component.prevNoteEvent.emit();
+
+      expect(spy.getLastValue()).toBe(1);
+
+      component.prevNoteEvent.emit();
+      component.prevNoteEvent.emit();
+
+      expect(spy.getLastValue()).toBe(3);
+    });
+
+    it('should decrement index when nextNoteEvent fired', () => {
+      component.prevNoteEvent.emit();
+      component.prevNoteEvent.emit();
+      component.prevNoteEvent.emit();
+
+      expect(spy.getLastValue()).toBe(3);
+
+      component.nextNoteEvent.emit();
+
+      expect(spy.getLastValue()).toBe(2);
+
+      component.nextNoteEvent.emit();
+      component.nextNoteEvent.emit();
+
+      expect(spy.getLastValue()).toBe(0);
+    });
+
+    it('should reset index when weightlifting state changes', () => {
+      component.prevNoteEvent.emit();
+      component.prevNoteEvent.emit();
+      component.prevNoteEvent.emit();
+
+      expect(spy.getLastValue()).toBe(3);
+
+      component.pickMovementEvent$.emit();
+
+      expect(spy.getLastValue()).toBe(0);
+    });
+
+    it('should not increment index if out of bounds when prevNoteEvent fired', () => {
+      const mockNotes: MovementNote[] = [{}, {}] as MovementNote[];
+      spyOn(movementsService, 'getMovementNotes').and.returnValue(of(mockNotes));
+      component.movementPickedEvent$.emit({} as Movement);
+
+      component.prevNoteEvent.emit();
+
+      expect(spy.getLastValue()).toBe(1);
+
+      component.prevNoteEvent.emit();
+      component.prevNoteEvent.emit();
+      component.prevNoteEvent.emit();
+
+      expect(spy.getLastValue()).toBe(1);
+    });
+
+    it('should not decrement index if out of bounds when nextNoteEvent fired', () => {
+      expect(spy.getLastValue()).toBe(0);
+
+      component.nextNoteEvent.emit();
+      component.nextNoteEvent.emit();
+      component.nextNoteEvent.emit();
+      component.nextNoteEvent.emit();
+
+      expect(spy.getLastValue()).toBe(0);
+    });
+  });
+
+  describe('currentMovementNote$', () => {
+    let spy: SubscriberSpy<MovementNote | null>;
+
+    beforeEach(() => {
+      spy = subscribeSpyTo(component.currentMovementNote$);
+    });
+
+    it('should be null if picking-movement', () => {
+      component.pickMovementEvent$.emit();
+
+      expect(spy.getLastValue()).toBeNull();
+    });
+
+    it('should be null if notes length is 0', () => {
+      const mockNotes: MovementNote[] = [];
+      spyOn(movementsService, 'getMovementNotes').and.returnValue(of(mockNotes));
+      component.movementPickedEvent$.emit({} as Movement);
+
+      expect(spy.getLastValue()).toBeNull();
+    });
+
+    it('should be note in index === currentIdx if movement is picked', () => {
+      const mockNotes: MovementNote[] = getMovementNotesFixture();
+      spyOn(movementsService, 'getMovementNotes').and.returnValue(of(mockNotes));
+      component.movementPickedEvent$.emit({} as Movement);
+
+      expect(spy.getLastValue()).toEqual(mockNotes[0]);
+
+      component.prevNoteEvent.emit();
+
+      expect(spy.getLastValue()).toEqual(mockNotes[1]);
+    });
+  });
 
   describe('HTML View', () => {
     it('should display current movement info when working-out state is set', () => {
