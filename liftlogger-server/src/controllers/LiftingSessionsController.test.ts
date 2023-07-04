@@ -25,14 +25,11 @@ describe('LiftingSessionsController', () => {
     });
 
     it('should return sets when flag is set to true', async () => {
-      const result: LiftingSession & { sets?: LiftingSet } = await controller.getLiftingSession(
-        1,
-        'testing@test.com',
-        true,
-      );
+      const result: (LiftingSession & { sets?: LiftingSet }) | null =
+        await controller.getLiftingSession(1, 'testing@test.com', true);
 
       expect(result).toHaveProperty('sets');
-      expect(result.sets!).toHaveLength(6);
+      expect(result!.sets!).toHaveLength(6);
     });
 
     it('should NOT return sets when flag is set to false', async () => {
@@ -41,10 +38,10 @@ describe('LiftingSessionsController', () => {
       expect(result).not.toHaveProperty('sets');
     });
 
-    it('should throw error if not match for session id and owner email is found', async () => {
-      const promise = controller.getLiftingSession(1, 'second@testing.com');
+    it('should return null if not match for session id and owner email is found', async () => {
+      const result = await controller.getLiftingSession(1, 'second@testing.com');
 
-      await expect(promise).rejects.toThrow();
+      await expect(result).toBeNull();
     });
   });
 

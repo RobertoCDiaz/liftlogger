@@ -17,8 +17,8 @@ export default class LiftingSessionController {
     sessionId: number,
     userEmail: string,
     includeSets = false,
-  ): Promise<LiftingSession> {
-    return await this.prisma.liftingSession.findFirstOrThrow({
+  ): Promise<LiftingSession | null> {
+    return await this.prisma.liftingSession.findFirst({
       where: {
         id: sessionId,
         user_email: userEmail,
