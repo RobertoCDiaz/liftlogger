@@ -11,6 +11,8 @@ import PrismaUtils from '../utils/PrismaUtils';
 
 @Route('sessions')
 export class LiftingSessionsRoutes extends Controller {
+  liftingSessionsController = new LiftingSessionController(PrismaUtils.getPrismaInstance());
+
   /**
    * Request to fetch a single Lifting Session from DB along the Lifting Sets
    * that are part of it.
@@ -26,12 +28,19 @@ export class LiftingSessionsRoutes extends Controller {
     @Path() id: number,
     @Query() includeSets: boolean = true,
     @Request() req: express.Request,
-  ): Promise<LiftingSession | null | undefined> {
-    return await new LiftingSessionController(PrismaUtils.getPrismaInstance()).getLiftingSession(
+  ): Promise<LiftingSession | undefined> {
+    const session = await this.liftingSessionsController.getLiftingSession(
       id,
       req.user_email,
       includeSets,
     );
+
+    if (!session) {
+      this.setStatus(404);
+      return;
+    }
+
+    return session;
   }
 
   /**
@@ -47,10 +56,11 @@ export class LiftingSessionsRoutes extends Controller {
   async getSessions(
     @Query() includeSets: boolean = true,
     @Request() req: express.Request,
-  ): Promise<LiftingSession[] | null | undefined> {
-    return await new LiftingSessionController(
-      PrismaUtils.getPrismaInstance(),
-    ).getLiftingSessionsFromUser(req.user_email, includeSets);
+  ): Promise<LiftingSession[]> {
+    return await this.liftingSessionsController.getLiftingSessionsFromUser(
+      req.user_email,
+      includeSets,
+    );
   }
 
   /**
@@ -66,14 +76,12 @@ export class LiftingSessionsRoutes extends Controller {
   async createSession(
     @Body() body: LiftingSessionWithSetsCreationRequestParams,
     @Request() req: express.Request,
-  ): Promise<LiftingSession | null | undefined> {
+  ): Promise<LiftingSession> {
     const session = {
       ...body.session,
       user_email: req.user_email,
     } satisfies LiftingSessionCreationParams;
 
-    return await new LiftingSessionController(
-      PrismaUtils.getPrismaInstance(),
-    ).createSessionWithSets(session, body.sets);
+    return await this.liftingSessionsController.createSessionWithSets(session, body.sets);
   }
 }
