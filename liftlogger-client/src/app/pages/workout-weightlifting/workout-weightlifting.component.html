@@ -8,13 +8,14 @@
     <ng-container *ngSwitchCase="'picking-movement'">
       <ng-container *ngTemplateOutlet="pickingMovement"></ng-container>
     </ng-container>
+    <ng-container *ngSwitchCase="'session-notes'">
+      <ng-container *ngTemplateOutlet="sessionNotes"></ng-container>
+    </ng-container>
   </div>
 
   <div class="toggles">
     <mat-accordion>
-      <ng-container
-        *ngIf="vm.weightliftingState.state === 'picking-movement'; else movementToggles"
-      >
+      <ng-container *ngIf="vm.weightliftingState.state === 'picking-movement'">
         <mat-expansion-panel id="previous-session-notes">
           <mat-expansion-panel-header>
             <mat-panel-title>Previous sessions notes</mat-panel-title>
@@ -23,7 +24,7 @@
         </mat-expansion-panel>
       </ng-container>
 
-      <ng-template #movementToggles>
+      <ng-container *ngIf="vm.weightliftingState.state === 'working-out'">
         <mat-expansion-panel id="last-session-toggle">
           <mat-expansion-panel-header>
             <mat-panel-title>Last Session</mat-panel-title>
@@ -80,9 +81,22 @@
         <ng-template #noJournalMessage>
           <p class="message">You haven't trained this movement yet!</p>
         </ng-template>
-      </ng-template>
+      </ng-container>
     </mat-accordion>
   </div>
+
+  <ng-template #sessionNotes>
+    <div class="session-notes">
+      <h3>Wanna leave some notes for this session?</h3>
+      <mat-form-field>
+        <mat-label>Leave some comments for this session...</mat-label>
+        <textarea
+          matInput
+          placeholder="E.g. Today I felt tired, that's why the intesity was reduced"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </ng-template>
 
   <ng-template #pickingMovement>
     <div class="movement-picker">

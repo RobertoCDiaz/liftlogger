@@ -15,6 +15,8 @@ import { PageHeaderComponent } from 'src/app/components/page-header/page-header.
 import { CreatorInputComponent } from 'src/app/components/creator-input/creator-input.component';
 import { GraphComponent } from 'src/app/components/graph/graph.component';
 import { CalendarComponent } from 'src/app/components/calendar/calendar.component';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 
 const components = [
   ButtonComponent,
@@ -35,7 +37,15 @@ const components = [
  */
 @NgModule({
   declarations: components,
-  imports: [CommonModule, FormsModule, NgxSkeletonLoaderModule, MatDividerModule, MatSidenavModule],
-  exports: components,
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgxSkeletonLoaderModule,
+    MatDividerModule,
+    MatSidenavModule,
+    MatInputModule,
+    MatFormFieldModule,
+  ],
+  exports: [...components, MatInput, MatFormField, MatLabel],
 })
 export class GlobalModule {}

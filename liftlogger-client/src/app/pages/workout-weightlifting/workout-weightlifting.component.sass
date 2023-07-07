@@ -139,6 +139,15 @@ html,body
       align-items: center
       gap: .25em
 
+  .session-notes
+    @include styles.flex(column)
+    align-items: stretch
+    gap: 1em
+
+    textarea
+      @include styles.flex(column)
+      align-items: stretch
+
   .toggles
     grid-area: toggles
 
