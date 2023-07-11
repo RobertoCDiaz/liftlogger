@@ -9,7 +9,7 @@ import { liftingSessionsFixture } from '../fixtures/liftingsessions.fixture';
 import { of } from 'rxjs';
 import { subscribeSpyTo } from '@hirez_io/observer-spy';
 
-fdescribe('LiftingSessionsService', () => {
+describe('LiftingSessionsService', () => {
   let service: LiftingSessionsService;
 
   let http: HttpService;

@@ -12,7 +12,7 @@ import { HttpService } from './http.service';
   providedIn: 'root',
 })
 export class LiftingSessionsService {
-  http: HttpService = inject(HttpService);
+  private http: HttpService = inject(HttpService);
 
   /**
    * Attempts to create a new LiftingSession.
